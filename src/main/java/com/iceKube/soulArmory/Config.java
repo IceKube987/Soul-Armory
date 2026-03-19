@@ -30,7 +30,7 @@ public class Config {
 //            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
 
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_MAX_SOUL = BUILDER
-            .comment("The maximum soul amount of soul weapons (e.g. Soul Sword)")
+            .comment("The maximum soul amount of Soul Sword")
             .defineInRange("soulSwordMaxSoul", 300, 0, Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_POINTS_PER_DAMAGE = BUILDER
@@ -48,17 +48,17 @@ public class Config {
 //    public static String magicNumberIntroduction;
 //    public static Set<Item> items;
 
-    private static boolean validateItemName(final Object obj) {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }
+//    private static boolean validateItemName(final Object obj) {
+//        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
+//    }
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
 //        logDirtBlock = LOG_DIRT_BLOCK.get();
 //        magicNumber = MAGIC_NUMBER.get();
 //        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
-
-        // convert the list of strings into a set of items
+//
+//         convert the list of strings into a set of items
 //        items = ITEM_STRINGS.get().stream()
 //                .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
 //                .collect(Collectors.toSet());
