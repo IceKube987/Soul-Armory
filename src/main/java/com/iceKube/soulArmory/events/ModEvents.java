@@ -24,14 +24,14 @@ public class ModEvents {
         ItemStack mainHandItem = player.getMainHandItem();
         if (!(mainHandItem.getItem() instanceof SoulSwordItem)) return;
 
-        // Add soul equal to the damage dealt (floored to int), capped at maxSoul
-        int damageDealt = (int) event.getAmount();
+        // Add soul equal to the damage dealt, capped at maxSoul
+        float damageDealt = event.getAmount();
         if (damageDealt <= 0) return;
-        damageDealt = Math.round(Math.min(event.getEntity().getHealth(), damageDealt));
+        damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
 
         CompoundTag tag = mainHandItem.getOrCreateTag();
-        int currentSoul = tag.getInt(SOUL_AMOUNT_NBT);
-        int newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
-        tag.putInt(SOUL_AMOUNT_NBT, newSoul);
+        float currentSoul = tag.getFloat(SOUL_AMOUNT_NBT);
+        float newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
+        tag.putFloat(SOUL_AMOUNT_NBT, newSoul);
     }
 }

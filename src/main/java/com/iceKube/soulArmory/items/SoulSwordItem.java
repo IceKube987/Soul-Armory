@@ -20,15 +20,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class SoulSwordItem extends Item {
 
-    private float attackDamage;
-
-    private String soulAmountNBT = "soul_armory.soul_sword.soulAmount"; // equal to `int soulAmount = 0`
+    private String soulAmountNBT = "soul_armory.soul_sword.soulAmount";
 
     private String lastHeldGameTimeNBT = "soul_armory.soul_sword.lastHeldGameTime";
 
@@ -45,7 +45,7 @@ public class SoulSwordItem extends Item {
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         if (pStack.getTag() == null) {
             CompoundTag NBT = new CompoundTag();
-            NBT.putInt(soulAmountNBT, 0);
+            NBT.putFloat(soulAmountNBT, 0);
             NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
             pStack.setTag(NBT);
         }
@@ -54,7 +54,7 @@ public class SoulSwordItem extends Item {
             CompoundTag NBT = pStack.getTag();
             if (player.getMainHandItem() == pStack) {
                 // Apply accumulated soul decay (calculated since the sword was last held)
-                NBT.putInt(soulAmountNBT, Math.max(0, NBT.getInt(soulAmountNBT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
+                NBT.putFloat(soulAmountNBT, Math.max(0, NBT.getFloat(soulAmountNBT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
                 // Refresh the last held game time since the sword is held in player's main hand.
                 NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
             }
@@ -90,15 +90,14 @@ public class SoulSwordItem extends Item {
         }
 
         long currentGameTime = pLevel != null ? pLevel.getGameTime() : 0;
-        int currentSoul = pStack.getTag().getInt(soulAmountNBT);
-        int effectiveSoul = Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime));
-//        pTooltipComponents.add(Component.literal("Soul: " + effectiveSoul + " / " + maxSoul));
+        float currentSoul = pStack.getTag().getFloat(soulAmountNBT);
+        int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast it to int to avoid showing decimals in tooltip.
         pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + Config.soulSwordMaxSoul));
     }
 
     private float getAttackDamage(ItemStack stack) {
         if (stack.getTag() == null) return 1;
-        return 1 + (int) (stack.getTag().getInt(soulAmountNBT) / Config.soulSwordPointsPerDamage);
+        return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
     }
 
     // generic code from SwordItem
@@ -116,8 +115,8 @@ public class SoulSwordItem extends Item {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, net.minecraftforge.common.ToolAction toolAction) {
-        return net.minecraftforge.common.ToolActions.DEFAULT_SWORD_ACTIONS.contains(toolAction);
+    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
+        return ToolActions.DEFAULT_SWORD_ACTIONS.contains(toolAction);
     }
 
     @Override
