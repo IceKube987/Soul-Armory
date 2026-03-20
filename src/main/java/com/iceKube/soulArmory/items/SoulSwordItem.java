@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -63,6 +65,15 @@ public class SoulSwordItem extends Item {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
     }
 
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        if (pUsedHand != InteractionHand.MAIN_HAND) return super.use(pLevel, pPlayer, pUsedHand);
+
+        heal(pPlayer.getItemInHand(InteractionHand.MAIN_HAND),pPlayer);
+
+        return super.use(pLevel, pPlayer, pUsedHand);
+    }
+
     /**
      * Calculates how much soul should be decayed based on how long the sword hasn't been held.
      * After a grace period of 10 seconds (200 ticks), soul decays at 1 point per 6 ticks.
@@ -84,7 +95,6 @@ public class SoulSwordItem extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (pStack.getTag() == null) {
-//            pTooltipComponents.add(Component.literal("Soul: 0 / " + maxSoul));
             pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + "0 / " + Config.soulSwordMaxSoul));
             return;
         }
@@ -100,12 +110,41 @@ public class SoulSwordItem extends Item {
         return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
     }
 
+    private void heal(ItemStack stack, Player player) {
+        if (stack.getTag() == null) return;
+
+        CompoundTag tag = stack.getTag();
+        float currentSoul = tag.getFloat(soulAmountNBT);
+
+        float currentHealth = player.getHealth();
+        float maxHealth = player.getMaxHealth();
+        float healthMissing = maxHealth - currentHealth;
+
+        if (healthMissing <= 0 || currentSoul <= 0) return;
+
+        // How many HP we can afford to heal with available soul
+        int affordableHeal = (int) (currentSoul / Config.soulSwordPointsPerHealing);
+
+        // Actual healing: min of what's needed (rounded up to nearest int) and what we can afford
+        int healingAmount = (int) Math.min(Math.ceil(healthMissing), affordableHeal);
+
+        if (healingAmount <= 0) return;
+
+        // Deduct soul cost
+        tag.putFloat(soulAmountNBT, currentSoul - (float) (healingAmount * Config.soulSwordPointsPerHealing));
+
+        // Apply healing
+        player.heal(healingAmount);
+    }
+
     // generic code from SwordItem
 
+    @Override
     public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
         return !pPlayer.isCreative();
     }
 
+    @Override
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
         if (pState.is(Blocks.COBWEB)) {
             return 15.0F;
@@ -124,6 +163,7 @@ public class SoulSwordItem extends Item {
         return slotChanged;
     }
 
+    @Override
     public boolean isCorrectToolForDrops(BlockState pBlock) {
         return pBlock.is(Blocks.COBWEB);
     }
@@ -133,8 +173,8 @@ public class SoulSwordItem extends Item {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4f, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon Modifier", getAttackDamage(stack), AttributeModifier.Operation.ADDITION));
-        this.attributeModifiers = builder.build();
+//        this.attributeModifiers = builder.build();
 
-        return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot, stack);
+        return slot == EquipmentSlot.MAINHAND ? builder.build() : super.getAttributeModifiers(slot, stack);
     }
 }
