@@ -30,8 +30,6 @@ public class SoulSwordItem extends Item {
 
     private String soulAmountNBT = "soul_armory.soul_sword.soulAmount"; // equal to `int soulAmount = 0`
 
-    private int maxSoul = Config.soulSwordMaxSoul;
-
     private String lastHeldGameTimeNBT = "soul_armory.soul_sword.lastHeldGameTime";
 
     /**
