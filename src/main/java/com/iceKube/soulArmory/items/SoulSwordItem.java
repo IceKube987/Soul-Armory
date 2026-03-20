@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.iceKube.soulArmory.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class SoulSwordItem extends Item {
 
     private String soulAmountNBT = "soul_armory.soul_sword.soulAmount"; // equal to `int soulAmount = 0`
 
-    private final int maxSoul = 300;
+    private int maxSoul = Config.soulSwordMaxSoul;
 
     private String lastHeldGameTimeNBT = "soul_armory.soul_sword.lastHeldGameTime";
 
@@ -68,7 +69,7 @@ public class SoulSwordItem extends Item {
      * Calculates how much soul should be decayed based on how long the sword hasn't been held.
      * After a grace period of 10 seconds (200 ticks), soul decays at 1 point per 6 ticks.
      * Returns the total accumulated decay (floored to int).
-     *
+     * <p>
      * Call it when:
      * 1. The player picks up the sword (is holding it in main hand) — to apply deferred decay
      * 2. When appendHoverText is called — to show the effective soul amount
@@ -85,19 +86,21 @@ public class SoulSwordItem extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (pStack.getTag() == null) {
-            pTooltipComponents.add(Component.literal("Soul: 0 / " + maxSoul));
+//            pTooltipComponents.add(Component.literal("Soul: 0 / " + maxSoul));
+            pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + "0 / " + Config.soulSwordMaxSoul));
             return;
         }
 
         long currentGameTime = pLevel != null ? pLevel.getGameTime() : 0;
         int currentSoul = pStack.getTag().getInt(soulAmountNBT);
         int effectiveSoul = Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime));
-        pTooltipComponents.add(Component.literal("Soul: " + effectiveSoul + " / " + maxSoul));
+//        pTooltipComponents.add(Component.literal("Soul: " + effectiveSoul + " / " + maxSoul));
+        pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + Config.soulSwordMaxSoul));
     }
 
     private float getAttackDamage(ItemStack stack) {
         if (stack.getTag() == null) return 1;
-        return 1 + (int) (stack.getTag().getInt(soulAmountNBT) / 10);
+        return 1 + (int) (stack.getTag().getInt(soulAmountNBT) / Config.soulSwordPointsPerDamage);
     }
 
     // generic code from SwordItem
@@ -117,6 +120,11 @@ public class SoulSwordItem extends Item {
     @Override
     public boolean canPerformAction(ItemStack stack, net.minecraftforge.common.ToolAction toolAction) {
         return net.minecraftforge.common.ToolActions.DEFAULT_SWORD_ACTIONS.contains(toolAction);
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged;
     }
 
     public boolean isCorrectToolForDrops(BlockState pBlock) {

@@ -1,10 +1,12 @@
 package com.iceKube.soulArmory.events;
 
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.SoulSwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,10 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEvents {
 
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_sword.soulAmount";
-    private static final int MAX_SOUL = 300;
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
+    public static void onLivingHurt(LivingDamageEvent event) {
         // Check if the source of the damage is a player holding a SoulSwordItem
         if (!(event.getSource().getEntity() instanceof Player player)) return;
 
@@ -29,7 +30,7 @@ public class ModEvents {
 
         CompoundTag tag = mainHandItem.getOrCreateTag();
         int currentSoul = tag.getInt(SOUL_AMOUNT_NBT);
-        int newSoul = Math.min(MAX_SOUL, currentSoul + damageDealt);
+        int newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
         tag.putInt(SOUL_AMOUNT_NBT, newSoul);
     }
 }
