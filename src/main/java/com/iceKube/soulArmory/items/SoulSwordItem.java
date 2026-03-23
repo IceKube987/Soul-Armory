@@ -25,18 +25,34 @@ public class SoulSwordItem extends BaseSoulWeaponItem {
 
     public SoulSwordItem(Properties pProperties) {
         super(pProperties);
-        gracePeriodTicks = Config.soulSwordGracePeriod;
-        soulDecaySpeed = Config.soulSwordSoulDecaySpeed;
-        maxSoul = Config.soulSwordMaxSoul;
         doApplySpeedModifier = true;
-        pointPerSpeedPercent = Config.soulSwordPointPerSpeedPercent;
+    }
+
+    @Override
+    public int getGracePeriodTicks() {
+        return Config.soulSwordGracePeriod;
+    }
+
+    @Override
+    public int getSoulDecaySpeed() {
+        return Config.soulSwordSoulDecaySpeed;
+    }
+
+    @Override
+    public int getMaxSoul() {
+        return Config.soulSwordMaxSoul;
+    }
+
+    @Override
+    public int getPointPerSpeedPercent() {
+        return Config.soulSwordPointPerSpeedPercent;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand != InteractionHand.MAIN_HAND) return super.use(pLevel, pPlayer, pUsedHand);
 
-        heal(pPlayer.getItemInHand(InteractionHand.MAIN_HAND),pPlayer);
+        heal(pPlayer.getItemInHand(InteractionHand.MAIN_HAND), pPlayer);
 
         return super.use(pLevel, pPlayer, pUsedHand);
     }

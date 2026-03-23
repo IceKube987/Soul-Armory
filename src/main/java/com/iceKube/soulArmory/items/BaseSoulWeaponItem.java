@@ -21,15 +21,12 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public static final String lastHeldGameTimeNBT = "soul_armory.soul_weapon.lastHeldGameTime";
 
-    public int gracePeriodTicks;
-
-    public int soulDecaySpeed;
-
-    public int maxSoul;
-
     public boolean doApplySpeedModifier;
 
-    public int pointPerSpeedPercent;
+    public abstract int getGracePeriodTicks();
+    public abstract int getSoulDecaySpeed();
+    public abstract int getMaxSoul();
+    public abstract int getPointPerSpeedPercent();
 
     /**
      * Calculates how much soul should be decayed based on how long the sword hasn't been held.
@@ -44,22 +41,22 @@ public abstract class BaseSoulWeaponItem extends Item {
         CompoundTag tag = stack.getTag();
         if (tag == null) return 0;
         long lastHeld = tag.getLong(lastHeldGameTimeNBT);
-        long ticksDecaying = (currentGameTime - lastHeld) - gracePeriodTicks; // 200 ticks = 10 second grace period
+        long ticksDecaying = (currentGameTime - lastHeld) - getGracePeriodTicks(); // 200 ticks = 10 second grace period
         if (ticksDecaying <= 0) return 0;
-        return (int) (ticksDecaying / soulDecaySpeed); // 1 soul per 6 ticks (= 10 soul/sec)
+        return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks (= 10 soul/sec)
     }
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (pStack.getTag() == null) {
-            pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + "0 / " + maxSoul));
+            pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + "0 / " + getMaxSoul()));
             return;
         }
 
         long currentGameTime = pLevel != null ? pLevel.getGameTime() : 0;
         float currentSoul = pStack.getTag().getFloat(soulAmountNBT);
         int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast it to int to avoid showing decimals in tooltip.
-        pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + maxSoul));
+        pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + getMaxSoul()));
     }
 
     @Override
@@ -86,6 +83,6 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public double getSpeedAdditionPercentage(ItemStack stack){
         if (!doApplySpeedModifier || stack.getTag()==null) return 0;
-        return 0.01 * (int)(stack.getTag().getFloat(soulAmountNBT) / pointPerSpeedPercent);
+        return 0.01 * (int)(stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 }

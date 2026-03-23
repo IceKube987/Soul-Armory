@@ -16,6 +16,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_GRACE_PERIOD;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_DECAY_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_PER_SPEED_PERCENT;
+    private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
 
     static {
         BUILDER.comment("Soul Sword Settings").push("soul-sword");
@@ -49,6 +50,10 @@ public class Config {
                 .defineInRange("soulSwordPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
 
         BUILDER.pop();
+
+        SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
+                .comment("Do speed boost by soul gears only boost to 2x of base speed?")
+                .define("speedBoostHasCeil",true);
     }
 
     static final ForgeConfigSpec SPEC = BUILDER.build();

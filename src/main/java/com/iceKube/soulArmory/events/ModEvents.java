@@ -22,7 +22,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
 
-    private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_sword.soulAmount";
+    private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96");
 
     // Add soul when player is hurting entity with soul weapons.
@@ -39,9 +39,9 @@ public class ModEvents {
             damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
 
             CompoundTag tag = mainHandItem.getOrCreateTag();
-            float currentSoul = tag.getFloat(SOUL_AMOUNT_NBT);
+            float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
             float newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
-            tag.putFloat(SOUL_AMOUNT_NBT, newSoul);
+            tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
         } else if (mainHandItem.getItem() instanceof SoulBowItem) {
             //TODO: Soul Bow Item.
         }
