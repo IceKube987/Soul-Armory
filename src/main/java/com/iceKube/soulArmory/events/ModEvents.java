@@ -47,6 +47,7 @@ public class ModEvents {
         }
     }
 
+    // Apply speed modifier if the player is holding a soul weapon that applies speed modifier.
     @SubscribeEvent
     public static void onPlayerTickApplySpeedModifier(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
@@ -68,10 +69,17 @@ public class ModEvents {
         double currentSpeed = attr.getValue();
         double targetSpeed = currentSpeed * (1 + soulWeaponItem.getSpeedAdditionPercentage(stack));
 
+        double modifierAmount = Config.speedBoostHasCeil
+                ? Math.max(0, Math.min(baseSpeed * Config.speedBoostCeil, targetSpeed))
+                : targetSpeed;
+
+        // Subtract current speed because it's an addition modifier.
+        modifierAmount -= currentSpeed;
+
         attr.addTransientModifier(new AttributeModifier(
                 SOUL_SPEED_MODIFIER_UUID,
                 "Soul Weapon Modifier",
-                Math.max(0,Math.min(baseSpeed * 2, targetSpeed) - currentSpeed),
+                modifierAmount,
                 AttributeModifier.Operation.ADDITION));
 
     }

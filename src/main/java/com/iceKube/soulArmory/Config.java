@@ -17,6 +17,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_DECAY_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_PER_SPEED_PERCENT;
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
+    private static final ForgeConfigSpec.DoubleValue SOUL_SPEED_BOOST_CEIL;
 
     static {
         BUILDER.comment("Soul Sword Settings").push("soul-sword");
@@ -52,8 +53,14 @@ public class Config {
         BUILDER.pop();
 
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
-                .comment("Do speed boost by soul gears only boost to 2x of base speed?")
+                .comment("Whether the speed boost provided by soul gears is capped at a maximum multiplier.")
+                .comment("If false, the boost has no upper limit and speedBoostCeil will be ignored.")
                 .define("speedBoostHasCeil",true);
+
+        SOUL_SPEED_BOOST_CEIL = BUILDER
+                .comment("The maximum speed multiplier (relative to base movement speed) at which soul gears will no longer provide additional speed boosts.")
+                .comment("This value is ignored if speedBoostHasCeil is false.")
+                .defineInRange("speedBoostCeil", 2.0, 1.0, Double.MAX_VALUE);
     }
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
@@ -65,6 +72,8 @@ public class Config {
     public static int soulSwordGracePeriod;
     public static int soulSwordSoulDecaySpeed;
     public static int soulSwordPointPerSpeedPercent;
+    public static boolean speedBoostHasCeil;
+    public static double speedBoostCeil;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -75,5 +84,7 @@ public class Config {
         soulSwordGracePeriod = SOUL_SWORD_GRACE_PERIOD.get();
         soulSwordSoulDecaySpeed = SOUL_SWORD_SOUL_DECAY_SPEED.get();
         soulSwordPointPerSpeedPercent = SOUL_SWORD_SOUL_PER_SPEED_PERCENT.get();
+        speedBoostHasCeil = SOUL_SPEED_BOOST_HAS_CEIL.get();
+        speedBoostCeil = SOUL_SPEED_BOOST_CEIL.get();
     }
 }
