@@ -3,8 +3,6 @@ package com.iceKube.soulArmory.events;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
-import com.iceKube.soulArmory.items.SoulBowItem;
-import com.iceKube.soulArmory.items.SoulSwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -32,7 +30,7 @@ public class ModEvents {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
 
         ItemStack mainHandItem = player.getMainHandItem();
-        if (mainHandItem.getItem() instanceof SoulSwordItem) {
+        if (mainHandItem.getItem() instanceof BaseSoulWeaponItem) {
             // Add soul equal to the damage dealt, capped at maxSoul
             float damageDealt = event.getAmount();
             if (damageDealt <= 0) return;
@@ -42,8 +40,6 @@ public class ModEvents {
             float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
             float newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
             tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
-        } else if (mainHandItem.getItem() instanceof SoulBowItem) {
-            //TODO: Soul Bow Item.
         }
     }
 

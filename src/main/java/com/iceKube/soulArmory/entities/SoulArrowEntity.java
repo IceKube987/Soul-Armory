@@ -86,7 +86,7 @@ public class SoulArrowEntity extends AbstractArrow {
     }
 
     // -------------------------------------------------------------------------
-    // Constant damage — ignores velocity; always deals Config.soulBowBaseDamage
+    // Constant damage — ignores velocity; always deals a certain amount of damage.
     // -------------------------------------------------------------------------
 
     @Override
@@ -102,7 +102,8 @@ public class SoulArrowEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(target);
         }
 
-        target.hurt(damageSource, (float) Config.soulBowBaseDamage);
+        target.invulnerableTime = 0;
+        target.hurt(damageSource, (float) getBaseDamage());
         discard();
     }
 

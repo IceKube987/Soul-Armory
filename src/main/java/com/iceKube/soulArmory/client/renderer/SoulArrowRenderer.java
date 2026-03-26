@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
+//TODO: Need a custom model (currently using vanilla model for arrow)
 public class SoulArrowRenderer extends ArrowRenderer<SoulArrowEntity> {
 
     private static final ResourceLocation TEXTURE =

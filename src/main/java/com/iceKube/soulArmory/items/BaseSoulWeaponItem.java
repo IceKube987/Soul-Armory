@@ -24,8 +24,11 @@ public abstract class BaseSoulWeaponItem extends Item {
     public boolean doApplySpeedModifier;
 
     public abstract int getGracePeriodTicks();
+
     public abstract int getSoulDecaySpeed();
+
     public abstract int getMaxSoul();
+
     public abstract int getPointPerSpeedPercent();
 
     /**
@@ -35,10 +38,10 @@ public abstract class BaseSoulWeaponItem extends Item {
      * <p>
      * Called when:
      * <li>
-     *         The player picks up the sword (is holding it in main hand) — to apply deferred decay
+     * The player picks up the sword (is holding it in main hand) — to apply deferred decay
      * </li>
      * <li>
-     *     When appendHoverText is called — to show the effective soul amount
+     * When appendHoverText is called — to show the effective soul amount
      * </li>
      */
     protected int calculateSoulDecay(ItemStack stack, long currentGameTime) {
@@ -85,8 +88,8 @@ public abstract class BaseSoulWeaponItem extends Item {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
     }
 
-    public double getSpeedAdditionPercentage(ItemStack stack){
-        if (!doApplySpeedModifier || stack.getTag()==null) return 0;
-        return 0.01 * (int)(stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
+    public double getSpeedAdditionPercentage(ItemStack stack) {
+        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
+        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 }

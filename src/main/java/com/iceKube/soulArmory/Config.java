@@ -82,15 +82,15 @@ public class Config {
 
         SOUL_BOW_BASE_DAMAGE = BUILDER
                 .comment("The base damage of Soul Bow")
-                .defineInRange("soulBowBaseDamage", 2.0, 1.0, Double.MAX_VALUE);
+                .defineInRange("soulBowBaseDamage", 6.0, 1.0, Double.MAX_VALUE);
 
         SOUL_BOW_POINT_PER_DAMAGE_PERCENT = BUILDER
-                .comment("How many points of soul is required for 1 percent of extra damage and arrow speed.")
-                .defineInRange("soulBowPointPerDamagePercent", 10, 1, Integer.MAX_VALUE);
+                .comment("How many points of soul is required for 1 percent of extra damage, drawing speed and arrow speed.")
+                .defineInRange("soulBowPointPerDamagePercent", 3, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_POINT_PER_SPEED_PERCENT = BUILDER
                 .comment("How many points of soul is required for 1 percent of speed boost")
-                .defineInRange("soulBowPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
+                .defineInRange("soulBowPointPerSpeedPercent", 6, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_GRACE_PERIOD = BUILDER
                 .comment("How long (in ticks) will the soul start to decay after not holding.")
@@ -131,7 +131,7 @@ public class Config {
     public static int soulBowPointPerDamagePercent;
     public static int soulBowPointPerSpeedPercent;
     public static int soulBowGracePeriod;
-    public static  int soulBowSoulDecaySpeed;
+    public static int soulBowSoulDecaySpeed;
     public static boolean speedBoostHasCeil;
     public static double speedBoostCeil;
     public static double soulArrowHomingRange;
