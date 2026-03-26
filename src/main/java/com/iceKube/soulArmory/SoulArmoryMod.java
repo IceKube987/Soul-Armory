@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory;
 
 import com.iceKube.soulArmory.registries.BlockRegisrty;
+import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -47,6 +48,7 @@ public class SoulArmoryMod {
         BlockRegisrty.BLOCKS.register(modEventBus);
         BlockRegisrty.BLOCKITEMS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
+        EntityRegistry.ENTITIES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
