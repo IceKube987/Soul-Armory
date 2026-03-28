@@ -1,5 +1,8 @@
 {
   "item.soul_armory.soul_sword": "Soul Sword",
+  "item.soul_armory.soul_bow": "Soul Bow",
 
-  "tooltip.soul_armory.soul": "Soul :"
+  "tooltip.soul_armory.soul": "Soul :",
+
+  "itemGroup.soul_armory": "Soul Armory"
 }

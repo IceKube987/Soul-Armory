@@ -111,11 +111,6 @@ public class SoulSwordItem extends BaseSoulWeaponItem {
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return slotChanged;
-    }
-
-    @Override
     public boolean isCorrectToolForDrops(BlockState pBlock) {
         return pBlock.is(Blocks.COBWEB);
     }

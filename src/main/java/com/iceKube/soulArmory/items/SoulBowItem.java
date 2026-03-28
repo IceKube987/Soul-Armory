@@ -8,9 +8,19 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class SoulBowItem extends BaseSoulWeaponItem {
 
@@ -79,7 +89,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
         if (!(pEntityLiving instanceof Player player)) return;
 
-        // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed, arrow damage and arrow speed.
+        // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed and arrow damage.
         double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
 
         int chargedTicks = getUseDuration(pStack) - pTimeLeft;
@@ -94,12 +104,13 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 
             SoulArrowEntity arrow = new SoulArrowEntity(
                     EntityRegistry.SOUL_ARROW.get(), player, pLevel);
-            // Shoot in the direction the player is looking; power * 1.5 is
-            // half of the max speed as a fully-charged vanilla bow.
+            // Shoot in the direction the player is looking; power * 3.0 is
+            // the max speed as a fully-charged vanilla bow.
             arrow.shootFromRotation(
                     player, player.getXRot(), player.getYRot(),
-                    0.0F, ((float) (power * 1.5F * soulMultiplier)), 1.0F);
+                    0.0F, power * 3.0f, 0.3f);
             arrow.setBaseDamage(damage);
+            arrow.setTarget(getNearestEntityLookedAt(player, 30, 30));
             pLevel.addFreshEntity(arrow);
         }
 
@@ -108,5 +119,150 @@ public class SoulBowItem extends BaseSoulWeaponItem {
                 SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
                 1.0F,
                 1.0F / (pLevel.getRandom().nextFloat() * 0.4F + 1.2F) + power * 0.5F);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack pStack) {
+        return UseAnim.BOW;
+    }
+
+    // -------------------------------------------------------------------------
+    // Target acquisition
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the LivingEntity closest to the player's crosshair within a cone-shaped region.
+     * Uses a multi-stage filter: AABB coarse filter, cone filter, angle sort, then occlusion check.
+     *
+     * @param player       The player whose perspective is used.
+     * @param maxDistance  The maximum distance along the look vector to consider.
+     * @param halfAngleDeg Half of the cone angle in degrees (full cone = 2 * halfAngleDeg).
+     * @return The closest unobstructed Enemy within the cone, or null if none found.
+     */
+    public LivingEntity getNearestEntityLookedAt(Player player, double maxDistance, double halfAngleDeg) {
+        // Get normalized look vector and eye position
+        Vec3 lookVec = player.getViewVector(1.0f).normalize();
+        Vec3 eyePos = player.getEyePosition();
+
+        // Precompute cosine of half-angle for cone filter
+        double cosHalfAngle = Math.cos(Math.toRadians(halfAngleDeg));
+
+        // Build AABB for coarse entity filtering
+        // Expand player's bounding box along the look vector by maxDistance, and by maxDistance / 3 on all sides
+        AABB playerBB = player.getBoundingBox();
+        AABB searchBB = playerBB.expandTowards(lookVec.scale(maxDistance)).inflate(maxDistance / 3);
+
+        // Query all enemies within the AABB (excluding the player)
+        // Will get entities behind the player, but will be sorted out by angle later.
+        List<LivingEntity> candidates = player.level().getEntitiesOfClass(
+                LivingEntity.class, searchBB,
+                e -> e instanceof Enemy
+        );
+
+        // Return null if there is no enemies.
+        if (candidates.isEmpty()) {
+            return null;
+        }
+
+        candidates.removeIf(entity -> {
+            // Get entity center at mid-height
+            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
+            Vec3 toEntity = entityCenter.subtract(eyePos);
+
+            // Project onto look vector to get depth along view axis
+            double t = toEntity.dot(lookVec);
+
+            // Discard entities if it is somewhat at the same position as the player.
+            double toEntityLength = toEntity.length();
+            if (toEntityLength == 0) {
+                return true;
+            }
+
+            // Discard entities behind the player or beyond max distance
+            if (t < 0 || t > maxDistance) {
+                return true;
+            }
+
+            // Compute cosAngle - closer to 1 means closer to crosshair
+            double cosAngle = t / toEntityLength;
+
+            // Discard entities outside the cone
+            if (cosAngle < cosHalfAngle) {
+                return true;
+            }
+
+            return false;
+        });
+
+        // Filter candidates by cone constraints and sort by angle
+        candidates.sort(Comparator.comparingDouble((LivingEntity entity) -> {
+            // Get entity center at mid-height
+            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
+            Vec3 toEntity = entityCenter.subtract(eyePos);
+
+            // Project onto look vector to get depth along view axis
+            double t = toEntity.dot(lookVec);
+
+            double toEntityLength = toEntity.length();
+
+            // Compute cosAngle - closer to 1 means closer to crosshair
+            double cosAngle = t / toEntityLength;
+
+            return -cosAngle; // Negative for descending sort (closest to crosshair first)
+        }));
+
+        // Occlusion check: perform block raycast from eye to entity center
+        for (LivingEntity entity : candidates) {
+            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
+            Vec3 entityEye = entity.getEyePosition();
+            Vec3 entityFeet = entity.getPosition(1.0f);
+
+            // Perform block raycast with COLLIDER shape and empty fluid handling
+            ClipContext centerClipContext = new ClipContext(
+                    eyePos,
+                    entityCenter,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    player
+            );
+            BlockHitResult centerBlockHit = player.level().clip(centerClipContext);
+
+            // If no block obstruction (MISS), return this entity
+            if (centerBlockHit.getType() == HitResult.Type.MISS) {
+                return entity;
+            }
+
+            // Eye check
+            ClipContext eyeClipContext = new ClipContext(
+                    eyePos,
+                    entityEye,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    player
+            );
+            BlockHitResult eyeBlockHit = player.level().clip(eyeClipContext);
+
+            // If no block obstruction (MISS), return this entity
+            if (eyeBlockHit.getType() == HitResult.Type.MISS) {
+                return entity;
+            }
+
+            // Feet check
+            ClipContext feetClipContext = new ClipContext(
+                    eyePos,
+                    entityFeet,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    player
+            );
+            BlockHitResult feetBlockHit = player.level().clip(feetClipContext);
+
+            // If no block obstruction (MISS), return this entity
+            if (feetBlockHit.getType() == HitResult.Type.MISS) {
+                return entity;
+            }
+        }
+
+        return null;
     }
 }

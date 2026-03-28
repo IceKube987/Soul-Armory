@@ -1,5 +1,8 @@
 {
   "item.soul_armory.soul_sword": "灵魂剑",
+  "item.soul_armory.soul_bow": "灵魂弓",
 
-  "tooltip.soul_armory.soul": "灵魂: "
+  "tooltip.soul_armory.soul": "灵魂: ",
+
+  "itemGroup.soul_armory": "Soul Armory"
 }

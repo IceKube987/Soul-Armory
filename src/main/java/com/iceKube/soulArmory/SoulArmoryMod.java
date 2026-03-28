@@ -3,6 +3,7 @@ package com.iceKube.soulArmory;
 import com.iceKube.soulArmory.registries.BlockRegisrty;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
+import com.iceKube.soulArmory.utils.ModItemProperties;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,6 +32,7 @@ public class SoulArmoryMod {
         IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::clientSetup);
 
         BlockRegisrty.BLOCKS.register(modEventBus);
         BlockRegisrty.BLOCKITEMS.register(modEventBus);
@@ -48,11 +51,16 @@ public class SoulArmoryMod {
 
     }
 
+    private void clientSetup(final FMLClientSetupEvent event) {
+        ModItemProperties.addCustomProperties();
+    }
+
     public static final RegistryObject<CreativeModeTab> SOUL_ARMORY_TAB = CREATIVE_MODE_TABS.register("soul_armory_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> ItemRegistry.SOUL_SWORD.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(ItemRegistry.SOUL_SWORD.get());
+                output.accept(ItemRegistry.SOUL_BOW.get());
             }).build());
 //
 //    private void addCreative(BuildCreativeModeTabContentsEvent event) {

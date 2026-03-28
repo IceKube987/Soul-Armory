@@ -50,15 +50,15 @@ public class Config {
 
         SOUL_SWORD_BASE_DAMAGE = BUILDER
                 .comment("The base damage of Soul Sword")
-                .defineInRange("soulSwordBaseDamage", 2.0, 1.0, Double.MAX_VALUE);
+                .defineInRange("soulSwordBaseDamage", 4.0, 1.0, Double.MAX_VALUE);
 
         SOUL_SWORD_POINT_PER_DAMAGE = BUILDER
                 .comment("How many points of soul is required for 1 extra damage")
-                .defineInRange("soulSwordPointPerDamage", 10, 1, Integer.MAX_VALUE);
+                .defineInRange("soulSwordPointPerDamage", 15, 1, Integer.MAX_VALUE);
 
         SOUL_SWORD_POINT_PER_HEALING = BUILDER
                 .comment("How many points of soul is required for 1 HP in healing.")
-                .defineInRange("soulSwordPointPerHealing", 7, 1, Integer.MAX_VALUE);
+                .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
 
         SOUL_SWORD_GRACE_PERIOD = BUILDER
                 .comment("How long (in ticks) will the soul start to decay after not holding.")
@@ -85,8 +85,8 @@ public class Config {
                 .defineInRange("soulBowBaseDamage", 6.0, 1.0, Double.MAX_VALUE);
 
         SOUL_BOW_POINT_PER_DAMAGE_PERCENT = BUILDER
-                .comment("How many points of soul is required for 1 percent of extra damage, drawing speed and arrow speed.")
-                .defineInRange("soulBowPointPerDamagePercent", 3, 1, Integer.MAX_VALUE);
+                .comment("How many points of soul is required for 1 percent of extra damage, drawing speed ")
+                .defineInRange("soulBowPointPerDamagePercent", 1, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_POINT_PER_SPEED_PERCENT = BUILDER
                 .comment("How many points of soul is required for 1 percent of speed boost")
@@ -106,12 +106,11 @@ public class Config {
 
         SOUL_ARROW_HOMING_RANGE = BUILDER
                 .comment("The radius (in blocks) within which the Soul Arrow will search for and home in on the nearest hostile mob.")
-                .defineInRange("soulArrowHomingRange", 32.0, 1.0, Double.MAX_VALUE);
+                .defineInRange("soulArrowHomingRange", 100.0, 1.0, Double.MAX_VALUE);
 
         SOUL_ARROW_TURN_FACTOR = BUILDER
                 .comment("How sharply the Soul Arrow steers toward its target each tick (0.0 = no steering, 1.0 = instant snap).")
-                .comment("A value around 0.08–0.15 produces a smooth, missile-like curve.")
-                .defineInRange("soulArrowTurnFactor", 0.1, 0.0, 1.0);
+                .defineInRange("soulArrowTurnFactor", 0.05, 0.0, 1.0);
 
         BUILDER.pop();
 
