@@ -51,7 +51,7 @@ public abstract class BaseSoulWeaponItem extends Item {
         long lastHeld = tag.getLong(lastHeldGameTimeNBT);
         long ticksDecaying = (currentGameTime - lastHeld) - getGracePeriodTicks(); // 200 ticks = 10 second grace period
         if (ticksDecaying <= 0) return 0;
-        return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks (= 10 soul/sec)
+        return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks
     }
 
     @Override

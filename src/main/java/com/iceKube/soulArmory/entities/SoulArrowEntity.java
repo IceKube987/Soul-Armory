@@ -23,6 +23,7 @@ import java.util.List;
 public class SoulArrowEntity extends AbstractArrow {
 
     private int inGroundTicks = 0;
+    private int flyingTicks = 0;
 
     // Sync the ID for the target to track.
     private static final EntityDataAccessor<Integer> TARGET_ID =
@@ -89,7 +90,7 @@ public class SoulArrowEntity extends AbstractArrow {
                             .subtract(position())
                             .normalize();
                     // Smoothly interpolate the arrow's direction toward the target.
-                    double turnFactor = Config.soulArrowTurnFactor;
+                    double turnFactor = Config.soulArrowTurnFactor * Math.min(1, flyingTicks/2);
                     Vec3 newDir = new Vec3(
                             currentDir.x + (toTarget.x - currentDir.x) * turnFactor,
                             currentDir.y + (toTarget.y - currentDir.y) * turnFactor,
@@ -97,6 +98,11 @@ public class SoulArrowEntity extends AbstractArrow {
                     ).normalize();
                     setDeltaMovement(newDir.scale(currentSpeed));
                 }
+            }
+            flyingTicks++;
+            // discard if the arrow had been flying for more than 10 seconds.
+            if (flyingTicks >= 200){
+                this.discard();
             }
         } else {
             inGroundTicks++;

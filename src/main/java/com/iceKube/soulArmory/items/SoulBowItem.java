@@ -110,7 +110,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
                     player, player.getXRot(), player.getYRot(),
                     0.0F, power * 3.0f, 0.3f);
             arrow.setBaseDamage(damage);
-            arrow.setTarget(getNearestEntityLookedAt(player, 30, 30));
+            arrow.setTarget(getNearestEntityLookedAt(player, Config.soulBowTraceRange, Config.soulBowTraceAngle));
             pLevel.addFreshEntity(arrow);
         }
 

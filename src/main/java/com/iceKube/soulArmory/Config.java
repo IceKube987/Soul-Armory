@@ -23,8 +23,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_POINT_PER_SPEED_PERCENT;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_GRACE_PERIOD;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SOUL_DECAY_SPEED;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_RANGE;
 
-    private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_HOMING_RANGE;
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -100,17 +101,22 @@ public class Config {
                 .comment("How fast should 1 point of soul decay (in ticks)")
                 .defineInRange("soulBowSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
 
+        SOUL_BOW_TRACE_ANGLE = BUILDER
+                .comment("Lock-on cone half-angle in degrees.")
+                .comment("E.g. 15 means enemies within 15° left/right of your crosshair can be targeted.")
+                .defineInRange("soulBowTraceAngle", 15.0, 0.0, 90.0);
+
+        SOUL_BOW_TRACE_RANGE = BUILDER
+                .comment("Max distance for lock-on target acquisition. Enemies beyond this range are ignored.")
+                .defineInRange("soulBowTraceRange", 50.0, 0.0, Double.MAX_VALUE);
+
         BUILDER.pop();
 
         BUILDER.comment("Soul Arrow Settings").push("soul-arrow");
 
-        SOUL_ARROW_HOMING_RANGE = BUILDER
-                .comment("The radius (in blocks) within which the Soul Arrow will search for and home in on the nearest hostile mob.")
-                .defineInRange("soulArrowHomingRange", 100.0, 1.0, Double.MAX_VALUE);
-
         SOUL_ARROW_TURN_FACTOR = BUILDER
                 .comment("How sharply the Soul Arrow steers toward its target each tick (0.0 = no steering, 1.0 = instant snap).")
-                .defineInRange("soulArrowTurnFactor", 0.05, 0.0, 1.0);
+                .defineInRange("soulArrowTurnFactor", 0.5, 0.0, 1.0);
 
         BUILDER.pop();
 
@@ -131,9 +137,10 @@ public class Config {
     public static int soulBowPointPerSpeedPercent;
     public static int soulBowGracePeriod;
     public static int soulBowSoulDecaySpeed;
+    public static double soulBowTraceAngle;
+    public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
     public static double speedBoostCeil;
-    public static double soulArrowHomingRange;
     public static double soulArrowTurnFactor;
 
     @SubscribeEvent
@@ -153,7 +160,8 @@ public class Config {
         speedBoostCeil = SOUL_SPEED_BOOST_CEIL.get();
         soulBowGracePeriod = SOUL_BOW_GRACE_PERIOD.get();
         soulBowSoulDecaySpeed = SOUL_BOW_SOUL_DECAY_SPEED.get();
-        soulArrowHomingRange = SOUL_ARROW_HOMING_RANGE.get();
+        soulBowTraceAngle = SOUL_BOW_TRACE_ANGLE.get();
+        soulBowTraceRange = SOUL_BOW_TRACE_RANGE.get();
         soulArrowTurnFactor = SOUL_ARROW_TURN_FACTOR.get();
     }
 }
