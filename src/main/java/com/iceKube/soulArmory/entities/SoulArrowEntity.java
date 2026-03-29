@@ -113,23 +113,6 @@ public class SoulArrowEntity extends AbstractArrow {
         super.tick();
     }
 
-    /**
-     * Returns the nearest alive {@link Monster} within {@code range} blocks,
-     * excluding the entity that fired this arrow.
-     */
-    private LivingEntity findNearestHostile(double range) {
-        AABB searchBox = getBoundingBox().inflate(range);
-        List<Monster> hostiles = level().getEntitiesOfClass(
-                Monster.class, searchBox,
-                e -> e.isAlive() && e != getOwner()
-        );
-        if (hostiles.isEmpty()) return null;
-        Vec3 pos = position();
-        return hostiles.stream()
-                .min(Comparator.comparingDouble(e -> e.distanceToSqr(pos.x, pos.y, pos.z)))
-                .orElse(null);
-    }
-
     // -------------------------------------------------------------------------
     // Constant damage — ignores velocity; always deals a certain amount of damage.
     // -------------------------------------------------------------------------
