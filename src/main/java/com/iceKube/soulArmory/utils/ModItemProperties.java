@@ -3,7 +3,9 @@ package com.iceKube.soulArmory.utils;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 
@@ -15,8 +17,13 @@ public class ModItemProperties {
     private static void makeSoulBow(){
         ItemProperties.register(ItemRegistry.SOUL_BOW.get(), new ResourceLocation("pull"), (stack, clientLevel, livingEntity, i) -> {
             if (livingEntity == null) return 0.0F;
-            if (livingEntity.getUseItem() != stack) return 0.0F;
+            if (!livingEntity.getUseItem().is(ItemRegistry.SOUL_BOW.get())) return 0.0F;
             if (stack.getTag() == null) return 0.0F;
+            // Compare ID
+            CompoundTag stackTag = stack.getTag();
+            CompoundTag useTag = livingEntity.getUseItem().getTag();
+            if (useTag == null) return 0.0F;
+            if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
 
             // speed up the bow pulling animation.
             double soulMultiplier = (1 + 0.01 * (int)(stack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
@@ -26,7 +33,16 @@ public class ModItemProperties {
         });
 
         ItemProperties.register(ItemRegistry.SOUL_BOW.get(), new ResourceLocation("pulling"), (stack, clientLevel, livingEntity, i) -> {
-            return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+            if (livingEntity == null) return 0.0F;
+            if (!livingEntity.isUsingItem()) return 0.0F;
+            if (!livingEntity.getUseItem().is(ItemRegistry.SOUL_BOW.get())) return 0.0F;
+            // Compare ID
+            CompoundTag stackTag = stack.getTag();
+            CompoundTag useTag = livingEntity.getUseItem().getTag();
+            if (stackTag == null || useTag == null) return 0.0F;
+            if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
+            return stackTag.getUUID("soul_armory.instanceId")
+                    .equals(useTag.getUUID("soul_armory.instanceId")) ? 1.0F : 0.0F;
         });
     }
 }

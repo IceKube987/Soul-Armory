@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class BaseSoulWeaponItem extends Item {
     public BaseSoulWeaponItem(Properties pProperties) {
@@ -73,6 +74,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             CompoundTag NBT = new CompoundTag();
             NBT.putFloat(soulAmountNBT, 0);
             NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
+            NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
             pStack.setTag(NBT);
         }
 
