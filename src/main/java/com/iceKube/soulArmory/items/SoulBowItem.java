@@ -3,11 +3,15 @@ package com.iceKube.soulArmory.items;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +24,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SoulBowItem extends BaseSoulWeaponItem {
 
@@ -65,7 +71,6 @@ public class SoulBowItem extends BaseSoulWeaponItem {
      * No physical arrow is consumed;
      */
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
-        // TODO: Sonic boom skill implementation.
         pPlayer.startUsingItem(pHand);
         return InteractionResultHolder.consume(pPlayer.getItemInHand(pHand));
     }
@@ -81,6 +86,14 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         }
 
         return f;
+    }
+
+    @Override
+    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
+        super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
+        if (pLivingEntity instanceof Player player) {
+            useSkill(player.getItemInHand(InteractionHand.MAIN_HAND), pLevel, player, false);
+        }
     }
 
     /**
@@ -99,6 +112,11 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         if (power < 0.9F) return; // Won't shoot unless charged to max.
 
         if (!pLevel.isClientSide) {
+
+            // Try to use skill
+            if (player.isShiftKeyDown()) {
+                if (useSkill(pStack, pLevel, player, true)) return;
+            }
 
             double damage = Config.soulBowBaseDamage * soulMultiplier; // Apply arrow damage multiplier
 
@@ -125,10 +143,6 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BOW;
     }
-
-    // -------------------------------------------------------------------------
-    // Target acquisition
-    // -------------------------------------------------------------------------
 
     /**
      * Returns the LivingEntity closest to the player's crosshair within a cone-shaped region.
@@ -264,5 +278,57 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         }
 
         return null;
+    }
+
+    /**
+     * Handle skill usage
+     *
+     * @return Whether the skill is successfully cast, will only be used in releaseUsing.
+     */
+    private boolean useSkill(ItemStack stack, Level level, Player player, boolean isRelease) {
+        if (!isRelease) return false; // Ticking skill is not yet implemented.
+
+        // Sonic Boom: trace 15 2-block AABBs along player's view vector and damage all entities hit
+        Set<LivingEntity> hitEntities = new HashSet<>();
+        Vec3 lookVec = player.getViewVector(1.0f).normalize();
+        Vec3 currentCenter = player.getEyePosition().add(lookVec.scale(2)); // 2 blocks ahead of player's eye
+
+        for (int i = 0; i < 15; i++) {
+            AABB searchBox = new AABB(currentCenter, currentCenter).inflate(1); // 2-block AABB centered on currentCenter
+            List<LivingEntity> entities = level.getEntitiesOfClass(
+                    LivingEntity.class, searchBox
+            );
+            hitEntities.addAll(entities);
+            currentCenter = currentCenter.add(lookVec.scale(2)); // Move 2 blocks ahead along view vector
+        }
+
+        // Apply 65 damage to all collected entities
+        for (LivingEntity entity : hitEntities) {
+            entity.hurt(player.damageSources().sonicBoom(player), 65.0f);
+        }
+
+//        player.playSound(SoundEvents.WARDEN_SONIC_BOOM, 3.0F, 1.0F);
+        level.playSound(
+                null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS,
+                3.0F,
+                1.0F);
+
+        // Add particle effect.
+        if (level instanceof ServerLevel serverLevel){
+            Vec3 origin = player.getEyePosition();
+            Vec3 direction = player.getViewVector(1.0f).normalize();
+
+            for (int i = 1; i < 30; ++i) {              // 30 blocks range
+                Vec3 particlePos = origin.add(direction.scale(i));
+                serverLevel.sendParticles(
+                        ParticleTypes.SONIC_BOOM,
+                        particlePos.x, particlePos.y, particlePos.z,
+                        1, 0.0D, 0.0D, 0.0D, 0.0D
+                );
+            }
+        }
+
+        return true;
     }
 }

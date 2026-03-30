@@ -34,13 +34,13 @@ public abstract class BaseSoulWeaponItem extends Item {
     public abstract int getPointPerSpeedPercent();
 
     /**
-     * Calculates how much soul should be decayed based on how long the sword hasn't been held.
+     * Calculates how much soul should be decayed based on how long the weapon hasn't been held.
      * After a grace period of 10 seconds (200 ticks), soul decays at 1 point per 6 ticks.
      * Returns the total accumulated decay (floored to int).
      * <p>
      * Called when:
      * <li>
-     * The player picks up the sword (is holding it in main hand) — to apply deferred decay
+     * The player picks up the weapon (is holding it in main hand) — to apply deferred decay
      * </li>
      * <li>
      * When appendHoverText is called — to show the effective soul amount
@@ -81,9 +81,9 @@ public abstract class BaseSoulWeaponItem extends Item {
         if (pEntity instanceof Player player) {
             CompoundTag NBT = pStack.getTag();
             if (player.getMainHandItem() == pStack) {
-                // Apply accumulated soul decay (calculated since the sword was last held)
+                // Apply accumulated soul decay (calculated since the weapon was last held)
                 NBT.putFloat(soulAmountNBT, Math.max(0, NBT.getFloat(soulAmountNBT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
-                // Refresh the last held game time since the sword is held in player's main hand.
+                // Refresh the last held game time since the weapon is held in player's main hand.
                 NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
             }
         }

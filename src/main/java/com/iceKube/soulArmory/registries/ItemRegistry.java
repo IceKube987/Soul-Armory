@@ -12,8 +12,8 @@ public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SoulArmoryMod.MODID);
 
     public static final RegistryObject<Item> SOUL_SWORD = ITEMS.register("soul_sword",
-            () -> new SoulSwordItem(new Item.Properties()));
+            () -> new SoulSwordItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SOUL_BOW = ITEMS.register("soul_bow",
-            () -> new SoulBowItem(new Item.Properties()));
+            () -> new SoulBowItem(new Item.Properties().stacksTo(1)));
 }
