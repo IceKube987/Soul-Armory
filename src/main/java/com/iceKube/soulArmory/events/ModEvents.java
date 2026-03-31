@@ -3,6 +3,7 @@ package com.iceKube.soulArmory.events;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
+import com.iceKube.soulArmory.items.SoulSwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -10,8 +11,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -78,5 +81,20 @@ public class ModEvents {
                 modifierAmount,
                 AttributeModifier.Operation.ADDITION));
 
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRightClick(PlayerInteractEvent event) {
+        if (!Config.soulSwordDisableShieldUsage) return;
+        if (event.getHand() != InteractionHand.OFF_HAND) return;
+        
+        Player player = event.getEntity();
+        ItemStack mainHandItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack offHandItem = player.getItemInHand(InteractionHand.OFF_HAND);
+        
+        if (!(mainHandItem.getItem() instanceof SoulSwordItem)) return;
+        if (!(offHandItem.getItem() instanceof ShieldItem)) return;
+        
+        event.setCanceled(true);
     }
 }

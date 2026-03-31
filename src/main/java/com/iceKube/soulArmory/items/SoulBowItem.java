@@ -91,9 +91,10 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     @Override
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
-        if (pLivingEntity instanceof Player player) {
-            useSkill(player.getItemInHand(InteractionHand.MAIN_HAND), pLevel, player, false);
-        }
+        // TODO: implement different skills, not just default.
+//        if (pLivingEntity instanceof Player player) {
+//            useSkill(player.getItemInHand(InteractionHand.MAIN_HAND), pLevel, player, false);
+//        }
     }
 
     /**

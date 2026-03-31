@@ -16,6 +16,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_GRACE_PERIOD;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_DECAY_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_POINT_PER_SPEED_PERCENT;
+    private static final ForgeConfigSpec.BooleanValue SOUL_SWORD_DISABLE_SHIELD_USAGE;
 
     private static final ForgeConfigSpec.IntValue SOUL_BOW_MAX_SOUL;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_BASE_DAMAGE;
@@ -72,6 +73,10 @@ public class Config {
         SOUL_SWORD_POINT_PER_SPEED_PERCENT = BUILDER
                 .comment("How many points of soul is required for 1 percent of speed boost")
                 .defineInRange("soulSwordPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
+
+        SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
+                .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand.")
+                .define("soulSwordDisableShieldUsage", true);
 
         BUILDER.pop();
 
@@ -141,6 +146,7 @@ public class Config {
     public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
     public static double speedBoostCeil;
+    public static boolean soulSwordDisableShieldUsage;
     public static double soulArrowTurnFactor;
 
     @SubscribeEvent
@@ -163,5 +169,6 @@ public class Config {
         soulBowTraceAngle = SOUL_BOW_TRACE_ANGLE.get();
         soulBowTraceRange = SOUL_BOW_TRACE_RANGE.get();
         soulArrowTurnFactor = SOUL_ARROW_TURN_FACTOR.get();
+        soulSwordDisableShieldUsage = SOUL_SWORD_DISABLE_SHIELD_USAGE.get();
     }
 }
