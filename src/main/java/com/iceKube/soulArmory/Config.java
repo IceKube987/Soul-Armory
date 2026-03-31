@@ -26,7 +26,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SOUL_DECAY_SPEED;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_RANGE;
-
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_RANGE;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE;
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -115,6 +117,27 @@ public class Config {
                 .comment("Max distance for lock-on target acquisition. Enemies beyond this range are ignored.")
                 .defineInRange("soulBowTraceRange", 50.0, 0.0, Double.MAX_VALUE);
 
+        BUILDER.push("skills").comment("Different Skills for Soul Bow");
+
+        BUILDER.push("sonic-boom");
+
+        SOUL_BOW_SKILL_SONIC_BOOM_RANGE = BUILDER
+                .comment("The range of the sonic boom skill for Soul Bow")
+                .defineInRange("soulBowSkillSBRange", 50, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION = BUILDER
+                .comment("How many points of soul will it take to use the skill.")
+                .defineInRange("soulBowSkillSBConsumption",100,0,Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE = BUILDER
+                .comment("The damage dealt by the sonic boom skill")
+                .defineInRange("soulBowSkillSBDamage", 65.0, 1.0, Double.MAX_VALUE);
+
+        BUILDER.pop();
+
+
+
+        BUILDER.pop();
         BUILDER.pop();
 
         BUILDER.comment("Soul Arrow Settings").push("soul-arrow");
@@ -142,6 +165,9 @@ public class Config {
     public static int soulBowPointPerSpeedPercent;
     public static int soulBowGracePeriod;
     public static int soulBowSoulDecaySpeed;
+    public static int soulBowSkillSBRange;
+    public static int soulBowSkillSBConsumption;
+    public static double soulBowSkillSBDamage;
     public static double soulBowTraceAngle;
     public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
@@ -170,5 +196,8 @@ public class Config {
         soulBowTraceRange = SOUL_BOW_TRACE_RANGE.get();
         soulArrowTurnFactor = SOUL_ARROW_TURN_FACTOR.get();
         soulSwordDisableShieldUsage = SOUL_SWORD_DISABLE_SHIELD_USAGE.get();
+        soulBowSkillSBRange = SOUL_BOW_SKILL_SONIC_BOOM_RANGE.get();
+        soulBowSkillSBConsumption = SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION.get();
+        soulBowSkillSBDamage = SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE.get();
     }
 }

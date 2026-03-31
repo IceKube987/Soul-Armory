@@ -7,11 +7,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -289,12 +287,20 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     private boolean useSkill(ItemStack stack, Level level, Player player, boolean isRelease) {
         if (!isRelease) return false; // Ticking skill is not yet implemented.
 
+        return sonicBoomSkill(stack, level, player);
+    }
+
+    private boolean sonicBoomSkill(ItemStack stack, Level level, Player player) {
+        if (stack.getTag() == null) return false;
+        if (!stack.getTag().contains(soulAmountNBT)) return false;
+        if (stack.getTag().getFloat(soulAmountNBT) < Config.soulBowSkillSBConsumption) return false;
+
         // Sonic Boom: trace 15 2-block AABBs along player's view vector and damage all entities hit
         Set<LivingEntity> hitEntities = new HashSet<>();
         Vec3 lookVec = player.getViewVector(1.0f).normalize();
         Vec3 currentCenter = player.getEyePosition().add(lookVec.scale(2)); // 2 blocks ahead of player's eye
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < (int) Math.ceil(Config.soulBowSkillSBRange / 2.0); i++) {
             AABB searchBox = new AABB(currentCenter, currentCenter).inflate(1); // 2-block AABB centered on currentCenter
             List<LivingEntity> entities = level.getEntitiesOfClass(
                     LivingEntity.class, searchBox
@@ -303,9 +309,9 @@ public class SoulBowItem extends BaseSoulWeaponItem {
             currentCenter = currentCenter.add(lookVec.scale(2)); // Move 2 blocks ahead along view vector
         }
 
-        // Apply 65 damage to all collected entities
+        // Apply damage to all collected entities
         for (LivingEntity entity : hitEntities) {
-            entity.hurt(player.damageSources().sonicBoom(player), 65.0f);
+            entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
         }
 
 //        player.playSound(SoundEvents.WARDEN_SONIC_BOOM, 3.0F, 1.0F);
@@ -316,11 +322,11 @@ public class SoulBowItem extends BaseSoulWeaponItem {
                 1.0F);
 
         // Add particle effect.
-        if (level instanceof ServerLevel serverLevel){
+        if (level instanceof ServerLevel serverLevel) {
             Vec3 origin = player.getEyePosition();
             Vec3 direction = player.getViewVector(1.0f).normalize();
 
-            for (int i = 1; i < 30; ++i) {              // 30 blocks range
+            for (int i = 1; i < Config.soulBowSkillSBRange; ++i) {
                 Vec3 particlePos = origin.add(direction.scale(i));
                 serverLevel.sendParticles(
                         ParticleTypes.SONIC_BOOM,
@@ -329,6 +335,8 @@ public class SoulBowItem extends BaseSoulWeaponItem {
                 );
             }
         }
+
+        stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - Config.soulBowSkillSBConsumption);
 
         return true;
     }
