@@ -313,7 +313,8 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         for (int i = 0; i < (int) Math.ceil(Config.soulBowSkillSBRange / 2.0); i++) {
             AABB searchBox = new AABB(currentCenter, currentCenter).inflate(1); // 2-block AABB centered on currentCenter
             List<LivingEntity> entities = level.getEntitiesOfClass(
-                    LivingEntity.class, searchBox
+                    LivingEntity.class, searchBox,
+                    livingEntity -> livingEntity instanceof Enemy
             );
             hitEntities.addAll(entities);
             currentCenter = currentCenter.add(lookVec.scale(2)); // Move 2 blocks ahead along view vector

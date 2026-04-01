@@ -6,6 +6,8 @@ import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,6 +33,7 @@ public class ModEvents {
     public static void onLivingHurt(LivingDamageEvent event) {
         // Check if the source of the damage is a player holding a Soul Weapon
         if (!(event.getSource().getEntity() instanceof Player player)) return;
+        if (event.getSource().is(DamageTypes.SONIC_BOOM)) return;
 
         ItemStack mainHandItem = player.getMainHandItem();
         if (mainHandItem.getItem() instanceof BaseSoulWeaponItem) {
