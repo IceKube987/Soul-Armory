@@ -23,6 +23,8 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public static final String lastHeldGameTimeNBT = "soul_armory.soul_weapon.lastHeldGameTime";
 
+    public static final String lastSoulOverflowTimeNBT = "soul_armory.soul_weapon.lastSoulOverflowTime";
+
     public boolean doApplySpeedModifier;
 
     public abstract int getGracePeriodTicks();
@@ -32,6 +34,10 @@ public abstract class BaseSoulWeaponItem extends Item {
     public abstract int getMaxSoul();
 
     public abstract int getPointPerSpeedPercent();
+
+    public abstract int getOverflowSpeed();
+
+    public abstract int getOverflowThreshold();
 
     /**
      * Calculates how much soul should be decayed based on how long the weapon hasn't been held.
@@ -55,6 +61,15 @@ public abstract class BaseSoulWeaponItem extends Item {
         return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks
     }
 
+    protected int calculateOverflowDecay(ItemStack stack, long currentGameTime) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null) return 0;
+        long lastDecayed = tag.getLong(lastSoulOverflowTimeNBT);
+        long ticksDecaying = (currentGameTime - lastDecayed);
+        if (ticksDecaying <= 0) return 0;
+        return (int) (ticksDecaying / getOverflowSpeed());
+    }
+
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (pStack.getTag() == null) {
@@ -74,6 +89,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             CompoundTag NBT = new CompoundTag();
             NBT.putFloat(soulAmountNBT, 0);
             NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
+            NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
             pStack.setTag(NBT);
         }
@@ -85,6 +101,17 @@ public abstract class BaseSoulWeaponItem extends Item {
                 NBT.putFloat(soulAmountNBT, Math.max(0, NBT.getFloat(soulAmountNBT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
                 // Refresh the last held game time since the weapon is held in player's main hand.
                 NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
+            }
+
+            // Handle soul decay beyond the threshold.
+            // 2 points of soul is decayed per second by default.
+            if (NBT.getFloat(soulAmountNBT) > getOverflowThreshold()){
+                if (pLevel.getGameTime() - NBT.getLong(lastSoulOverflowTimeNBT) >= getOverflowSpeed()){
+                    NBT.putFloat(soulAmountNBT, Math.max(getOverflowThreshold(), NBT.getFloat(soulAmountNBT) - calculateOverflowDecay(pStack, pLevel.getGameTime())));
+                    NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
+                }
+            }else {
+                NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             }
         }
 

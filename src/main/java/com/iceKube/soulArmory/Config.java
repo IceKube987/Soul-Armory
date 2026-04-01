@@ -17,6 +17,8 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SOUL_DECAY_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_POINT_PER_SPEED_PERCENT;
     private static final ForgeConfigSpec.BooleanValue SOUL_SWORD_DISABLE_SHIELD_USAGE;
+    private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_SPEED;
+    private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_THRESHOLD;
 
     private static final ForgeConfigSpec.IntValue SOUL_BOW_MAX_SOUL;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_BASE_DAMAGE;
@@ -24,6 +26,8 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_POINT_PER_SPEED_PERCENT;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_GRACE_PERIOD;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SOUL_DECAY_SPEED;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_OVERFLOW_SPEED;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_OVERFLOW_THRESHOLD;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_RANGE;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_RANGE;
@@ -80,6 +84,15 @@ public class Config {
                 .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand.")
                 .define("soulSwordDisableShieldUsage", true);
 
+        SOUL_SWORD_OVERFLOW_THRESHOLD = BUILDER
+                .comment("The soul amount threshold above which soul start to decay in overflow speed.")
+                .comment("To disable this feature, change the value to the same as max soul.")
+                .defineInRange("soulSwordOverflowThreshold", 200, 1, Integer.MAX_VALUE);
+
+        SOUL_SWORD_OVERFLOW_SPEED = BUILDER
+                .comment("How fast (in ticks) 1 point of soul decays when above overflow threshold.")
+                .defineInRange("soulSwordOverflowSpeed", 10, 1, Integer.MAX_VALUE);
+
         BUILDER.pop();
 
         BUILDER.comment("Soul Bow Settings").push("soul-bow");
@@ -107,6 +120,15 @@ public class Config {
         SOUL_BOW_SOUL_DECAY_SPEED = BUILDER
                 .comment("How fast should 1 point of soul decay (in ticks)")
                 .defineInRange("soulBowSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_OVERFLOW_THRESHOLD = BUILDER
+                .comment("The soul amount threshold above which soul start to decay in overflow speed.")
+                .comment("To disable this feature, change the value to the same as max soul.")
+                .defineInRange("soulBowOverflowThreshold", 200, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_OVERFLOW_SPEED = BUILDER
+                .comment("How fast (in ticks) 1 point of soul decays when above overflow threshold.")
+                .defineInRange("soulBowOverflowSpeed", 10, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_TRACE_ANGLE = BUILDER
                 .comment("Lock-on cone half-angle in degrees.")
@@ -174,6 +196,10 @@ public class Config {
     public static double speedBoostCeil;
     public static boolean soulSwordDisableShieldUsage;
     public static double soulArrowTurnFactor;
+    public static int soulSwordOverflowSpeed;
+    public static int soulSwordOverflowThreshold;
+    public static int soulBowOverflowSpeed;
+    public static int soulBowOverflowThreshold;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -199,5 +225,9 @@ public class Config {
         soulBowSkillSBRange = SOUL_BOW_SKILL_SONIC_BOOM_RANGE.get();
         soulBowSkillSBConsumption = SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION.get();
         soulBowSkillSBDamage = SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE.get();
+        soulSwordOverflowSpeed = SOUL_SWORD_OVERFLOW_SPEED.get();
+        soulSwordOverflowThreshold = SOUL_SWORD_OVERFLOW_THRESHOLD.get();
+        soulBowOverflowSpeed = SOUL_BOW_OVERFLOW_SPEED.get();
+        soulBowOverflowThreshold = SOUL_BOW_OVERFLOW_THRESHOLD.get();
     }
 }

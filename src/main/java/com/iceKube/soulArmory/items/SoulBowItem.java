@@ -53,6 +53,16 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         return Config.soulBowPointPerSpeedPercent;
     }
 
+    @Override
+    public int getOverflowSpeed() {
+        return Config.soulBowOverflowSpeed;
+    }
+
+    @Override
+    public int getOverflowThreshold() {
+        return Config.soulBowOverflowThreshold;
+    }
+
     // -------------------------------------------------------------------------
     // Bow usage, copied and modified from BowItem
     // -------------------------------------------------------------------------

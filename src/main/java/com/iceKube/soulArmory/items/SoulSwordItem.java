@@ -48,6 +48,16 @@ public class SoulSwordItem extends BaseSoulWeaponItem {
     }
 
     @Override
+    public int getOverflowSpeed() {
+        return Config.soulSwordOverflowSpeed;
+    }
+
+    @Override
+    public int getOverflowThreshold() {
+        return Config.soulSwordOverflowThreshold;
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand != InteractionHand.MAIN_HAND) return super.use(pLevel, pPlayer, pUsedHand);
 
