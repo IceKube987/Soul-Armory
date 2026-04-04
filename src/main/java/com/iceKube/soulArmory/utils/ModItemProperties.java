@@ -5,16 +5,15 @@ import com.iceKube.soulArmory.registries.ItemRegistry;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 
 public class ModItemProperties {
-    public static void addCustomProperties(){
+    public static void addCustomProperties() {
         makeSoulBow();
     }
 
-    private static void makeSoulBow(){
+    private static void makeSoulBow() {
         ItemProperties.register(ItemRegistry.SOUL_BOW.get(), new ResourceLocation("pull"), (stack, clientLevel, livingEntity, i) -> {
             if (livingEntity == null) return 0.0F;
             if (!livingEntity.getUseItem().is(ItemRegistry.SOUL_BOW.get())) return 0.0F;
@@ -26,7 +25,7 @@ public class ModItemProperties {
             if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
 
             // speed up the bow pulling animation.
-            double soulMultiplier = (1 + 0.01 * (int)(stack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
+            double soulMultiplier = (1 + 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
             int chargedTicks = stack.getUseDuration() - livingEntity.getUseItemRemainingTicks();
             chargedTicks /= 2; // Same as releaseUsing
             return (float) Math.min(chargedTicks * soulMultiplier / 20.0F, 1.0F);

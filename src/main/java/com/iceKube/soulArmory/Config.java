@@ -132,8 +132,8 @@ public class Config {
 
         SOUL_BOW_TRACE_ANGLE = BUILDER
                 .comment("Lock-on cone half-angle in degrees.")
-                .comment("E.g. 15 means enemies within 15° left/right of your crosshair can be targeted.")
-                .defineInRange("soulBowTraceAngle", 15.0, 0.0, 90.0);
+                .comment("E.g. 10 means enemies within 10° left/right of your crosshair can be targeted.")
+                .defineInRange("soulBowTraceAngle", 10.0, 0.0, 90.0);
 
         SOUL_BOW_TRACE_RANGE = BUILDER
                 .comment("Max distance for lock-on target acquisition. Enemies beyond this range are ignored.")
@@ -149,14 +149,13 @@ public class Config {
 
         SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION = BUILDER
                 .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillSBConsumption",100,0,Integer.MAX_VALUE);
+                .defineInRange("soulBowSkillSBConsumption", 100, 0, Integer.MAX_VALUE);
 
         SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE = BUILDER
                 .comment("The damage dealt by the sonic boom skill")
                 .defineInRange("soulBowSkillSBDamage", 65.0, 1.0, Double.MAX_VALUE);
 
         BUILDER.pop();
-
 
 
         BUILDER.pop();

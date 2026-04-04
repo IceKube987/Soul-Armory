@@ -8,17 +8,13 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.List;
 
 public class SoulArrowEntity extends AbstractArrow {
 
@@ -90,7 +86,7 @@ public class SoulArrowEntity extends AbstractArrow {
                             .subtract(position())
                             .normalize();
                     // Smoothly interpolate the arrow's direction toward the target.
-                    double turnFactor = Config.soulArrowTurnFactor * Math.min(1, flyingTicks/2);
+                    double turnFactor = Config.soulArrowTurnFactor * Math.min(1, flyingTicks / 2);
                     Vec3 newDir = new Vec3(
                             currentDir.x + (toTarget.x - currentDir.x) * turnFactor,
                             currentDir.y + (toTarget.y - currentDir.y) * turnFactor,
@@ -101,7 +97,7 @@ public class SoulArrowEntity extends AbstractArrow {
             }
             flyingTicks++;
             // discard if the arrow had been flying for more than 10 seconds.
-            if (flyingTicks >= 200){
+            if (flyingTicks >= 200) {
                 this.discard();
             }
         } else {

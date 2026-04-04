@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory;
 
+import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.registries.BlockRegisrty;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
@@ -48,7 +49,9 @@ public class SoulArmoryMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        event.enqueueWork(()->{
+            ModPacketHandler.register();
+        });
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

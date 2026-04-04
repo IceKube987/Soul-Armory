@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,12 +104,12 @@ public abstract class BaseSoulWeaponItem extends Item {
 
             // Handle soul decay beyond the threshold.
             // 2 points of soul is decayed per second by default.
-            if (NBT.getFloat(soulAmountNBT) > getOverflowThreshold()){
-                if (pLevel.getGameTime() - NBT.getLong(lastSoulOverflowTimeNBT) >= getOverflowSpeed()){
+            if (NBT.getFloat(soulAmountNBT) > getOverflowThreshold()) {
+                if (pLevel.getGameTime() - NBT.getLong(lastSoulOverflowTimeNBT) >= getOverflowSpeed()) {
                     NBT.putFloat(soulAmountNBT, Math.max(getOverflowThreshold(), NBT.getFloat(soulAmountNBT) - calculateOverflowDecay(pStack, pLevel.getGameTime())));
                     NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
                 }
-            }else {
+            } else {
                 NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             }
         }
