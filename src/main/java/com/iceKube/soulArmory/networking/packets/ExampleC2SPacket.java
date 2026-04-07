@@ -9,18 +9,13 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ExampleC2SPacket {
-
-    public ExampleC2SPacket() {
-
-    }
+public class ExampleC2SPacket extends BasePacket {
 
     public ExampleC2SPacket(FriendlyByteBuf buf) {
-
+        super(buf);
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-
+    public ExampleC2SPacket() {
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {

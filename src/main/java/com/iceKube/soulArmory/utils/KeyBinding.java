@@ -7,10 +7,10 @@ import org.lwjgl.glfw.GLFW;
 
 public class KeyBinding {
 
-    public static final String KEY_CATEGORY_TUTORIAL = "key.category.tutorialmod.tutorial";
-    public static final String KEY_DRINK_WATER = "key.tutorialmod.drink_water";
+    public static final String KEY_CATEGORY = "key.category.soul_armory";
+    public static final String KEY_TEST = "key.soul_armory.test";
 
-    public static final KeyMapping DRINKING_KEY = new KeyMapping(KEY_DRINK_WATER, KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, KEY_CATEGORY_TUTORIAL);
+    public static final KeyMapping TEST_KEY = new KeyMapping(KEY_TEST, KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, KEY_CATEGORY);
 
 }

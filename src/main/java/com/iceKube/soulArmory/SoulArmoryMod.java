@@ -49,7 +49,7 @@ public class SoulArmoryMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(()->{
+        event.enqueueWork(() -> {
             ModPacketHandler.register();
         });
     }

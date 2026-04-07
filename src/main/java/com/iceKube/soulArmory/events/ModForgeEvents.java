@@ -29,7 +29,7 @@ import java.util.UUID;
 public class ModForgeEvents {
 
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
-    private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96");
+    private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
 
     // Add soul when player is hurting entity with soul weapons.
     @SubscribeEvent
@@ -106,7 +106,7 @@ public class ModForgeEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if (KeyBinding.DRINKING_KEY.consumeClick()) {
+        if (KeyBinding.TEST_KEY.consumeClick()) {
             ModPacketHandler.sendToServer(new ExampleC2SPacket());
         }
     }

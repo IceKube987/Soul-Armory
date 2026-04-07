@@ -32,16 +32,6 @@ public class ModPacketHandler {
                 .add();
     }
 
-//    public static void handle(MyMessage msg, Supplier<NetworkEvent.Context> ctx) {
-//        ctx.get().enqueueWork(() -> {
-//            // Work that needs to be thread-safe (most work)
-//            ServerPlayer sender = ctx.get().getSender(); // the client that sent this packet
-//            // Do stuff
-//        });
-//        ctx.get().setPacketHandled(true);
-//    }
-
-
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);
     }
