@@ -7,6 +7,7 @@ import com.iceKube.soulArmory.items.SoulSwordItem;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.ExampleC2SPacket;
 import com.iceKube.soulArmory.utils.KeyBinding;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -24,6 +26,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.UUID;
+
+import static com.iceKube.soulArmory.client.OverlayHandler.drawSoulBar;
 
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModForgeEvents {
@@ -109,5 +113,21 @@ public class ModForgeEvents {
         if (KeyBinding.TEST_KEY.consumeClick()) {
             ModPacketHandler.sendToServer(new ExampleC2SPacket());
         }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+        // Draw after rendering all vanilla GUIs
+        GuiGraphics gui = event.getGuiGraphics();
+        int screenWidth = event.getWindow().getGuiScaledWidth();
+        int screenHeight = event.getWindow().getGuiScaledHeight();
+
+        int barWidth = 100;
+        int barHeight = 20;
+        int x = (screenWidth - barWidth) / 2;
+        int y = screenHeight - 50;
+
+        // Call method
+        drawSoulBar(gui, x, y, barWidth, barHeight);
     }
 }

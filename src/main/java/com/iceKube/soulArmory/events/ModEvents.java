@@ -2,12 +2,18 @@ package com.iceKube.soulArmory.events;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.renderer.SoulArrowRenderer;
+import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.utils.KeyBinding;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvents {
@@ -25,5 +31,19 @@ public class ModEvents {
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         event.register(KeyBinding.TEST_KEY);
+    }
+
+    @SubscribeEvent
+    public static void registerShaders(RegisterShadersEvent evt) {
+        CoreShaders.init((id, vertexFormat, onLoaded) -> {
+            try {
+                evt.registerShader(
+                        new ShaderInstance(evt.getResourceProvider(), id, vertexFormat),
+                        onLoaded
+                );
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
     }
 }
