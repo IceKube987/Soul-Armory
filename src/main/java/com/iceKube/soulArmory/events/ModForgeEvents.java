@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.UUID;
 
-import static com.iceKube.soulArmory.client.OverlayHandler.drawSoulBar;
+import static com.iceKube.soulArmory.client.OverlayHandler.onRenderGUI;
 
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModForgeEvents {
@@ -124,10 +124,12 @@ public class ModForgeEvents {
 
         int barWidth = 182;
         int barHeight = 5;
-        int x = (screenWidth - barWidth) / 2;
-        int y = screenHeight - 50;
+        int renderWidth = (int) (screenWidth * 0.2);
+        int renderHeight = (int) (screenWidth * 0.01);
+        int x = (int) (screenWidth * 0.025);
+        int y = screenHeight - 15;
 
         // Call method
-        drawSoulBar(gui, x, y,0,15, barWidth, barHeight,barWidth, barHeight);
+        onRenderGUI(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
     }
 }
