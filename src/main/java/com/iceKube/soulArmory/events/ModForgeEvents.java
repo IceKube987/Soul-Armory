@@ -122,12 +122,12 @@ public class ModForgeEvents {
         int screenWidth = event.getWindow().getGuiScaledWidth();
         int screenHeight = event.getWindow().getGuiScaledHeight();
 
-        int barWidth = 100;
-        int barHeight = 20;
+        int barWidth = 182;
+        int barHeight = 5;
         int x = (screenWidth - barWidth) / 2;
         int y = screenHeight - 50;
 
         // Call method
-        drawSoulBar(gui, x, y, barWidth, barHeight);
+        drawSoulBar(gui, x, y,0,15, barWidth, barHeight,barWidth, barHeight);
     }
 }

@@ -9,27 +9,29 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class OverlayHandler {
 
-    public static void drawSoulBar(GuiGraphics gui, int x, int y, int w, int h) {
-        var shader = CoreShaders.showUV;
+    public static void drawSoulBar(GuiGraphics gui, int x, int y, int u, int v, int tex_w, int tex_h, int w, int h) {
+        var shader = CoreShaders.soulBar;
         if (shader == null) return;
 
         var matrix = gui.pose().last().pose();
-        RenderSystem.setShader(CoreShaders::showUV);
+        RenderSystem.setShader(CoreShaders::soulBar);
 
-        float minU = 0.1f;
-        float maxU = 0.3f;
-        float minV = 0.2f;
-        float maxV = 0.5f;
+        float minU = u / 256f;
+        float maxU = (u + tex_w) / 256f;
+        float minV = v / 256f;
+        float maxV = (v + tex_h) / 256f;
 
-        shader.safeGetUniform("UVRange").set(new float[]{minU,maxU,minV,maxV});
+        shader.safeGetUniform("UVRange").set(new float[]{minU, maxU, minV, maxV});
 
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/bars.png"));
 
         builder.vertex(matrix, x, y + h, 0).uv(minU, maxV).endVertex();
         builder.vertex(matrix, x + w, y + h, 0).uv(maxU, maxV).endVertex();
