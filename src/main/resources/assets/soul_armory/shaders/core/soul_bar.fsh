@@ -72,8 +72,8 @@ void main() {
 
     s += vec4(vec3(intensity), 0);
 
-    // 0.706 = 180/256
-    if (texCoord0.x < 0.706 * SoulOverflowPercentage)
+    // 0.71 = 182/256
+    if (texCoord0.x < 0.71 * SoulOverflowPercentage)
     s = vec4(0.0);
 
     fragColor = (color + s) * ColorModulator;

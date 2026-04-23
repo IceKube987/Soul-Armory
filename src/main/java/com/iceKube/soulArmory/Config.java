@@ -90,7 +90,7 @@ public class Config {
                 .defineInRange("soulSwordOverflowThreshold", 200, 1, Integer.MAX_VALUE);
 
         SOUL_SWORD_OVERFLOW_SPEED = BUILDER
-                .comment("How fast (in ticks) 1 point of soul decays when above overflow threshold.")
+                .comment("How fast (in ticks) 1 point of soul decays when above the overflow threshold.")
                 .defineInRange("soulSwordOverflowSpeed", 10, 1, Integer.MAX_VALUE);
 
         BUILDER.pop();
@@ -127,7 +127,7 @@ public class Config {
                 .defineInRange("soulBowOverflowThreshold", 200, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_OVERFLOW_SPEED = BUILDER
-                .comment("How fast (in ticks) 1 point of soul decays when above overflow threshold.")
+                .comment("How fast (in ticks) 1 point of soul decays when above the overflow threshold.")
                 .defineInRange("soulBowOverflowSpeed", 10, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_TRACE_ANGLE = BUILDER

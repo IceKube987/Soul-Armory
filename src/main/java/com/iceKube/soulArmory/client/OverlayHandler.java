@@ -27,14 +27,15 @@ public class OverlayHandler {
         if (item == null) return;
         if (!(item instanceof BaseSoulWeaponItem baseSoulWeaponItem)) return;
         float soulPoint = 0;
-        if (itemStack.getTag() != null && itemStack.getTag().contains(BaseSoulWeaponItem.soulAmountNBT)){
+        if (itemStack.getTag() != null && itemStack.getTag().contains(BaseSoulWeaponItem.soulAmountNBT)) {
             soulPoint = itemStack.getTag().getFloat(BaseSoulWeaponItem.soulAmountNBT);
         }
 
         float soulPercentage = soulPoint / baseSoulWeaponItem.getMaxSoul();
+        float soulOverflowPercentage = ((float) baseSoulWeaponItem.getOverflowThreshold()) / baseSoulWeaponItem.getMaxSoul();
 
         drawSoulBarOutline(gui, x, y, 0, 10, tex_w, tex_h, w, h);
-        drawSoulBar(gui, x, y, 0, 15, tex_w * soulPercentage, tex_h, w * soulPercentage, h);
+        drawSoulBar(gui, x, y, 0, 15, tex_w * soulPercentage, tex_h, w * soulPercentage, h, soulOverflowPercentage);
         renderItem(gui, x - 8, y - 4, 0.5F);
     }
 
@@ -59,6 +60,13 @@ public class OverlayHandler {
         Tesselator.getInstance().end();
     }
 
+    private static void drawSoulBar(GuiGraphics gui, int x, int y, int u, int v, float tex_w, float tex_h, float w, float h, float soulOverFlowPercentage) {
+        var shader = CoreShaders.soulBar();
+        if (shader == null) return;
+        shader.safeGetUniform("SoulOverflowPercentage").set(soulOverFlowPercentage);
+        drawSoulBar(gui, x, y, u, v, tex_w, tex_h, w, h);
+    }
+
     private static void drawSoulBar(GuiGraphics gui, int x, int y, int u, int v, float tex_w, float tex_h, float w, float h) {
         var shader = CoreShaders.soulBar();
         if (shader == null) return;
@@ -70,8 +78,6 @@ public class OverlayHandler {
         float maxU = (u + tex_w) / 256f;
         float minV = v / 256f;
         float maxV = (v + tex_h) / 256f;
-
-        shader.safeGetUniform("UVRange").set(new float[]{minU, maxU, minV, maxV});
 
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -112,10 +118,10 @@ public class OverlayHandler {
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
-        builder.vertex(matrix, 0, 0 + h, 0).uv(-1,1).endVertex();
-        builder.vertex(matrix, 0 + w, 0 + h, 0).uv(1,1).endVertex();
-        builder.vertex(matrix, 0 + w, 0, 0).uv(1,-1).endVertex();
-        builder.vertex(matrix, 0, 0, 0).uv(-1,-1).endVertex();
+        builder.vertex(matrix, 0, 0 + h, 0).uv(-1, 1).endVertex();
+        builder.vertex(matrix, 0 + w, 0 + h, 0).uv(1, 1).endVertex();
+        builder.vertex(matrix, 0 + w, 0, 0).uv(1, -1).endVertex();
+        builder.vertex(matrix, 0, 0, 0).uv(-1, -1).endVertex();
 
         Tesselator.getInstance().end();
     }
