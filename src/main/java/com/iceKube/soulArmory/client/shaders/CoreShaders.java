@@ -10,8 +10,9 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.util.function.Consumer;
 
 public class CoreShaders {
-    public static ShaderInstance soulBar;
-    public static ShaderInstance showUV;
+    private static ShaderInstance soulBar;
+    private static ShaderInstance showUV;
+    private static ShaderInstance soulVignette;
 
     public static void init(TriConsumer<ResourceLocation, VertexFormat, Consumer<ShaderInstance>> registrations) {
         registrations.accept(
@@ -24,6 +25,11 @@ public class CoreShaders {
                 DefaultVertexFormat.POSITION_TEX,
                 inst -> showUV = inst
         );
+        registrations.accept(
+                new ResourceLocation(SoulArmoryMod.MODID, "soul_vignette"),
+                DefaultVertexFormat.POSITION_TEX,
+                inst -> soulVignette = inst
+        );
 
     }
 
@@ -33,5 +39,9 @@ public class CoreShaders {
 
     public static ShaderInstance showUV(){
         return showUV;
+    }
+
+    public static ShaderInstance soulVignette(){
+        return soulVignette;
     }
 }

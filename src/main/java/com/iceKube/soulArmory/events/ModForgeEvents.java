@@ -2,11 +2,13 @@ package com.iceKube.soulArmory.events;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.ExampleC2SPacket;
 import com.iceKube.soulArmory.utils.KeyBinding;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -28,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.UUID;
 
 import static com.iceKube.soulArmory.client.OverlayHandler.onRenderGUI;
+import static com.iceKube.soulArmory.client.OverlayHandler.renderVignette;
 
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModForgeEvents {
@@ -111,12 +115,28 @@ public class ModForgeEvents {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (KeyBinding.TEST_KEY.consumeClick()) {
-            ModPacketHandler.sendToServer(new ExampleC2SPacket());
+//            ModPacketHandler.sendToServer(new ExampleC2SPacket());
+            var shader = CoreShaders.soulVignette();
+            if (shader == null) return;
+            Minecraft mc = Minecraft.getInstance();
+            shader.safeGetUniform("FadeinTime").set(mc.level.getDayTime());
+            int i = shader.getUniform("Started").getIntBuffer().get();
+            if (i == 0){
+                shader.getUniform("Started").set(1);
+            }else {
+                shader.getUniform("Started").set(0);
+            }
         }
     }
 
     @SubscribeEvent
     public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+
+        // Only render ONCE.
+        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
+            return;
+        }
+
         // Draw after rendering all vanilla GUIs
         GuiGraphics gui = event.getGuiGraphics();
         int screenWidth = event.getWindow().getGuiScaledWidth();
@@ -131,5 +151,7 @@ public class ModForgeEvents {
 
         // Call method
         onRenderGUI(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
+
+        renderVignette(gui,screenWidth,screenHeight);
     }
 }

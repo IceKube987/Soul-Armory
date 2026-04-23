@@ -60,7 +60,7 @@ public class OverlayHandler {
     }
 
     private static void drawSoulBar(GuiGraphics gui, int x, int y, int u, int v, float tex_w, float tex_h, float w, float h) {
-        var shader = CoreShaders.soulBar;
+        var shader = CoreShaders.soulBar();
         if (shader == null) return;
 
         var matrix = gui.pose().last().pose();
@@ -98,6 +98,26 @@ public class OverlayHandler {
         gui.renderItem(itemStack, 0, 0);
 
         ps.popPose();
+    }
+
+    public static void renderVignette(GuiGraphics gui, int w, int h) {
+        var shader = CoreShaders.soulVignette();
+        if (shader == null) return;
+
+        var matrix = gui.pose().last().pose();
+        RenderSystem.setShader(CoreShaders::soulVignette);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        BufferBuilder builder = Tesselator.getInstance().getBuilder();
+        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+
+        builder.vertex(matrix, 0, 0 + h, 0).uv(-1,1).endVertex();
+        builder.vertex(matrix, 0 + w, 0 + h, 0).uv(1,1).endVertex();
+        builder.vertex(matrix, 0 + w, 0, 0).uv(1,-1).endVertex();
+        builder.vertex(matrix, 0, 0, 0).uv(-1,-1).endVertex();
+
+        Tesselator.getInstance().end();
     }
 
     // This method is just for fun.

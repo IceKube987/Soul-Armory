@@ -62,7 +62,7 @@ void main() {
     float localX = (texCoord0.x - UVRange.x) / (UVRange.y - UVRange.x);
     float localY = (texCoord0.y - UVRange.z) / (UVRange.w - UVRange.z);
 
-    vec4 s = vec4(vec3(0.15), 1);
+    vec4 s = vec4(vec3(0.2), 1);
 
     float p = perlin_noise(vec2(texCoord0.x - time * 0.002,texCoord0.y), 15.0f);
 
