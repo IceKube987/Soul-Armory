@@ -2,7 +2,6 @@
 
 uniform sampler2D Sampler0;
 uniform vec4 ColorModulator;
-uniform vec4 UVRange;
 uniform float GameTime;
 uniform float SoulOverflowPercentage;
 
@@ -58,9 +57,6 @@ void main() {
 
     // GameTime is in [0, 1) over course of the day, turn it back into ticks
     float time = GameTime * 24000;
-    // Normalize UV coordinate
-    float localX = (texCoord0.x - UVRange.x) / (UVRange.y - UVRange.x);
-    float localY = (texCoord0.y - UVRange.z) / (UVRange.w - UVRange.z);
 
     vec4 s = vec4(vec3(0.2), 1);
 

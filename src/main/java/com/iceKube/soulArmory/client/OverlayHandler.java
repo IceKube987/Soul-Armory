@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class OverlayHandler {
 
+    private static final ResourceLocation BAR_TEXTURE = new ResourceLocation("textures/gui/bars.png");
+
     public static void onRenderGUI(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
@@ -50,7 +52,7 @@ public class OverlayHandler {
 
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/bars.png"));
+        RenderSystem.setShaderTexture(0, BAR_TEXTURE);
 
         builder.vertex(matrix, x, y + h, 0).uv(minU, maxV).endVertex();
         builder.vertex(matrix, x + w, y + h, 0).uv(maxU, maxV).endVertex();
@@ -81,7 +83,7 @@ public class OverlayHandler {
 
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/bars.png"));
+//        RenderSystem.setShaderTexture(0, BAR_TEXTURE);
 
         builder.vertex(matrix, x, y + h, 0).uv(minU, maxV).endVertex();
         builder.vertex(matrix, x + w, y + h, 0).uv(maxU, maxV).endVertex();
