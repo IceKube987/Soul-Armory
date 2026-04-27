@@ -1,4 +1,4 @@
-package com.iceKube.soulArmory.networking.packets;
+package com.iceKube.soulArmory.networking;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;

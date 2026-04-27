@@ -1,7 +1,8 @@
 package com.iceKube.soulArmory.networking;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.networking.packets.ExampleC2SPacket;
+import com.iceKube.soulArmory.networking.packets.C2S.ExampleC2SPacket;
+import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -29,6 +30,12 @@ public class ModPacketHandler {
                 .decoder(ExampleC2SPacket::new)
                 .encoder(ExampleC2SPacket::toBytes)
                 .consumerMainThread(ExampleC2SPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(SwitchSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SwitchSkillC2SPacket::new)
+                .encoder(SwitchSkillC2SPacket::toBytes)
+                .consumerMainThread(SwitchSkillC2SPacket::handle)
                 .add();
     }
 

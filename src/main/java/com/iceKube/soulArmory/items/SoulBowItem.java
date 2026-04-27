@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,16 +30,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class SoulBowItem extends BaseSoulWeaponItem {
 
     public static final String lastExecutedTime = "soul_armory.soul_bow.last_executed_time";
-
     public static final String availableSkills = "soul_armory.soul_bow.available_skills";
-
     public static final String currentSkill = "soul_armory.soul_bow.current_skill";
+    public static final String currentSkillIndex = "soul_armory.soul_bow.current_skill_index";
 
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
@@ -83,6 +84,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
             CompoundTag tag = pStack.getTag();
             tag.putLong(lastExecutedTime, pLevel.getGameTime());
             tag.putString(currentSkill, SoulSkills.SONIC_BOOM.soulSkillId.toString());
+            tag.putInt(currentSkillIndex, 0);
 
             ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
             listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
@@ -193,6 +195,10 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BOW;
     }
+
+    // --------------------
+    // Unique methods
+    // --------------------
 
     /**
      * Returns the LivingEntity closest to the player's crosshair within a cone-shaped region.
@@ -338,6 +344,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     private boolean useInstantSkill(ItemStack stack, Level level, Player player) {
 //        return sonicBoomSkill(stack, level, player);
         if (!(getCurrentSkill(stack) instanceof InstantSoulSkill skill)) return false;
+
         return skill.execute(stack, level, player);
     }
 
@@ -346,10 +353,14 @@ public class SoulBowItem extends BaseSoulWeaponItem {
      */
     private void useContinuousSkill(ItemStack stack, Level level, Player player) {
         if (!(getCurrentSkill(stack) instanceof ContinuousSoulSkill skill)) return;
-        return;
+        if (stack.getTag() == null || !stack.getTag().contains(lastExecutedTime)) return;
+
+        if (skill.execute(stack, level, player)) {
+            stack.getTag().putLong(lastExecutedTime, level.getGameTime());
+        }
     }
 
-    private BaseSoulSkill getCurrentSkill(ItemStack stack) {
+    public BaseSoulSkill getCurrentSkill(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null || !tag.contains(currentSkill, Tag.TAG_STRING)) {
             return null;
@@ -365,5 +376,61 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         }
 
         return SoulSkills.getSkill(skillId);
+    }
+
+    public List<BaseSoulSkill> getAvailableSkills(ItemStack stack) {
+        List<BaseSoulSkill> skills = new ArrayList<>();
+        if (!stack.hasTag()) return skills;
+
+        ListTag listTag = stack.getTag().getList(availableSkills, Tag.TAG_STRING);
+
+        for (int i = 0; i < listTag.size(); i++) {
+            ResourceLocation id = ResourceLocation.tryParse(listTag.getString(i));
+            if (id != null) {
+                BaseSoulSkill skill = SoulSkills.getSkill(id);
+                if (skill != null) {
+                    skills.add(skill);
+                } else {
+                    // if the skill is somehow missing, remove it from the list.
+                    listTag.remove(listTag.getString(i));
+                    stack.getTag().put(availableSkills, listTag);
+                }
+            }else {
+                // if the string somehow does not represent a skill, remove it from the list.
+                listTag.remove(listTag.getString(i));
+                stack.getTag().put(availableSkills, listTag);
+            }
+        }
+        return skills;
+    }
+
+    public void cycleToNextSkill(ItemStack stack, Player player) {
+        if (!stack.hasTag()) return;
+        CompoundTag tag = stack.getTag();
+
+        List<BaseSoulSkill> skills = getAvailableSkills(stack);
+        int size = skills.size();
+
+        // Check if there is only one skill
+        if (size <= 1) return;
+
+        int currentIndex = tag.getInt(currentSkillIndex);
+        // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
+        int nextIndex = (currentIndex + 1) % size;
+        tag.putInt(currentSkillIndex, nextIndex);
+
+        // actually switch to next skill
+        String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
+        tag.putString(currentSkill, nextSkillId);
+
+        // Visual feedbacks
+        // temp code.
+        BaseSoulSkill nextSkill = this.getCurrentSkill(stack);
+        if (nextSkill != null && !player.level().isClientSide()) {
+            player.displayClientMessage(
+                    Component.translatable(nextSkill.getTranslationKey()),
+                    true
+            );
+        }
     }
 }

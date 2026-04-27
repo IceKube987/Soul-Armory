@@ -5,8 +5,6 @@ import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
-import com.iceKube.soulArmory.networking.ModPacketHandler;
-import com.iceKube.soulArmory.networking.packets.ExampleC2SPacket;
 import com.iceKube.soulArmory.utils.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,8 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.UUID;
 
-import static com.iceKube.soulArmory.client.OverlayHandler.onRenderGUI;
-import static com.iceKube.soulArmory.client.OverlayHandler.renderVignette;
+import static com.iceKube.soulArmory.client.OverlayHandler.*;
 
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModForgeEvents {
@@ -121,9 +118,9 @@ public class ModForgeEvents {
             Minecraft mc = Minecraft.getInstance();
             shader.safeGetUniform("FadeinTime").set(mc.level.getDayTime());
             int i = shader.getUniform("Started").getIntBuffer().get();
-            if (i == 0){
+            if (i == 0) {
                 shader.getUniform("Started").set(1);
-            }else {
+            } else {
                 shader.getUniform("Started").set(0);
             }
         }
@@ -152,6 +149,8 @@ public class ModForgeEvents {
         // Call method
         onRenderGUI(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
 
-        renderVignette(gui,screenWidth,screenHeight);
+        renderVignette(gui, screenWidth, screenHeight);
+
+        renderSkillIcon(gui, (int) (screenWidth * 0.9), (int) (screenHeight - (screenWidth * 0.1)), ((int) (screenWidth * 0.1)), (int) (screenWidth * 0.1));
     }
 }

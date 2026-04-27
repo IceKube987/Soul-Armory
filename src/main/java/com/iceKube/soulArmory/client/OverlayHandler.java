@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.client;
 
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
+import com.iceKube.soulArmory.items.SoulBowItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -126,6 +128,21 @@ public class OverlayHandler {
         builder.vertex(matrix, 0, 0, 0).uv(-1, -1).endVertex();
 
         Tesselator.getInstance().end();
+    }
+
+    public static void renderSkillIcon(GuiGraphics gui, int x, int y, int w, int h) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+
+        ItemStack itemStack = mc.player.getMainHandItem();
+        Item item = itemStack.getItem();
+
+        if (!(item instanceof SoulBowItem soulBowItem)) return;
+
+        ResourceLocation texture = soulBowItem.getCurrentSkill(itemStack).soulSkillTexture;
+        if (!mc.getResourceManager().getResource(texture).isPresent()) return;
+
+        gui.blit(texture, x, y, 0, 0, w, h,48,48);
     }
 
     // This method is just for fun.

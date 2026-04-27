@@ -1,5 +1,6 @@
-package com.iceKube.soulArmory.networking.packets;
+package com.iceKube.soulArmory.networking.packets.C2S;
 
+import com.iceKube.soulArmory.networking.BasePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
