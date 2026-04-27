@@ -4,6 +4,8 @@ import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.registries.BlockRegisrty;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
+import com.iceKube.soulArmory.soulSkill.SoulSkills;
+import com.iceKube.soulArmory.soulSkill.skills.SonicBoomSkill;
 import com.iceKube.soulArmory.utils.ModItemProperties;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
@@ -19,6 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+
+import static com.iceKube.soulArmory.soulSkill.SoulSkills.registerSoulSkills;
 
 @Mod(SoulArmoryMod.MODID)
 public class SoulArmoryMod {
@@ -51,6 +55,7 @@ public class SoulArmoryMod {
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ModPacketHandler.register();
+            registerSoulSkills();
         });
     }
 

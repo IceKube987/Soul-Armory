@@ -3,12 +3,20 @@ package com.iceKube.soulArmory.items;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
+import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
+import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
+import com.iceKube.soulArmory.soulSkill.SoulSkills;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -22,11 +30,15 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SoulBowItem extends BaseSoulWeaponItem {
+
+    public static final String lastExecutedTime = "soul_armory.soul_bow.last_executed_time";
+
+    public static final String availableSkills = "soul_armory.soul_bow.available_skills";
+
+    public static final String currentSkill = "soul_armory.soul_bow.current_skill";
 
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
@@ -61,6 +73,21 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     @Override
     public int getOverflowThreshold() {
         return Config.soulBowOverflowThreshold;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+
+        if (!pStack.getTag().contains(lastExecutedTime)) {
+            CompoundTag tag = pStack.getTag();
+            tag.putLong(lastExecutedTime, pLevel.getGameTime());
+            tag.putString(currentSkill, SoulSkills.SONIC_BOOM.soulSkillId.toString());
+
+            ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
+            listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
+            tag.put(availableSkills, listTag);
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -103,6 +130,20 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 //        if (pLivingEntity instanceof Player player) {
 //            useSkill(player.getItemInHand(InteractionHand.MAIN_HAND), pLevel, player, false);
 //        }
+        if (pLivingEntity instanceof Player player) {
+            // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed and arrow damage.
+            double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
+
+            int chargedTicks = getUseDuration(pStack) - pRemainingUseDuration;
+            chargedTicks /= 2; // Base charge speed for soul bow is half of vanilla bow.
+            chargedTicks = (int) (chargedTicks * soulMultiplier); // Apply drawing speed multiplier
+            float power = getPowerForTime(chargedTicks);
+            if (power < 0.9F) return; // Won't use skill unless charged to max.
+
+            if (player.isShiftKeyDown()) {
+                useContinuousSkill(pStack, pLevel, player);
+            }
+        }
     }
 
     /**
@@ -124,7 +165,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 
             // Try to use skill
             if (player.isShiftKeyDown()) {
-                if (useSkill(pStack, pLevel, player, true)) return;
+                if (useInstantSkill(pStack, pLevel, player)) return;
             }
 
             double damage = Config.soulBowBaseDamage * soulMultiplier; // Apply arrow damage multiplier
@@ -290,65 +331,39 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     }
 
     /**
-     * Handle skill usage
+     * Handle instant skill usage
      *
-     * @return Whether the skill is successfully cast, will only be used in releaseUsing.
+     * @return Whether the skill is successfully executed
      */
-    private boolean useSkill(ItemStack stack, Level level, Player player, boolean isRelease) {
-        if (!isRelease) return false; // Ticking skill is not yet implemented.
-
-        return sonicBoomSkill(stack, level, player);
+    private boolean useInstantSkill(ItemStack stack, Level level, Player player) {
+//        return sonicBoomSkill(stack, level, player);
+        if (!(getCurrentSkill(stack) instanceof InstantSoulSkill skill)) return false;
+        return skill.execute(stack, level, player);
     }
 
-    private boolean sonicBoomSkill(ItemStack stack, Level level, Player player) {
-        if (stack.getTag() == null) return false;
-        if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < Config.soulBowSkillSBConsumption) return false;
+    /**
+     * Handle continuous skill usage
+     */
+    private void useContinuousSkill(ItemStack stack, Level level, Player player) {
+        if (!(getCurrentSkill(stack) instanceof ContinuousSoulSkill skill)) return;
+        return;
+    }
 
-        // Sonic Boom: trace 15 2-block AABBs along player's view vector and damage all entities hit
-        Set<LivingEntity> hitEntities = new HashSet<>();
-        Vec3 lookVec = player.getViewVector(1.0f).normalize();
-        Vec3 currentCenter = player.getEyePosition().add(lookVec.scale(2)); // 2 blocks ahead of player's eye
-
-        for (int i = 0; i < (int) Math.ceil(Config.soulBowSkillSBRange / 2.0); i++) {
-            AABB searchBox = new AABB(currentCenter, currentCenter).inflate(1); // 2-block AABB centered on currentCenter
-            List<LivingEntity> entities = level.getEntitiesOfClass(
-                    LivingEntity.class, searchBox,
-                    livingEntity -> livingEntity instanceof Enemy
-            );
-            hitEntities.addAll(entities);
-            currentCenter = currentCenter.add(lookVec.scale(2)); // Move 2 blocks ahead along view vector
+    private BaseSoulSkill getCurrentSkill(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains(currentSkill, Tag.TAG_STRING)) {
+            return null;
         }
 
-        // Apply damage to all collected entities
-        for (LivingEntity entity : hitEntities) {
-            entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
+        String skillIdString = tag.getString(currentSkill);
+
+        ResourceLocation skillId = ResourceLocation.tryParse(skillIdString);
+
+        if (skillId == null) {
+            tag.remove(skillIdString);
+            return null;
         }
 
-//        player.playSound(SoundEvents.WARDEN_SONIC_BOOM, 3.0F, 1.0F);
-        level.playSound(
-                null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS,
-                3.0F,
-                1.0F);
-
-        // Add particle effect.
-        if (level instanceof ServerLevel serverLevel) {
-            Vec3 origin = player.getEyePosition();
-            Vec3 direction = player.getViewVector(1.0f).normalize();
-
-            for (int i = 1; i < Config.soulBowSkillSBRange; ++i) {
-                Vec3 particlePos = origin.add(direction.scale(i));
-                serverLevel.sendParticles(
-                        ParticleTypes.SONIC_BOOM,
-                        particlePos.x, particlePos.y, particlePos.z,
-                        1, 0.0D, 0.0D, 0.0D, 0.0D
-                );
-            }
-        }
-
-        stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - Config.soulBowSkillSBConsumption);
-
-        return true;
+        return SoulSkills.getSkill(skillId);
     }
 }
