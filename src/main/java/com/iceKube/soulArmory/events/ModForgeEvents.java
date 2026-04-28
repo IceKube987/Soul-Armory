@@ -157,8 +157,8 @@ public class ModForgeEvents {
         // Call method
         onRenderGUI(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
 
-        renderVignette(gui, screenWidth, screenHeight);
+//        renderVignette(gui, screenWidth, screenHeight);
 
-        renderSkillIcon(gui, (int) (screenWidth * 0.89), (int) (screenHeight - (screenWidth * 0.11)), ((int) (screenWidth * 0.1)), (int) (screenWidth * 0.1));
+        renderSkillIcon(gui, (int) (screenWidth * 0.94), (int) (screenHeight - (screenWidth * 0.06)), ((int) (screenWidth * 0.05)), (int) (screenWidth * 0.05));
     }
 }
