@@ -151,6 +151,6 @@ public class ModForgeEvents {
 
         renderVignette(gui, screenWidth, screenHeight);
 
-        renderSkillIcon(gui, (int) (screenWidth * 0.9), (int) (screenHeight - (screenWidth * 0.1)), ((int) (screenWidth * 0.1)), (int) (screenWidth * 0.1));
+        renderSkillIcon(gui, (int) (screenWidth * 0.89), (int) (screenHeight - (screenWidth * 0.11)), ((int) (screenWidth * 0.1)), (int) (screenWidth * 0.1));
     }
 }

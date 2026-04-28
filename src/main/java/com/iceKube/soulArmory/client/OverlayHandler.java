@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -142,7 +141,7 @@ public class OverlayHandler {
         ResourceLocation texture = soulBowItem.getCurrentSkill(itemStack).soulSkillTexture;
         if (!mc.getResourceManager().getResource(texture).isPresent()) return;
 
-        gui.blit(texture, x, y, 0, 0, w, h,48,48);
+        gui.blit(texture, x, y, w, h, 0, 0, 32, 32,32,32);
     }
 
     // This method is just for fun.
