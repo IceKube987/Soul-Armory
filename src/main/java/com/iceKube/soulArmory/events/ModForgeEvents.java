@@ -4,8 +4,12 @@ import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
+import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
+import com.iceKube.soulArmory.networking.ModPacketHandler;
+import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
 import com.iceKube.soulArmory.utils.KeyBinding;
+import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -41,7 +45,8 @@ public class ModForgeEvents {
     public static void onLivingHurt(LivingDamageEvent event) {
         // Check if the source of the damage is a player holding a Soul Weapon
         if (!(event.getSource().getEntity() instanceof Player player)) return;
-        if (event.getSource().is(DamageTypes.SONIC_BOOM)) return;
+        // Check if the damage is caused by skills.
+        if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW)) return;
 
         ItemStack mainHandItem = player.getMainHandItem();
         if (mainHandItem.getItem() instanceof BaseSoulWeaponItem) {
@@ -123,6 +128,9 @@ public class ModForgeEvents {
             } else {
                 shader.getUniform("Started").set(0);
             }
+        }
+        if (KeyBinding.SWITCH_SKILL.consumeClick()){
+            ModPacketHandler.sendToServer(new SwitchSkillC2SPacket());
         }
     }
 

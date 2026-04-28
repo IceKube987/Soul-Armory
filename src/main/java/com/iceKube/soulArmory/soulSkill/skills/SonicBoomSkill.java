@@ -28,7 +28,7 @@ public class SonicBoomSkill extends InstantSoulSkill {
         super(new ResourceLocation(SoulArmoryMod.MODID, "sonic_boom"),
                 new ResourceLocation("textures/particle/sonic_boom_10.png"),
                 "sonic_boom",
-                100
+                Config.soulBowSkillSBConsumption
         );
     }
 

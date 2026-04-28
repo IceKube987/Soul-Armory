@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulSkill;
 
+import com.iceKube.soulArmory.soulSkill.skills.ScatterShotSkill;
 import com.iceKube.soulArmory.soulSkill.skills.SonicBoomSkill;
 import net.minecraft.resources.ResourceLocation;
 
@@ -28,8 +29,10 @@ public class SoulSkills {
     // Registered skills.
     // ------
     public static final BaseSoulSkill SONIC_BOOM = new SonicBoomSkill();
+    public static final BaseSoulSkill SCATTER_SHOT = new ScatterShotSkill();
 
     public static void registerSoulSkills() {
         register(SONIC_BOOM);
+        register(SCATTER_SHOT);
     }
 }

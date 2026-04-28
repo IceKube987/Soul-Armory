@@ -88,6 +88,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 
             ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
             listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
+            listTag.add(StringTag.valueOf(SoulSkills.SCATTER_SHOT.soulSkillId.toString()));
             tag.put(availableSkills, listTag);
         }
     }
@@ -128,10 +129,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
     @Override
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
-        // TODO: implement different skills, not just default.
-//        if (pLivingEntity instanceof Player player) {
-//            useSkill(player.getItemInHand(InteractionHand.MAIN_HAND), pLevel, player, false);
-//        }
+
         if (pLivingEntity instanceof Player player) {
             // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed and arrow damage.
             double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));

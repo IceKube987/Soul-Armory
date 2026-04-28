@@ -30,9 +30,16 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_OVERFLOW_THRESHOLD;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_RANGE;
+
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_RANGE;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE;
+
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SCATTER_CONSUMPTION;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SCATTER_ARROW_COUNT;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SCATTER_DAMAGE;
+
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -157,6 +164,25 @@ public class Config {
 
         BUILDER.pop();
 
+        BUILDER.push("scatter-shot");
+
+        SOUL_BOW_SKILL_SCATTER_CONSUMPTION = BUILDER
+                .comment("How many points of soul will it take to use the skill.")
+                .defineInRange("soulBowSkillSSConsumption", 20, 0, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_SCATTER_ARROW_COUNT = BUILDER
+                .comment("How many arrows will be shot when using scatter shot.")
+                .defineInRange("soulBowSkillSSArrowCount", 5, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE = BUILDER
+                .comment("The maximum spread angle (in degrees) for each arrow from the center direction.")
+                .defineInRange("soulBowSkillSSSpreadAngle", 7.0, 0.0, 90.0);
+
+        SOUL_BOW_SKILL_SCATTER_DAMAGE = BUILDER
+                .comment("The damage of each arrow.")
+                .defineInRange("soulBowSkillSSDamage", 12, 0.0, Double.MAX_VALUE);
+
+        BUILDER.pop();
 
         BUILDER.pop();
         BUILDER.pop();
@@ -189,6 +215,10 @@ public class Config {
     public static int soulBowSkillSBRange;
     public static int soulBowSkillSBConsumption;
     public static double soulBowSkillSBDamage;
+    public static int soulBowSkillSSConsumption;
+    public static int soulBowSkillSSArrowCount;
+    public static double soulBowSkillSSSpreadAngle;
+    public static double soulBowSkillSSDamage;
     public static double soulBowTraceAngle;
     public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
@@ -224,6 +254,10 @@ public class Config {
         soulBowSkillSBRange = SOUL_BOW_SKILL_SONIC_BOOM_RANGE.get();
         soulBowSkillSBConsumption = SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION.get();
         soulBowSkillSBDamage = SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE.get();
+        soulBowSkillSSConsumption = SOUL_BOW_SKILL_SCATTER_CONSUMPTION.get();
+        soulBowSkillSSArrowCount = SOUL_BOW_SKILL_SCATTER_ARROW_COUNT.get();
+        soulBowSkillSSSpreadAngle = SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE.get();
+        soulBowSkillSSDamage = SOUL_BOW_SKILL_SCATTER_DAMAGE.get();
         soulSwordOverflowSpeed = SOUL_SWORD_OVERFLOW_SPEED.get();
         soulSwordOverflowThreshold = SOUL_SWORD_OVERFLOW_THRESHOLD.get();
         soulBowOverflowSpeed = SOUL_BOW_OVERFLOW_SPEED.get();
