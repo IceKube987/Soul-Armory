@@ -44,6 +44,12 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_RAPID_FIRE_EXECUTE_INTERVAL;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_RAPID_FIRE_DAMAGE;
 
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_CONSUMPTION;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_DAMAGE;
+
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -204,6 +210,30 @@ public class Config {
 
         BUILDER.pop();
 
+        BUILDER.push("barrage");
+
+        SOUL_BOW_SKILL_BARRAGE_CONSUMPTION = BUILDER
+                .comment("How many points of soul will it take to use the skill.")
+                .defineInRange("soulBowSkillBConsumption", 15, 0, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL = BUILDER
+                .comment("The cooldown interval (in ticks) between barrage shots.")
+                .defineInRange("soulBowSkillBExecuteInterval", 3, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_BARRAGE_DAMAGE = BUILDER
+                .comment("The damage dealt by each arrow.")
+                .defineInRange("soulBowSkillBDamage", 12.0, 0.0, Double.MAX_VALUE);
+
+        SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT = BUILDER
+                .comment("How many arrows will be shot when using barrage.")
+                .defineInRange("soulBowSkillBArrowCount", 3, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE = BUILDER
+                .comment("The spread angle (in degrees) for arrows.")
+                .defineInRange("soulBowSkillBAngle", 10.0, 0.0, 90.0);
+
+        BUILDER.pop();
+
         BUILDER.pop();
         BUILDER.pop();
 
@@ -242,6 +272,11 @@ public class Config {
     public static int soulBowSkillRFConsumption;
     public static int soulBowSkillRFExecuteInterval;
     public static double soulBowSkillRFDamage;
+    public static int soulBowSkillBConsumption;
+    public static int soulBowSkillBExecuteInterval;
+    public static double soulBowSkillBDamage;
+    public static int soulBowSkillBArrowCount;
+    public static double soulBowSkillBAngle;
     public static double soulBowTraceAngle;
     public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
@@ -284,6 +319,11 @@ public class Config {
         soulBowSkillRFConsumption = SOUL_BOW_SKILL_RAPID_FIRE_CONSUMPTION.get();
         soulBowSkillRFExecuteInterval = SOUL_BOW_SKILL_RAPID_FIRE_EXECUTE_INTERVAL.get();
         soulBowSkillRFDamage = SOUL_BOW_SKILL_RAPID_FIRE_DAMAGE.get();
+        soulBowSkillBConsumption = SOUL_BOW_SKILL_BARRAGE_CONSUMPTION.get();
+        soulBowSkillBExecuteInterval = SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL.get();
+        soulBowSkillBDamage = SOUL_BOW_SKILL_BARRAGE_DAMAGE.get();
+        soulBowSkillBArrowCount = SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT.get();
+        soulBowSkillBAngle = SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE.get();
         soulSwordOverflowSpeed = SOUL_SWORD_OVERFLOW_SPEED.get();
         soulSwordOverflowThreshold = SOUL_SWORD_OVERFLOW_THRESHOLD.get();
         soulBowOverflowSpeed = SOUL_BOW_OVERFLOW_SPEED.get();

@@ -19,6 +19,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +30,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -91,6 +93,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
             // TODO: This is only for test and marked for removal when soul forging system is completed
             listTag.add(StringTag.valueOf(SoulSkills.SCATTER_SHOT.soulSkillId.toString()));
             listTag.add(StringTag.valueOf(SoulSkills.RAPID_FIRE.soulSkillId.toString()));
+            listTag.add(StringTag.valueOf(SoulSkills.BARRAGE.soulSkillId.toString()));
 
             tag.put(availableSkills, listTag);
         }
@@ -237,6 +240,9 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         }
 
         candidates.removeIf(entity -> {
+            // Make sure it doesn't track Endermen.
+            if (entity instanceof EnderMan) return true;
+
             // Get entity center at mid-height
             Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
             Vec3 toEntity = entityCenter.subtract(eyePos);
