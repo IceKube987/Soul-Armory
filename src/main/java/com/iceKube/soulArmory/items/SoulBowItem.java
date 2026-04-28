@@ -88,7 +88,10 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 
             ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
             listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
+            // TODO: This is only for test and marked for removal when soul forging system is completed
             listTag.add(StringTag.valueOf(SoulSkills.SCATTER_SHOT.soulSkillId.toString()));
+            listTag.add(StringTag.valueOf(SoulSkills.RAPID_FIRE.soulSkillId.toString()));
+
             tag.put(availableSkills, listTag);
         }
     }
@@ -165,6 +168,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
 
             // Try to use skill
             if (player.isShiftKeyDown()) {
+                if (getCurrentSkill(pStack) instanceof ContinuousSoulSkill) return; // Do not shoot arrow if player is using a continuous skill
                 if (useInstantSkill(pStack, pLevel, player)) return;
             }
 

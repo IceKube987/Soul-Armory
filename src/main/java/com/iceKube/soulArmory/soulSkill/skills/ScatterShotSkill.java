@@ -29,9 +29,8 @@ public class ScatterShotSkill extends InstantSoulSkill {
     @Override
     public boolean execute(ItemStack stack, Level level, Player player) {
         if (stack.getTag() == null) return false;
-        if (!(stack.getItem() instanceof SoulBowItem soulBowItem)) return false;
         if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < Config.soulBowSkillSSConsumption) return false;
+        if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;
 
         double damage = Config.soulBowSkillSSDamage;
 
@@ -74,8 +73,6 @@ public class ScatterShotSkill extends InstantSoulSkill {
         );
 
         // Consume soul
-        stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - Config.soulBowSkillSSConsumption);
-
-        return true;
+        return super.execute(stack, level, player);
     }
 }
