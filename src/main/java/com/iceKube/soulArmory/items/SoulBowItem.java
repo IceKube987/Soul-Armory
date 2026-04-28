@@ -94,6 +94,7 @@ public class SoulBowItem extends BaseSoulWeaponItem {
             listTag.add(StringTag.valueOf(SoulSkills.SCATTER_SHOT.soulSkillId.toString()));
             listTag.add(StringTag.valueOf(SoulSkills.RAPID_FIRE.soulSkillId.toString()));
             listTag.add(StringTag.valueOf(SoulSkills.BARRAGE.soulSkillId.toString()));
+            listTag.add(StringTag.valueOf(SoulSkills.SONIC_OVERLOAD.soulSkillId.toString()));
 
             tag.put(availableSkills, listTag);
         }
@@ -430,15 +431,5 @@ public class SoulBowItem extends BaseSoulWeaponItem {
         // actually switch to next skill
         String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
         tag.putString(currentSkill, nextSkillId);
-
-        // Visual feedbacks
-        // temp code.
-        BaseSoulSkill nextSkill = this.getCurrentSkill(stack);
-        if (nextSkill != null && !player.level().isClientSide()) {
-            player.displayClientMessage(
-                    Component.translatable(nextSkill.getTranslationKey()),
-                    true
-            );
-        }
     }
 }

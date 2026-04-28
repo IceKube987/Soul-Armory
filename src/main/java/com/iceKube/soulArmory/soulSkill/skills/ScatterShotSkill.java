@@ -46,7 +46,7 @@ public class ScatterShotSkill extends InstantSoulSkill {
 
         for (int i = 0; i < arrowCount; i++) {
             // Calculate spread angles
-            // Distribute arrows evenly within the spread cone
+            // Distribute arrows evenly
             double offsetFraction = (arrowCount == 1) ? 0 : (double) i / (arrowCount - 1) - 0.5; // -0.5 to 0.5
             double horizontalOffset = offsetFraction * Config.soulBowSkillSSSpreadAngle * 2; // horizontal spread in degrees
 

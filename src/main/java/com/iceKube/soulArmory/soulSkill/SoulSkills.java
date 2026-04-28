@@ -1,9 +1,6 @@
 package com.iceKube.soulArmory.soulSkill;
 
-import com.iceKube.soulArmory.soulSkill.skills.BarrageSkill;
-import com.iceKube.soulArmory.soulSkill.skills.RapidFireSkill;
-import com.iceKube.soulArmory.soulSkill.skills.ScatterShotSkill;
-import com.iceKube.soulArmory.soulSkill.skills.SonicBoomSkill;
+import com.iceKube.soulArmory.soulSkill.skills.*;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -34,11 +31,13 @@ public class SoulSkills {
     public static final BaseSoulSkill SCATTER_SHOT = new ScatterShotSkill();
     public static final BaseSoulSkill RAPID_FIRE = new RapidFireSkill();
     public static final BaseSoulSkill BARRAGE = new BarrageSkill();
+    public static final BaseSoulSkill SONIC_OVERLOAD = new SonicOverloadSkill();
 
     public static void registerSoulSkills() {
         register(SONIC_BOOM);
         register(SCATTER_SHOT);
         register(RAPID_FIRE);
         register(BARRAGE);
+        register(SONIC_OVERLOAD);
     }
 }

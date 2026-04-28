@@ -40,7 +40,7 @@ public class SonicBoomSkill extends InstantSoulSkill {
     public boolean execute(ItemStack stack, Level level, Player player) {
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < Config.soulBowSkillSBConsumption) return false;
+        if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;
 
         // Sonic Boom: trace 15 2-block AABBs along player's view vector and damage all entities hit
         Set<LivingEntity> hitEntities = new HashSet<>();
@@ -84,8 +84,6 @@ public class SonicBoomSkill extends InstantSoulSkill {
             }
         }
 
-        stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - Config.soulBowSkillSBConsumption);
-
-        return true;
+        return super.execute(stack, level, player);
     }
 }

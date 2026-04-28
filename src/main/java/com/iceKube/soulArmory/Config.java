@@ -50,6 +50,12 @@ public class Config {
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_DAMAGE;
 
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_OVERLOAD_DAMAGE;
+    private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_RANGE;
+
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -161,7 +167,7 @@ public class Config {
         BUILDER.push("sonic-boom");
 
         SOUL_BOW_SKILL_SONIC_BOOM_RANGE = BUILDER
-                .comment("The range of the sonic boom skill for Soul Bow")
+                .comment("The range of the skill")
                 .defineInRange("soulBowSkillSBRange", 50, 1, Integer.MAX_VALUE);
 
         SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION = BUILDER
@@ -234,6 +240,30 @@ public class Config {
 
         BUILDER.pop();
 
+        BUILDER.push("sonic-overload");
+
+        SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION = BUILDER
+                .comment("How many points of soul will it take to use the skill.")
+                .defineInRange("soulBowSkillSOConsumption", 250, 0, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT = BUILDER
+                .comment("How many blasts will be fired when using sonic overload.")
+                .defineInRange("soulBowSkillSOBlastCount", 5, 1, Integer.MAX_VALUE);
+
+        SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE = BUILDER
+                .comment("The maximum spread angle (in degrees) for each arrow from the center direction.")
+                .defineInRange("soulBowSkillSOSpreadAngle", 30.0, 0.0, 90.0);
+
+        SOUL_BOW_SKILL_OVERLOAD_DAMAGE = BUILDER
+                .comment("The damage dealt by the skill.")
+                .defineInRange("soulBowSkillSODamage", 150.0, 0.0, Double.MAX_VALUE);
+
+        SOUL_BOW_SKILL_OVERLOAD_RANGE = BUILDER
+                .comment("The range of the skill")
+                .defineInRange("soulBowSkillSORange",50,0, Integer.MAX_VALUE);
+
+        BUILDER.pop();
+
         BUILDER.pop();
         BUILDER.pop();
 
@@ -287,6 +317,11 @@ public class Config {
     public static int soulSwordOverflowThreshold;
     public static int soulBowOverflowSpeed;
     public static int soulBowOverflowThreshold;
+    public static int soulBowSkillSOConsumption;
+    public static int soulBowSkillSOBlastCount;
+    public static double soulBowSkillSOSpreadAngle;
+    public static double soulBowSkillSODamage;
+    public static int soulBowSkillSORange;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -328,5 +363,10 @@ public class Config {
         soulSwordOverflowThreshold = SOUL_SWORD_OVERFLOW_THRESHOLD.get();
         soulBowOverflowSpeed = SOUL_BOW_OVERFLOW_SPEED.get();
         soulBowOverflowThreshold = SOUL_BOW_OVERFLOW_THRESHOLD.get();
+        soulBowSkillSOConsumption = SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION.get();
+        soulBowSkillSOBlastCount = SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT.get();
+        soulBowSkillSOSpreadAngle = SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE.get();
+        soulBowSkillSODamage = SOUL_BOW_SKILL_OVERLOAD_DAMAGE.get();
+        soulBowSkillSORange = SOUL_BOW_SKILL_OVERLOAD_RANGE.get();
     }
 }
