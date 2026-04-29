@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -32,12 +33,9 @@ public class SonicBoomSkill extends InstantSoulSkill {
         );
     }
 
-    public SonicBoomSkill(ResourceLocation soulSkillId, ResourceLocation soulSkillTexture, String soulSkillName, int soulCost) {
-        super(soulSkillId, soulSkillTexture, soulSkillName, soulCost);
-    }
-
     @Override
     public boolean execute(ItemStack stack, Level level, Player player) {
+        if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(soulAmountNBT)) return false;
         if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;

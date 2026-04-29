@@ -269,7 +269,7 @@ public class Config {
 
                     SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT = BUILDER
                             .comment("How many blasts will be fired when using the skill")
-                            .defineInRange("soulBowSkillSOBlastCount", 5, 1, Integer.MAX_VALUE);
+                            .defineInRange("soulBowSkillSOBlastCount", 7, 1, Integer.MAX_VALUE);
 
                     SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE = BUILDER
                             .comment("The maximum spread angle (in degrees) for each blast from the center direction")

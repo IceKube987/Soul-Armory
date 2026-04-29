@@ -3,6 +3,7 @@ package com.iceKube.soulArmory.client;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.SoulBowItem;
+import com.iceKube.soulArmory.items.SoulSkillSystemItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -136,9 +137,9 @@ public class OverlayHandler {
         ItemStack itemStack = mc.player.getMainHandItem();
         Item item = itemStack.getItem();
 
-        if (!(item instanceof SoulBowItem soulBowItem)) return;
+        if (!(item instanceof SoulSkillSystemItem skillItem)) return;
 
-        ResourceLocation texture = soulBowItem.getCurrentSkill(itemStack).soulSkillTexture;
+        ResourceLocation texture = skillItem.getCurrentSkill(itemStack).soulSkillTexture;
         if (!mc.getResourceManager().getResource(texture).isPresent()) return;
 
         gui.blit(texture, x, y, w, h, 0, 0, 32, 32,32,32);

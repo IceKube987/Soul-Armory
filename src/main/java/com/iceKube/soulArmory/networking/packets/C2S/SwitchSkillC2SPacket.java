@@ -30,8 +30,9 @@ public class SwitchSkillC2SPacket extends BasePacket {
             Item item = stack.getItem();
 
             if (item instanceof SoulBowItem soulBowItem){
-                soulBowItem.cycleToNextSkill(stack,player);
+                soulBowItem.cycleToNextSkill(stack);
             }
+            // TODO: if item instance of SoulSwordItem.
         });
 
         return true;

@@ -28,6 +28,7 @@ public class ScatterShotSkill extends InstantSoulSkill {
 
     @Override
     public boolean execute(ItemStack stack, Level level, Player player) {
+        if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(soulAmountNBT)) return false;
         if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;

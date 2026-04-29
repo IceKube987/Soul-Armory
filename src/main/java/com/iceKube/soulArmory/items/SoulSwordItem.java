@@ -3,8 +3,13 @@ package com.iceKube.soulArmory.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.iceKube.soulArmory.Config;
+import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
+import com.iceKube.soulArmory.soulSkill.SoulSkills;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,7 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
-public class SoulSwordItem extends BaseSoulWeaponItem {
+import java.util.List;
+
+public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystemItem {
 
     public SoulSwordItem(Properties pProperties) {
         super(pProperties);
@@ -61,7 +68,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand != InteractionHand.MAIN_HAND) return super.use(pLevel, pPlayer, pUsedHand);
 
-        heal(pPlayer.getItemInHand(InteractionHand.MAIN_HAND), pPlayer);
+        executeSkill(pPlayer.getItemInHand(InteractionHand.MAIN_HAND), pLevel, pPlayer);
 
         return super.use(pLevel, pPlayer, pUsedHand);
     }
@@ -72,31 +79,44 @@ public class SoulSwordItem extends BaseSoulWeaponItem {
         return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
     }
 
-    private void heal(ItemStack stack, Player player) {
-        if (stack.getTag() == null) return;
-
+    @Override
+    public void setDefaultSkill(ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
-        float currentSoul = tag.getFloat(soulAmountNBT);
+        tag.putLong(lastExecutedTime, level.getGameTime());
+        tag.putString(currentSkill, SoulSkills.SONIC_BOOM.soulSkillId.toString());
+        tag.putInt(currentSkillIndex, 0);
 
-        float currentHealth = player.getHealth();
-        float maxHealth = player.getMaxHealth();
-        float healthMissing = maxHealth - currentHealth;
+        ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
 
-        if (healthMissing <= 0 || currentSoul <= 0) return;
+        listTag.add(StringTag.valueOf(SoulSkills.HEAL.soulSkillId.toString()));
 
-        // How many HP we can afford to heal with available soul
-        int affordableHeal = (int) (currentSoul / Config.soulSwordPointsPerHealing);
+        tag.put(availableSkills, listTag);
+    }
 
-        // Actual healing: min of what's needed (rounded up to nearest int) and what we can afford
-        int healingAmount = (int) Math.min(Math.ceil(healthMissing), affordableHeal);
+    public void cycleToNextSkill(ItemStack stack) {
+        if (!stack.hasTag()) return;
+        CompoundTag tag = stack.getTag();
 
-        if (healingAmount <= 0) return;
+        List<BaseSoulSkill> skills = getAvailableSkills(stack);
+        if (skills == null) return;
+        int size = skills.size();
 
-        // Deduct soul cost
-        tag.putFloat(soulAmountNBT, currentSoul - (float) (healingAmount * Config.soulSwordPointsPerHealing));
+        // Check if there is only one skill
+        if (size <= 1) return;
 
-        // Apply healing
-        player.heal(healingAmount);
+        int currentIndex = tag.getInt(currentSkillIndex);
+        // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
+        int nextIndex = (currentIndex + 1) % size;
+        tag.putInt(currentSkillIndex, nextIndex);
+
+        // actually switch to next skill
+        String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
+        tag.putString(currentSkill, nextSkillId);
+    }
+
+    private void executeSkill(ItemStack stack, Level level, Player player) {
+        if (!(stack.getItem() instanceof SoulSwordItem)) return;
+        getCurrentSkill(stack).execute(stack, level, player);
     }
 
     // generic code from SwordItem

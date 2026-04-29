@@ -32,6 +32,7 @@ public class SoulSkills {
     public static final BaseSoulSkill RAPID_FIRE = new RapidFireSkill();
     public static final BaseSoulSkill BARRAGE = new BarrageSkill();
     public static final BaseSoulSkill SONIC_OVERLOAD = new SonicOverloadSkill();
+    public static final BaseSoulSkill HEAL = new HealSkill();
 
     public static void registerSoulSkills() {
         register(SONIC_BOOM);
@@ -39,5 +40,6 @@ public class SoulSkills {
         register(RAPID_FIRE);
         register(BARRAGE);
         register(SONIC_OVERLOAD);
+        register(HEAL);
     }
 }

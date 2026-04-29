@@ -1,7 +1,12 @@
 package com.iceKube.soulArmory.items;
 
+import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
+import com.iceKube.soulArmory.soulSkill.SoulSkills;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -10,6 +15,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +30,13 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public static final String lastSoulOverflowTimeNBT = "soul_armory.soul_weapon.lastSoulOverflowTime";
 
-    public boolean doApplySpeedModifier;
+    public boolean doApplySpeedModifier = false;
+
+    // Skill System
+    public static final String lastExecutedTime = "soul_armory.soul_bow.last_executed_time";
+    public static final String availableSkills = "soul_armory.soul_bow.available_skills";
+    public static final String currentSkill = "soul_armory.soul_bow.current_skill";
+    public static final String currentSkillIndex = "soul_armory.soul_bow.current_skill_index";
 
     public abstract int getGracePeriodTicks();
 
@@ -37,6 +49,10 @@ public abstract class BaseSoulWeaponItem extends Item {
     public abstract int getOverflowSpeed();
 
     public abstract int getOverflowThreshold();
+
+    public boolean canUseSkill(){
+        return this instanceof SoulSkillSystemItem;
+    }
 
     /**
      * Calculates how much soul should be decayed based on how long the weapon hasn't been held.
@@ -90,7 +106,12 @@ public abstract class BaseSoulWeaponItem extends Item {
             NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
             NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
+
             pStack.setTag(NBT);
+
+            if (this instanceof SoulSkillSystemItem soulSkillSystemItem) {
+                soulSkillSystemItem.setDefaultSkill(pStack,pLevel);
+            }
         }
 
         if (pEntity instanceof Player player) {
@@ -125,5 +146,51 @@ public abstract class BaseSoulWeaponItem extends Item {
     public double getSpeedAdditionPercentage(ItemStack stack) {
         if (!doApplySpeedModifier || stack.getTag() == null) return 0;
         return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
+    }
+
+    public BaseSoulSkill getCurrentSkill(ItemStack stack) {
+        if (!canUseSkill()) return null;
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains(currentSkill, Tag.TAG_STRING)) {
+            return null;
+        }
+
+        String skillIdString = tag.getString(currentSkill);
+
+        ResourceLocation skillId = ResourceLocation.tryParse(skillIdString);
+
+        if (skillId == null) {
+            tag.remove(skillIdString);
+            return null;
+        }
+
+        return SoulSkills.getSkill(skillId);
+    }
+
+    public List<BaseSoulSkill> getAvailableSkills(ItemStack stack) {
+        if (!canUseSkill()) return null;
+        List<BaseSoulSkill> skills = new ArrayList<>();
+        if (!stack.hasTag()) return skills;
+
+        ListTag listTag = stack.getTag().getList(availableSkills, Tag.TAG_STRING);
+
+        for (int i = 0; i < listTag.size(); i++) {
+            ResourceLocation id = ResourceLocation.tryParse(listTag.getString(i));
+            if (id != null) {
+                BaseSoulSkill skill = SoulSkills.getSkill(id);
+                if (skill != null) {
+                    skills.add(skill);
+                } else {
+                    // if the skill is somehow missing, remove it from the list.
+                    listTag.remove(listTag.getString(i));
+                    stack.getTag().put(availableSkills, listTag);
+                }
+            }else {
+                // if the string somehow does not represent a skill, remove it from the list.
+                listTag.remove(listTag.getString(i));
+                stack.getTag().put(availableSkills, listTag);
+            }
+        }
+        return skills;
     }
 }
