@@ -64,216 +64,234 @@ public class Config {
 
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
-                .comment("Whether the speed boost provided by soul gears is capped at a maximum multiplier.")
-                .comment("If false, the boost has no upper limit and speedBoostCeil will be ignored.")
+                .comment("Whether the speed boost provided by soul weapons or armor is capped at a maximum multiplier")
+                .comment("If false, the boost has no upper limit and speedBoostCeil will be ignored")
                 .define("speedBoostHasCeil", true);
 
         SOUL_SPEED_BOOST_CEIL = BUILDER
-                .comment("The maximum speed multiplier (relative to base movement speed) at which soul gears will no longer provide additional speed boosts.")
-                .comment("This value is ignored if speedBoostHasCeil is false.")
+                .comment("The maximum speed multiplier (relative to base movement speed) at which soul weapons or armor will no longer provide additional speed boosts")
+                .comment("This value is ignored if speedBoostHasCeil is false")
                 .defineInRange("speedBoostCeil", 2.0, 1.0, Double.MAX_VALUE);
 
-        BUILDER.comment("Soul Sword Settings").push("soul-sword");
+        {
+            BUILDER.comment("Soul Sword Settings").push("soul-sword");
 
-        SOUL_SWORD_MAX_SOUL = BUILDER
-                .comment("The maximum soul amount of Soul Sword")
-                .defineInRange("soulSwordMaxSoul", 300, 0, Integer.MAX_VALUE);
+            SOUL_SWORD_MAX_SOUL = BUILDER
+                    .comment("The maximum soul amount of Soul Sword")
+                    .defineInRange("soulSwordMaxSoul", 300, 0, Integer.MAX_VALUE);
 
-        SOUL_SWORD_BASE_DAMAGE = BUILDER
-                .comment("The base damage of Soul Sword")
-                .defineInRange("soulSwordBaseDamage", 4.0, 1.0, Double.MAX_VALUE);
+            SOUL_SWORD_BASE_DAMAGE = BUILDER
+                    .comment("The base damage of Soul Sword")
+                    .defineInRange("soulSwordBaseDamage", 4.0, 1.0, Double.MAX_VALUE);
 
-        SOUL_SWORD_POINT_PER_DAMAGE = BUILDER
-                .comment("How many points of soul is required for 1 extra damage")
-                .defineInRange("soulSwordPointPerDamage", 15, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_POINT_PER_DAMAGE = BUILDER
+                    .comment("How many points of soul is required for 1 extra damage")
+                    .defineInRange("soulSwordPointPerDamage", 15, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_POINT_PER_HEALING = BUILDER
-                .comment("How many points of soul is required for 1 HP in healing.")
-                .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_GRACE_PERIOD = BUILDER
+                    .comment("How long (in ticks) will the soul start to decay after putting away")
+                    .defineInRange("soulSwordGracePeriod", 200, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_GRACE_PERIOD = BUILDER
-                .comment("How long (in ticks) will the soul start to decay after not holding.")
-                .defineInRange("soulSwordGracePeriod", 200, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_SOUL_DECAY_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul decay (in ticks)")
+                    .defineInRange("soulSwordSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_SOUL_DECAY_SPEED = BUILDER
-                .comment("How fast should 1 point of soul decay (in ticks)")
-                .defineInRange("soulSwordSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_OVERFLOW_THRESHOLD = BUILDER
+                    .comment("The soul amount threshold above which soul start to decay in overflow speed")
+                    .comment("To disable this feature, change the value to the same as max soul")
+                    .defineInRange("soulSwordOverflowThreshold", 200, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_POINT_PER_SPEED_PERCENT = BUILDER
-                .comment("How many points of soul is required for 1 percent of speed boost")
-                .defineInRange("soulSwordPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_OVERFLOW_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul decay (in ticks) when soul amount is above overflow threshold")
+                    .defineInRange("soulSwordOverflowSpeed", 10, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
-                .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand.")
-                .define("soulSwordDisableShieldUsage", true);
+            SOUL_SWORD_POINT_PER_SPEED_PERCENT = BUILDER
+                    .comment("How many points of soul is required for 1 percent of speed boost")
+                    .defineInRange("soulSwordPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_OVERFLOW_THRESHOLD = BUILDER
-                .comment("The soul amount threshold above which soul start to decay in overflow speed.")
-                .comment("To disable this feature, change the value to the same as max soul.")
-                .defineInRange("soulSwordOverflowThreshold", 200, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_POINT_PER_HEALING = BUILDER
+                    .comment("How many points of soul is required for 1 HP in healing")
+                    .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
 
-        SOUL_SWORD_OVERFLOW_SPEED = BUILDER
-                .comment("How fast (in ticks) 1 point of soul decays when above the overflow threshold.")
-                .defineInRange("soulSwordOverflowSpeed", 10, 1, Integer.MAX_VALUE);
+            SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
+                    .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand")
+                    .define("soulSwordDisableShieldUsage", true);
 
-        BUILDER.pop();
+            BUILDER.pop();
+        }
 
-        BUILDER.comment("Soul Bow Settings").push("soul-bow");
+        {
+            BUILDER.comment("Soul Bow Settings").push("soul-bow");
 
-        SOUL_BOW_MAX_SOUL = BUILDER
-                .comment("The maximum soul amount of Soul Bow")
-                .defineInRange("soulBowMaxSoul", 300, 0, Integer.MAX_VALUE);
+            SOUL_BOW_MAX_SOUL = BUILDER
+                    .comment("The maximum soul amount of Soul Bow")
+                    .defineInRange("soulBowMaxSoul", 300, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_BASE_DAMAGE = BUILDER
-                .comment("The base damage of Soul Bow")
-                .defineInRange("soulBowBaseDamage", 6.0, 1.0, Double.MAX_VALUE);
+            SOUL_BOW_BASE_DAMAGE = BUILDER
+                    .comment("The base damage of Soul Bow")
+                    .defineInRange("soulBowBaseDamage", 6.0, 1.0, Double.MAX_VALUE);
 
-        SOUL_BOW_POINT_PER_DAMAGE_PERCENT = BUILDER
-                .comment("How many points of soul is required for 1 percent of extra damage, drawing speed ")
-                .defineInRange("soulBowPointPerDamagePercent", 1, 1, Integer.MAX_VALUE);
+            SOUL_BOW_POINT_PER_DAMAGE_PERCENT = BUILDER
+                    .comment("How many points of soul is required for 1 percent of extra damage and drawing speed ")
+                    .defineInRange("soulBowPointPerDamagePercent", 1, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_POINT_PER_SPEED_PERCENT = BUILDER
-                .comment("How many points of soul is required for 1 percent of speed boost")
-                .defineInRange("soulBowPointPerSpeedPercent", 6, 1, Integer.MAX_VALUE);
+            SOUL_BOW_GRACE_PERIOD = BUILDER
+                    .comment("How long (in ticks) will the soul start to decay after putting away")
+                    .defineInRange("soulBowGracePeriod", 200, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_GRACE_PERIOD = BUILDER
-                .comment("How long (in ticks) will the soul start to decay after not holding.")
-                .defineInRange("soulBowGracePeriod", 200, 0, Integer.MAX_VALUE);
+            SOUL_BOW_SOUL_DECAY_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul decay (in ticks)")
+                    .defineInRange("soulBowSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_SOUL_DECAY_SPEED = BUILDER
-                .comment("How fast should 1 point of soul decay (in ticks)")
-                .defineInRange("soulBowSoulDecaySpeed", 6, 1, Integer.MAX_VALUE);
+            SOUL_BOW_OVERFLOW_THRESHOLD = BUILDER
+                    .comment("The soul amount threshold above which soul start to decay at overflow speed")
+                    .comment("To disable this feature, change the value to the same as max soul")
+                    .defineInRange("soulBowOverflowThreshold", 200, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_OVERFLOW_THRESHOLD = BUILDER
-                .comment("The soul amount threshold above which soul start to decay in overflow speed.")
-                .comment("To disable this feature, change the value to the same as max soul.")
-                .defineInRange("soulBowOverflowThreshold", 200, 1, Integer.MAX_VALUE);
+            SOUL_BOW_OVERFLOW_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul decay (in ticks) when soul amount is above overflow threshold")
+                    .defineInRange("soulBowOverflowSpeed", 10, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_OVERFLOW_SPEED = BUILDER
-                .comment("How fast (in ticks) 1 point of soul decays when above the overflow threshold.")
-                .defineInRange("soulBowOverflowSpeed", 10, 1, Integer.MAX_VALUE);
+            SOUL_BOW_POINT_PER_SPEED_PERCENT = BUILDER
+                    .comment("How many points of soul is required for 1 percent of speed boost")
+                    .defineInRange("soulBowPointPerSpeedPercent", 6, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_TRACE_ANGLE = BUILDER
-                .comment("Lock-on cone half-angle in degrees.")
-                .comment("E.g. 10 means enemies within 10° left/right of your crosshair can be targeted.")
-                .defineInRange("soulBowTraceAngle", 10.0, 0.0, 90.0);
+            SOUL_BOW_TRACE_ANGLE = BUILDER
+                    .comment("Lock-on cone half-angle in degrees")
+                    .comment("E.g. 10 means enemies within 10° left/right of your crosshair can be targeted")
+                    .defineInRange("soulBowTraceAngle", 10.0, 0.0, 90.0);
 
-        SOUL_BOW_TRACE_RANGE = BUILDER
-                .comment("Max distance for lock-on target acquisition. Enemies beyond this range are ignored.")
-                .defineInRange("soulBowTraceRange", 50.0, 0.0, Double.MAX_VALUE);
+            SOUL_BOW_TRACE_RANGE = BUILDER
+                    .comment("Max distance for lock-on target acquisition. Enemies beyond this range are ignored")
+                    .defineInRange("soulBowTraceRange", 50.0, 0.0, Double.MAX_VALUE);
 
-        BUILDER.push("skills").comment("Different Skills for Soul Bow");
+            {
+                BUILDER.comment("Different Skills for Soul Bow").push("skills");
 
-        BUILDER.push("sonic-boom");
+                {
+                    BUILDER.push("sonic-boom");
 
-        SOUL_BOW_SKILL_SONIC_BOOM_RANGE = BUILDER
-                .comment("The range of the skill")
-                .defineInRange("soulBowSkillSBRange", 50, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION = BUILDER
+                            .comment("How many points of soul will it take to use the skill")
+                            .defineInRange("soulBowSkillSBConsumption", 100, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION = BUILDER
-                .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillSBConsumption", 100, 0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE = BUILDER
+                            .comment("The damage dealt by the skill")
+                            .defineInRange("soulBowSkillSBDamage", 80.0, 1.0, Double.MAX_VALUE);
 
-        SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE = BUILDER
-                .comment("The damage dealt by the sonic boom skill")
-                .defineInRange("soulBowSkillSBDamage", 80.0, 1.0, Double.MAX_VALUE);
+                    SOUL_BOW_SKILL_SONIC_BOOM_RANGE = BUILDER
+                            .comment("The range of the skill")
+                            .defineInRange("soulBowSkillSBRange", 50, 1, Integer.MAX_VALUE);
 
-        BUILDER.pop();
+                    BUILDER.pop();
+                }
 
-        BUILDER.push("scatter-shot");
+                {
+                    BUILDER.push("scatter-shot");
 
-        SOUL_BOW_SKILL_SCATTER_CONSUMPTION = BUILDER
-                .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillSSConsumption", 20, 0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_SCATTER_CONSUMPTION = BUILDER
+                            .comment("How many points of soul will it take to use the skill")
+                            .defineInRange("soulBowSkillSSConsumption", 20, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_SCATTER_ARROW_COUNT = BUILDER
-                .comment("How many arrows will be shot when using scatter shot.")
-                .defineInRange("soulBowSkillSSArrowCount", 5, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_SCATTER_DAMAGE = BUILDER
+                            .comment("The damage of each arrow")
+                            .defineInRange("soulBowSkillSSDamage", 12.0, 0.0, Double.MAX_VALUE);
 
-        SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE = BUILDER
-                .comment("The maximum spread angle (in degrees) for each arrow from the center direction.")
-                .defineInRange("soulBowSkillSSSpreadAngle", 7.0, 0.0, 90.0);
+                    SOUL_BOW_SKILL_SCATTER_ARROW_COUNT = BUILDER
+                            .comment("How many arrows will be shot when using the skill")
+                            .defineInRange("soulBowSkillSSArrowCount", 5, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_SCATTER_DAMAGE = BUILDER
-                .comment("The damage of each arrow.")
-                .defineInRange("soulBowSkillSSDamage", 12.0, 0.0, Double.MAX_VALUE);
+                    SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE = BUILDER
+                            .comment("The maximum spread angle (in degrees) for each arrow from the center direction")
+                            .defineInRange("soulBowSkillSSSpreadAngle", 10.0, 0.0, 90.0);
 
-        BUILDER.pop();
+                    BUILDER.pop();
+                }
 
-        BUILDER.push("rapid-fire");
+                {
+                    BUILDER.push("rapid-fire");
 
-        SOUL_BOW_SKILL_RAPID_FIRE_CONSUMPTION = BUILDER
-                .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillRFConsumption", 5, 0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_RAPID_FIRE_CONSUMPTION = BUILDER
+                            .comment("How many points of soul will it take to use the skill")
+                            .defineInRange("soulBowSkillRFConsumption", 5, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_RAPID_FIRE_EXECUTE_INTERVAL = BUILDER
-                .comment("The cooldown interval (in ticks) between rapid fire arrow shots.")
-                .defineInRange("soulBowSkillRFExecuteInterval", 3, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_RAPID_FIRE_DAMAGE = BUILDER
+                            .comment("The damage dealt by each arrow")
+                            .defineInRange("soulBowSkillRFDamage", 10.0, 0.0, Double.MAX_VALUE);
 
-        SOUL_BOW_SKILL_RAPID_FIRE_DAMAGE = BUILDER
-                .comment("The damage dealt by each arrow.")
-                .defineInRange("soulBowSkillRFDamage", 10.0, 0.0, Double.MAX_VALUE);
+                    SOUL_BOW_SKILL_RAPID_FIRE_EXECUTE_INTERVAL = BUILDER
+                            .comment("The interval (in ticks) between arrow shots")
+                            .defineInRange("soulBowSkillRFExecuteInterval", 3, 1, Integer.MAX_VALUE);
 
-        BUILDER.pop();
+                    BUILDER.pop();
+                }
 
-        BUILDER.push("barrage");
+                {
+                    BUILDER.push("barrage");
 
-        SOUL_BOW_SKILL_BARRAGE_CONSUMPTION = BUILDER
-                .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillBConsumption", 15, 0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_BARRAGE_CONSUMPTION = BUILDER
+                            .comment("How many points of soul will it take to use the skill")
+                            .defineInRange("soulBowSkillBConsumption", 15, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL = BUILDER
-                .comment("The cooldown interval (in ticks) between barrage shots.")
-                .defineInRange("soulBowSkillBExecuteInterval", 3, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_BARRAGE_DAMAGE = BUILDER
+                            .comment("The damage dealt by each arrow")
+                            .defineInRange("soulBowSkillBDamage", 12.0, 0.0, Double.MAX_VALUE);
 
-        SOUL_BOW_SKILL_BARRAGE_DAMAGE = BUILDER
-                .comment("The damage dealt by each arrow.")
-                .defineInRange("soulBowSkillBDamage", 12.0, 0.0, Double.MAX_VALUE);
+                    SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL = BUILDER
+                            .comment("The interval (in ticks) between barrage shots")
+                            .defineInRange("soulBowSkillBExecuteInterval", 3, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT = BUILDER
-                .comment("How many arrows will be shot when using barrage.")
-                .defineInRange("soulBowSkillBArrowCount", 3, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT = BUILDER
+                            .comment("How many arrows will be shot when using the skill")
+                            .defineInRange("soulBowSkillBArrowCount", 3, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE = BUILDER
-                .comment("The spread angle (in degrees) for arrows.")
-                .defineInRange("soulBowSkillBAngle", 10.0, 0.0, 90.0);
+                    SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE = BUILDER
+                            .comment("The spread angle (in degrees) for arrows")
+                            .defineInRange("soulBowSkillBAngle", 10.0, 0.0, 90.0);
 
-        BUILDER.pop();
+                    BUILDER.pop();
+                }
 
-        BUILDER.push("sonic-overload");
+                {
+                    BUILDER.push("sonic-overload");
 
-        SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION = BUILDER
-                .comment("How many points of soul will it take to use the skill.")
-                .defineInRange("soulBowSkillSOConsumption", 250, 0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION = BUILDER
+                            .comment("How many points of soul will it take to use the skill")
+                            .defineInRange("soulBowSkillSOConsumption", 250, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT = BUILDER
-                .comment("How many blasts will be fired when using sonic overload.")
-                .defineInRange("soulBowSkillSOBlastCount", 5, 1, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_OVERLOAD_DAMAGE = BUILDER
+                            .comment("The damage dealt by the skill")
+                            .defineInRange("soulBowSkillSODamage", 150.0, 0.0, Double.MAX_VALUE);
 
-        SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE = BUILDER
-                .comment("The maximum spread angle (in degrees) for each arrow from the center direction.")
-                .defineInRange("soulBowSkillSOSpreadAngle", 30.0, 0.0, 90.0);
+                    SOUL_BOW_SKILL_OVERLOAD_RANGE = BUILDER
+                            .comment("The range of the skill")
+                            .defineInRange("soulBowSkillSORange", 50, 0, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_OVERLOAD_DAMAGE = BUILDER
-                .comment("The damage dealt by the skill.")
-                .defineInRange("soulBowSkillSODamage", 150.0, 0.0, Double.MAX_VALUE);
+                    SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT = BUILDER
+                            .comment("How many blasts will be fired when using the skill")
+                            .defineInRange("soulBowSkillSOBlastCount", 5, 1, Integer.MAX_VALUE);
 
-        SOUL_BOW_SKILL_OVERLOAD_RANGE = BUILDER
-                .comment("The range of the skill")
-                .defineInRange("soulBowSkillSORange",50,0, Integer.MAX_VALUE);
+                    SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE = BUILDER
+                            .comment("The maximum spread angle (in degrees) for each blast from the center direction")
+                            .defineInRange("soulBowSkillSOSpreadAngle", 30.0, 0.0, 90.0);
 
-        BUILDER.pop();
+                    BUILDER.pop();
+                }
 
-        BUILDER.pop();
-        BUILDER.pop();
+                BUILDER.pop();
+            }
+            BUILDER.pop();
+        }
 
-        BUILDER.comment("Soul Arrow Settings").push("soul-arrow");
+        {
+            BUILDER.comment("Soul Arrow Settings").push("soul-arrow");
 
-        SOUL_ARROW_TURN_FACTOR = BUILDER
-                .comment("How sharply the Soul Arrow steers toward its target each tick (0.0 = no steering, 1.0 = instant snap).")
-                .defineInRange("soulArrowTurnFactor", 0.5, 0.0, 1.0);
+            SOUL_ARROW_TURN_FACTOR = BUILDER
+                    .comment("How sharply the Soul Arrow steers toward its target each tick (0.0 = no steering, 1.0 = instant snap)")
+                    .defineInRange("soulArrowTurnFactor", 0.5, 0.0, 1.0);
 
-        BUILDER.pop();
+            BUILDER.pop();
+        }
 
     }
 
