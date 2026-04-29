@@ -5,6 +5,10 @@
   "tooltip.soul_armory.soul": "Soul :",
 
   "skills.soul_armory.sonic_boom": "Sonic Boom",
+  "skills.soul_armory.barrage": "Barrage",
+  "skills.soul_armory.rapid_fire": "Rapid Fire",
+  "skills.soul_armory.scatter_shot": "Scatter Shot",
+  "skills.soul_armory.sonic_overload": "Sonic Overload",
 
   "itemGroup.soul_armory": "Soul Armory"
 }

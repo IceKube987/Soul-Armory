@@ -4,7 +4,11 @@
 
   "tooltip.soul_armory.soul": "灵魂: ",
 
-  "skills.soul_armory.sonic_boom": "音爆",
+  "skills.soul_armory.sonic_boom": "音波",
+  "skills.soul_armory.barrage": "箭雨",
+  "skills.soul_armory.rapid_fire": "连射",
+  "skills.soul_armory.scatter_shot": "齐射",
+  "skills.soul_armory.sonic_overload": "音爆",
 
   "itemGroup.soul_armory": "Soul Armory"
 }
