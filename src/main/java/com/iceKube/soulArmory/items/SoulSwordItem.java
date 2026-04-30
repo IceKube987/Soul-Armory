@@ -88,6 +88,8 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
 
         listTag.add(StringTag.valueOf(SoulSkills.HEAL.soulSkillId.toString()));
+
+        // TODO: Blade wave skill is temp.
         listTag.add(StringTag.valueOf(SoulSkills.BLADE_WAVE.soulSkillId.toString()));
 
         tag.put(availableSkills, listTag);
@@ -112,6 +114,10 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         // actually switch to next skill
         String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
         tag.putString(currentSkill, nextSkillId);
+
+        // Soul Sword only: deduce soul when switching
+        tag.putFloat(soulAmountNBT, Math.max(0,tag.getFloat(soulAmountNBT) - 100));
+        // TODO: add particle visual effect
     }
 
     private void executeSkill(ItemStack stack, Level level, Player player) {
