@@ -6,6 +6,7 @@ import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.utils.KeyBinding;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -26,6 +27,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.SOUL_ARROW.get(), SoulArrowRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.BLADE_WAVE.get(), NoopRenderer::new);
     }
 
     @SubscribeEvent

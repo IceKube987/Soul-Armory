@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.networking.packets.C2S;
 
 import com.iceKube.soulArmory.items.SoulBowItem;
+import com.iceKube.soulArmory.items.SoulSwordItem;
 import com.iceKube.soulArmory.networking.BasePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +33,10 @@ public class SwitchSkillC2SPacket extends BasePacket {
             if (item instanceof SoulBowItem soulBowItem){
                 soulBowItem.cycleToNextSkill(stack);
             }
-            // TODO: if item instance of SoulSwordItem.
+
+            if (item instanceof SoulSwordItem soulSwordItem){
+                soulSwordItem.cycleToNextSkill(stack);
+            }
         });
 
         return true;

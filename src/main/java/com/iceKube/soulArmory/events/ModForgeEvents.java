@@ -46,7 +46,7 @@ public class ModForgeEvents {
         // Check if the source of the damage is a player holding a Soul Weapon
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         // Check if the damage is caused by skills.
-        if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW)) return;
+        if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE)) return;
 
         ItemStack mainHandItem = player.getMainHandItem();
         if (mainHandItem.getItem() instanceof BaseSoulWeaponItem) {

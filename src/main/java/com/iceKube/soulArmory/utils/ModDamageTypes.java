@@ -18,11 +18,24 @@ public class ModDamageTypes {
             new ResourceLocation(SoulArmoryMod.MODID, "skill_arrow")
     );
 
+    public static final ResourceKey<DamageType> SKILL_DAMAGE = ResourceKey.create(
+            Registries.DAMAGE_TYPE,
+            new ResourceLocation(SoulArmoryMod.MODID, "skill_damage")
+    );
+
     public static DamageSource skillArrow(Level level, Entity directEntity, @Nullable Entity attacker) {
         Holder<DamageType> damageType = level.registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
                 .getHolderOrThrow(SKILL_ARROW);
 
         return new DamageSource(damageType, directEntity, attacker);
+    }
+
+    public static DamageSource skillDamage(Level level, @Nullable Entity attacker) {
+        Holder<DamageType> damageType = level.registryAccess()
+                .registryOrThrow(Registries.DAMAGE_TYPE)
+                .getHolderOrThrow(SKILL_DAMAGE);
+
+        return new DamageSource(damageType, attacker);
     }
 }

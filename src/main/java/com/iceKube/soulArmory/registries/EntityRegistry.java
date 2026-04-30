@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.registries;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.entities.BladeWaveEntity;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -19,4 +20,13 @@ public class EntityRegistry {
                             .clientTrackingRange(4)
                             .updateInterval(20)
                             .build("soul_armory:soul_arrow"));
+
+    public static final RegistryObject<EntityType<BladeWaveEntity>> BLADE_WAVE =
+            ENTITIES.register("blade_wave", () ->
+                    EntityType.Builder.<BladeWaveEntity>of(BladeWaveEntity::new, MobCategory.MISC)
+                            .sized(0.1F, 0.1F)
+                            .clientTrackingRange(4)
+                            .updateInterval(1)
+                            .noSummon()
+                            .build("soul_armory:blade_wave"));
 }

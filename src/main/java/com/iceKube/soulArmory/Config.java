@@ -20,6 +20,10 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_THRESHOLD;
 
+    private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_SPEED;
+    private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_LENGTH;
+    private static final ForgeConfigSpec.IntValue SOUL_SWORD_WAVE_LIFETIME;
+
     private static final ForgeConfigSpec.IntValue SOUL_BOW_MAX_SOUL;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_BASE_DAMAGE;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_POINT_PER_DAMAGE_PERCENT;
@@ -116,6 +120,22 @@ public class Config {
             SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
                     .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand")
                     .define("soulSwordDisableShieldUsage", true);
+
+            {
+                BUILDER.push("blade-wave");
+
+                SOUL_SWORD_WAVE_SPEED = BUILDER
+                        .comment("How far (in blocks) should the wave move in one tick")
+                        .defineInRange("bladeWaveSpeed",1,0,Double.MAX_VALUE);
+                SOUL_SWORD_WAVE_LENGTH = BUILDER
+                        .comment("How long (in blocks) is the wave")
+                        .defineInRange("bladeWaveLength",3,0,Double.MAX_VALUE);
+                SOUL_SWORD_WAVE_LIFETIME = BUILDER
+                        .comment("How long (in ticks) will it exist")
+                        .defineInRange("bladeWaveLifetime",20,1,Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
 
             BUILDER.pop();
         }
@@ -340,6 +360,9 @@ public class Config {
     public static double soulBowSkillSOSpreadAngle;
     public static double soulBowSkillSODamage;
     public static int soulBowSkillSORange;
+    public static double bladeWaveSpeed;
+    public static double bladeWaveLength;
+    public static int bladeWaveLifetime;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -386,5 +409,8 @@ public class Config {
         soulBowSkillSOSpreadAngle = SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE.get();
         soulBowSkillSODamage = SOUL_BOW_SKILL_OVERLOAD_DAMAGE.get();
         soulBowSkillSORange = SOUL_BOW_SKILL_OVERLOAD_RANGE.get();
+        bladeWaveSpeed = SOUL_SWORD_WAVE_SPEED.get();
+        bladeWaveLength = SOUL_SWORD_WAVE_LENGTH.get();
+        bladeWaveLifetime = SOUL_SWORD_WAVE_LIFETIME.get();
     }
 }

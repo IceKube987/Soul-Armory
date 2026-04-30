@@ -73,9 +73,8 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         return super.use(pLevel, pPlayer, pUsedHand);
     }
 
-
     private float getAttackDamage(ItemStack stack) {
-        if (stack.getTag() == null) return 1;
+        if (stack.getTag() == null) return (float) (Config.soulSwordBaseDamage - 1);
         return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
     }
 
@@ -83,12 +82,13 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
     public void setDefaultSkill(ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
         tag.putLong(lastExecutedTime, level.getGameTime());
-        tag.putString(currentSkill, SoulSkills.SONIC_BOOM.soulSkillId.toString());
+        tag.putString(currentSkill, SoulSkills.HEAL.soulSkillId.toString());
         tag.putInt(currentSkillIndex, 0);
 
         ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
 
         listTag.add(StringTag.valueOf(SoulSkills.HEAL.soulSkillId.toString()));
+        listTag.add(StringTag.valueOf(SoulSkills.BLADE_WAVE.soulSkillId.toString()));
 
         tag.put(availableSkills, listTag);
     }
