@@ -160,7 +160,12 @@ public abstract class BaseSoulWeaponItem extends Item {
         ResourceLocation skillId = ResourceLocation.tryParse(skillIdString);
 
         if (skillId == null) {
-            tag.remove(skillIdString);
+            tag.remove(currentSkill);
+            tag.putInt(currentSkillIndex, 0);
+            List<BaseSoulSkill> available = getAvailableSkills(stack);
+            if (!available.isEmpty()) {
+                tag.putString(currentSkill, available.get(0).soulSkillId.toString());
+            }
             return null;
         }
 
@@ -184,11 +189,13 @@ public abstract class BaseSoulWeaponItem extends Item {
                     // if the skill is somehow missing, remove it from the list.
                     listTag.remove(listTag.getString(i));
                     stack.getTag().put(availableSkills, listTag);
+                    i--;
                 }
             }else {
                 // if the string somehow does not represent a skill, remove it from the list.
                 listTag.remove(listTag.getString(i));
                 stack.getTag().put(availableSkills, listTag);
+                i--;
             }
         }
         return skills;

@@ -122,7 +122,9 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
 
     private void executeSkill(ItemStack stack, Level level, Player player) {
         if (!(stack.getItem() instanceof SoulSwordItem)) return;
-        getCurrentSkill(stack).execute(stack, level, player);
+        BaseSoulSkill skill = getCurrentSkill(stack);
+        if (skill == null) return;
+        skill.execute(stack, level, player);
     }
 
     // generic code from SwordItem
