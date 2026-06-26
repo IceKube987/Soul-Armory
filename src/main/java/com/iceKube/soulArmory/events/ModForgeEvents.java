@@ -117,7 +117,6 @@ public class ModForgeEvents {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (KeyBinding.TEST_KEY.consumeClick()) {
-//            ModPacketHandler.sendToServer(new ExampleC2SPacket());
             var shader = CoreShaders.soulVignette();
             if (shader == null) return;
             Minecraft mc = Minecraft.getInstance();
