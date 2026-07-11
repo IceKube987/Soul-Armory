@@ -175,9 +175,9 @@ public class OverlayHandler {
         // Skip if no switch has happened yet.
         if (stanceSeed == 0) return;
 
-        // Constants (tune to taste). Speed, height and width are fractions of the Minecraft
+        // Constants. Speed, height and width are fractions of the Minecraft
         // window size, so the effect scales with the window and GUI scale rather than being
-        // fixed pixel counts. Width is a fraction of window width; height and vertical speed
+        // fixed. Width is a fraction of window width; height and vertical speed
         // are fractions of window height (the natural axes for vertical bars).
         final int MIN_COUNT = 10;
         final int MAX_COUNT_EXTRA = 6;         // total count: 10-15
@@ -191,12 +191,6 @@ public class OverlayHandler {
         final int COLOR_RGB = 0x4488FF;        // soul blue
 
         int currentTick = clientTick;
-
-        // Early out: all bars are guaranteed dead after LIFETIME_BASE ticks.
-        if ((currentTick - stanceSpawnTick) > LIFETIME_BASE) {
-            stanceSeed = 0;
-            return;
-        }
 
         float partialTick = Minecraft.getInstance().getPartialTick();
 
