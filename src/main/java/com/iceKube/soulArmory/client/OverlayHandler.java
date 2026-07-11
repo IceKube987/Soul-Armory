@@ -18,9 +18,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Random;
+
 public class OverlayHandler {
 
     private static final ResourceLocation BAR_TEXTURE = new ResourceLocation("textures/gui/bars.png");
+
+    // --- Switch-skill VFX state ---
+    // Written only when a skill switch is signaled from the server (see triggerSwitchSkillVFX).
+    // The render path reads these every frame and is otherwise read-only.
+    private static long stanceSeed;
+    private static int stanceSpawnTick;
+
+    // Client-side tick counter, advanced once per client tick (see ModForgeEvents.onClientTick).
+    private static int clientTick;
 
     public static void renderSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
@@ -143,6 +154,95 @@ public class OverlayHandler {
         if (!mc.getResourceManager().getResource(texture).isPresent()) return;
 
         gui.blit(texture, x, y, w, h, 0, 0, 32, 32,32,32);
+    }
+
+    // Advances the client tick counter. Called once per client tick.
+    public static void onClientTick() {
+        clientTick++;
+    }
+
+    // Signals a skill switch: seeds a fresh burst of bars starting from the current client tick.
+    // This is the ONLY place stanceSeed / stanceSpawnTick are written.
+    public static void triggerSwitchSkillVFX() {
+        stanceSeed = System.nanoTime();
+        stanceSpawnTick = clientTick;
+    }
+
+    // Used when soul sword switches skill.
+    // Draws a burst of translucent blue vertical bars rising from the bottom of the HUD.
+    // Purely cosmetic and client-side; all motion/alpha is derived deterministically from the seed.
+    public static void renderSwitchSkillVFX(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        // Skip if no switch has happened yet.
+        if (stanceSeed == 0) return;
+
+        // Constants (tune to taste). Speed, height and width are fractions of the Minecraft
+        // window size, so the effect scales with the window and GUI scale rather than being
+        // fixed pixel counts. Width is a fraction of window width; height and vertical speed
+        // are fractions of window height (the natural axes for vertical bars).
+        final int MIN_COUNT = 10;
+        final int MAX_COUNT_EXTRA = 6;         // total count: 10-15
+        final float MIN_SPEED = 0.015f;        // fraction of window height per tick
+        final float MAX_SPEED = 0.04f;
+        final float MIN_HEIGHT = 0.025f;        // bar height as fraction of window height
+        final float MAX_HEIGHT_EXTRA = 0.1f;
+        final float MIN_WIDTH = 0.01f;        // bar width as fraction of window width
+        final float MAX_WIDTH_EXTRA = 0.01f;
+        final float LIFETIME_BASE = 20.0f;     // ticks, for the slowest bar
+        final int COLOR_RGB = 0x4488FF;        // soul blue
+
+        int currentTick = clientTick;
+
+        // Early out: all bars are guaranteed dead after LIFETIME_BASE ticks.
+        if ((currentTick - stanceSpawnTick) > LIFETIME_BASE) {
+            stanceSeed = 0;
+            return;
+        }
+
+        float partialTick = Minecraft.getInstance().getPartialTick();
+
+        Random rand = new Random(stanceSeed);
+        int count = rand.nextInt(MAX_COUNT_EXTRA) + MIN_COUNT;
+
+        float elapsed = (currentTick - stanceSpawnTick) + partialTick;
+
+        boolean anyVisible = false;
+
+        for (int i = 0; i < count; i++) {
+            // All per-bar properties derived deterministically from the seed.
+            // Dimensions/speed are fractions of the window size, converted to pixels here.
+            float x         = rand.nextFloat() * screenWidth;
+            float baseY = rand.nextFloat() * screenHeight * 0.1f; // spawn at random locations at the bottom 10% of the screen
+            float height    = (rand.nextFloat() * MAX_HEIGHT_EXTRA + MIN_HEIGHT) * screenHeight;
+            float width     = (rand.nextFloat() * MAX_WIDTH_EXTRA + MIN_WIDTH) * screenWidth;
+            float speedFrac = rand.nextFloat() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+            float speed     = speedFrac * screenHeight;   // pixels per tick
+
+            // Faster bars fade out sooner so they don't outlive their travel.
+            // The ratio is scale-independent, so the raw fractions work directly.
+            float lifetime = LIFETIME_BASE * (MIN_SPEED / speedFrac);
+            float alpha = 1.0f - (elapsed / lifetime);
+
+            if (alpha <= 0.0f) continue;
+            anyVisible = true;
+
+            float y = screenHeight - elapsed * speed - baseY;
+
+            int a = (int) (alpha * 180) << 24;   // cap base opacity at ~70%
+            int argb = a | COLOR_RGB;
+
+            guiGraphics.fill(
+                    (int) x,
+                    (int) y,
+                    (int) (x + width),
+                    (int) (y + height),
+                    argb
+            );
+        }
+
+        // Once all bars have faded, stop rendering.
+        if (!anyVisible) {
+            stanceSeed = 0;
+        }
     }
 
     // This method is just for fun.

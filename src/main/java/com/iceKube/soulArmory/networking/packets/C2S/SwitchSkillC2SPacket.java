@@ -39,7 +39,7 @@ public class SwitchSkillC2SPacket extends BasePacket {
             }
 
             if (item instanceof SoulSwordItem soulSwordItem) {
-                soulSwordItem.cycleToNextSkill(stack);
+                soulSwordItem.cycleToNextSkill(stack, player);
             }
         });
 

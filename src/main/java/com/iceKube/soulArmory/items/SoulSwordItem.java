@@ -3,9 +3,14 @@ package com.iceKube.soulArmory.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.iceKube.soulArmory.Config;
+import com.iceKube.soulArmory.networking.ModPacketHandler;
+import com.iceKube.soulArmory.networking.packets.S2C.SwitchSkillVFXS2CPacket;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -95,7 +100,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         tag.put(availableSkills, listTag);
     }
 
-    public void cycleToNextSkill(ItemStack stack) {
+    public void cycleToNextSkill(ItemStack stack, ServerPlayer player) {
         if (!stack.hasTag()) return;
         CompoundTag tag = stack.getTag();
 
@@ -116,8 +121,13 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         tag.putString(currentSkill, nextSkillId);
 
         // Soul Sword only: deduce soul when switching
+        // TODO: Switch Skill Cost in config file
         tag.putFloat(soulAmountNBT, Math.max(0,tag.getFloat(soulAmountNBT) - 100));
-        // TODO: add particle visual effect
+
+        // Play the switch sound and signal the client to play the switch VFX.
+        // TODO: Get my own SFX
+        player.level().playSound(null, player.getOnPos(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1, 1);
+        ModPacketHandler.sendToPlayer(new SwitchSkillVFXS2CPacket(), player);
     }
 
     private void executeSkill(ItemStack stack, Level level, Player player) {

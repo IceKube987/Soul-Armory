@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.events;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.client.OverlayHandler;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
@@ -158,5 +159,14 @@ public class ModForgeEvents {
 //        renderVignette(gui, screenWidth, screenHeight);
 
         renderSkillIcon(gui, (int) (screenWidth * 0.94), (int) (screenHeight - (screenWidth * 0.06)), ((int) (screenWidth * 0.05)), (int) (screenWidth * 0.05));
+
+        renderSwitchSkillVFX(gui, screenWidth, screenHeight);
+    }
+
+    // Advance the client-side tick counter used by the switch-skill VFX.
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        OverlayHandler.onClientTick();
     }
 }
