@@ -7,6 +7,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -55,6 +57,8 @@ public class HealSkill extends InstantSoulSkill {
 
         playParticle(level, player);
 
+        playSound(level,player);
+
         return true; // dynamically deduce soul, not use super()
     }
 
@@ -82,7 +86,7 @@ public class HealSkill extends InstantSoulSkill {
             double zOffset = zSize * random.nextFloat(1);
 
             Vec3 particlePos = new Vec3(aabb.minX + xOffset, aabb.minY + yOffset, aabb.minZ + zOffset);
-            Vec3 speedVector = particlePos.vectorTo(center).normalize().scale(0.05);
+            Vec3 speedVector = particlePos.vectorTo(center).scale(0.1);
 
             level.addParticle(ParticleTypes.SCULK_CHARGE_POP, particlePos.x,particlePos.y,particlePos.z, speedVector.x, speedVector.y, speedVector.z);
         }
@@ -96,5 +100,12 @@ public class HealSkill extends InstantSoulSkill {
             level.addParticle(ParticleTypes.SCULK_SOUL, aabb.minX + xOffset, aabb.minY + yOffset, aabb.minZ + zOffset, 0, 0.05, 0);
             level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, aabb.minX + xOffset, aabb.minY + yOffset, aabb.minZ + zOffset, 0, 0, 0);
         }
+    }
+
+    // TODO: Use better sound effect
+    private void playSound(Level level, Player player){
+        level.playSound(null,player.getOnPos(), SoundEvents.SCULK_BLOCK_PLACE, SoundSource.PLAYERS,1,1f);
+        level.playSound(null,player.getOnPos(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS,1,1f);
+        level.playSound(null,player.getOnPos(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS,0.3f,1f);
     }
 }
