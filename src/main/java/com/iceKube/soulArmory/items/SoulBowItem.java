@@ -267,7 +267,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemIt
         for (LivingEntity entity : candidates) {
             Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
             Vec3 entityEye = entity.getEyePosition();
-            Vec3 entityFeet = entity.getPosition(1.0f);
+            Vec3 entityFeet = entity.getPosition(1.0f).add(new Vec3(0,0.05,0));
 
             // Perform block raycast with COLLIDER shape and empty fluid handling
             ClipContext centerClipContext = new ClipContext(
