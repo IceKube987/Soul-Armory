@@ -113,13 +113,19 @@ public class Config {
                     .comment("How many points of soul is required for 1 percent of speed boost")
                     .defineInRange("soulSwordPointPerSpeedPercent", 3, 1, Integer.MAX_VALUE);
 
-            SOUL_SWORD_POINT_PER_HEALING = BUILDER
-                    .comment("How many points of soul is required for 1 HP in healing")
-                    .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
-
             SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
                     .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand")
                     .define("soulSwordDisableShieldUsage", true);
+
+            {
+                BUILDER.push("healing");
+
+                SOUL_SWORD_POINT_PER_HEALING = BUILDER
+                        .comment("How many points of soul is required for 1 HP in healing")
+                        .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
 
             {
                 BUILDER.push("blade-wave");

@@ -2,7 +2,6 @@ package com.iceKube.soulArmory.client;
 
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
-import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.items.SoulSkillSystemItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -23,7 +22,7 @@ public class OverlayHandler {
 
     private static final ResourceLocation BAR_TEXTURE = new ResourceLocation("textures/gui/bars.png");
 
-    public static void onRenderGUI(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
+    public static void renderSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
         ItemStack itemStack = mc.player.getMainHandItem();
@@ -140,6 +139,7 @@ public class OverlayHandler {
         if (!(item instanceof SoulSkillSystemItem skillItem)) return;
 
         ResourceLocation texture = skillItem.getCurrentSkill(itemStack).soulSkillTexture;
+        if (texture == null) return;
         if (!mc.getResourceManager().getResource(texture).isPresent()) return;
 
         gui.blit(texture, x, y, w, h, 0, 0, 32, 32,32,32);

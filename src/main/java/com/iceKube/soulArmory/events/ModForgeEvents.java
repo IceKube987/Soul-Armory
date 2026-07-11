@@ -4,7 +4,6 @@ import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
-import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
@@ -155,7 +154,7 @@ public class ModForgeEvents {
         int y = screenHeight - 15;
 
         // Call method
-        onRenderGUI(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
+        renderSoulBar(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
 
 //        renderVignette(gui, screenWidth, screenHeight);
 

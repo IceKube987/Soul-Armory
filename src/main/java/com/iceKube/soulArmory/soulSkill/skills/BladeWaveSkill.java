@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 
 import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 
+// Skill for Soul Sword
 public class BladeWaveSkill extends InstantSoulSkill {
     public BladeWaveSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "blade_wave"),

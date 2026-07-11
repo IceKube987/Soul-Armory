@@ -55,12 +55,9 @@ void main() {
         discard;
     }
 
-    // GameTime is in [0, 1) over course of the day, turn it back into ticks
-    float time = GameTime * 24000;
-
     vec4 s = vec4(vec3(0.2), 1);
 
-    float p = perlin_noise(vec2(texCoord0.x - time * 0.002,texCoord0.y), 15.0f);
+    float p = perlin_noise(vec2(texCoord0.x - GameTime * 48,texCoord0.y), 15.0f);
 
     float stripe = smoothstep(0.4, 0.5, p) * (1.0 - smoothstep(0.5, 0.6, p));
 
