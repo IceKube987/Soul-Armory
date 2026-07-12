@@ -1,12 +1,9 @@
 package com.iceKube.soulArmory;
 
 import com.iceKube.soulArmory.networking.ModPacketHandler;
-import com.iceKube.soulArmory.registries.BlockRegisrty;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.iceKube.soulArmory.registries.SoundRegistry;
-import com.iceKube.soulArmory.soulSkill.SoulSkills;
-import com.iceKube.soulArmory.soulSkill.skills.SonicBoomSkill;
 import com.iceKube.soulArmory.utils.ModItemProperties;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
@@ -40,8 +37,6 @@ public class SoulArmoryMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
-        BlockRegisrty.BLOCKS.register(modEventBus);
-        BlockRegisrty.BLOCKITEMS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         EntityRegistry.ENTITIES.register(modEventBus);
         SoundRegistry.SOUNDS.register(modEventBus);

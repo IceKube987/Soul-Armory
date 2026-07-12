@@ -1,7 +1,6 @@
 package com.iceKube.soulArmory.networking;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.networking.packets.C2S.ExampleC2SPacket;
 import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
 import com.iceKube.soulArmory.networking.packets.S2C.SwitchSkillVFXS2CPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -27,11 +26,6 @@ public class ModPacketHandler {
     }
 
     public static void register() {
-        INSTANCE.messageBuilder(ExampleC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ExampleC2SPacket::new)
-                .encoder(ExampleC2SPacket::toBytes)
-                .consumerMainThread(ExampleC2SPacket::handle)
-                .add();
 
         INSTANCE.messageBuilder(SwitchSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SwitchSkillC2SPacket::new)

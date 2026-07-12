@@ -49,7 +49,7 @@ public class ModForgeEvents {
         if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE)) return;
 
         ItemStack mainHandItem = player.getMainHandItem();
-        if (mainHandItem.getItem() instanceof BaseSoulWeaponItem) {
+        if (mainHandItem.getItem() instanceof BaseSoulWeaponItem item) {
             // Add soul equal to the damage dealt, capped at maxSoul
             float damageDealt = event.getAmount();
             if (damageDealt <= 0) return;
@@ -57,7 +57,7 @@ public class ModForgeEvents {
 
             CompoundTag tag = mainHandItem.getOrCreateTag();
             float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
-            float newSoul = Math.min(Config.soulSwordMaxSoul, currentSoul + damageDealt);
+            float newSoul = Math.min(item.getMaxSoul(), currentSoul + damageDealt);
             tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
         }
     }

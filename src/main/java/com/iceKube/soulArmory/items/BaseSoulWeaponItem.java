@@ -163,6 +163,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             tag.remove(currentSkill);
             tag.putInt(currentSkillIndex, 0);
             List<BaseSoulSkill> available = getAvailableSkills(stack);
+            if (available == null) return null;
             if (!available.isEmpty()) {
                 tag.putString(currentSkill, available.get(0).soulSkillId.toString());
             }
