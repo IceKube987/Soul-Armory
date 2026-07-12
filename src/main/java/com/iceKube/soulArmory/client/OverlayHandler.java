@@ -179,15 +179,15 @@ public class OverlayHandler {
         // window size, so the effect scales with the window and GUI scale rather than being
         // fixed. Width is a fraction of window width; height and vertical speed
         // are fractions of window height (the natural axes for vertical bars).
-        final int MIN_COUNT = 10;
-        final int MAX_COUNT_EXTRA = 6;         // total count: 10-15
-        final float MIN_SPEED = 0.015f;        // fraction of window height per tick
-        final float MAX_SPEED = 0.04f;
+        final int MIN_COUNT = 15;
+        final int MAX_COUNT_EXTRA = 6;         // total count: 15-20
+        final float MIN_SPEED = 0.04f;        // fraction of window height per tick
+        final float MAX_SPEED = 0.12f;
         final float MIN_HEIGHT = 0.025f;        // bar height as fraction of window height
-        final float MAX_HEIGHT_EXTRA = 0.1f;
+        final float MAX_HEIGHT_EXTRA = 0.2f;
         final float MIN_WIDTH = 0.01f;        // bar width as fraction of window width
         final float MAX_WIDTH_EXTRA = 0.01f;
-        final float LIFETIME_BASE = 20.0f;     // ticks, for the slowest bar
+        final float LIFETIME_BASE = 15.0f;     // ticks, for the slowest bar
         final int COLOR_RGB = 0x4488FF;        // soul blue
 
         int currentTick = clientTick;

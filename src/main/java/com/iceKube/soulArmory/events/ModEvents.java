@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.events;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.client.renderer.BladeWaveRenderer;
 import com.iceKube.soulArmory.client.renderer.SoulArrowRenderer;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.registries.EntityRegistry;
@@ -27,7 +28,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.SOUL_ARROW.get(), SoulArrowRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.BLADE_WAVE.get(), NoopRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.BLADE_WAVE.get(), BladeWaveRenderer::new);
     }
 
     @SubscribeEvent

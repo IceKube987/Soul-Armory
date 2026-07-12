@@ -22,7 +22,7 @@ public class BladeWaveSkill extends InstantSoulSkill {
         super(new ResourceLocation(SoulArmoryMod.MODID, "blade_wave"),
                 new ResourceLocation("textures/item/iron_sword.png"),
                 "blade_wave",
-                50);
+                Config.bladeWaveCost);
     }
 
     @Override

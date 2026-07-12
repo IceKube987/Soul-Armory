@@ -21,6 +21,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_THRESHOLD;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_SWITCH_SKILL_COST;
 
+    private static final ForgeConfigSpec.IntValue SOUL_SWORD_WAVE_COST;
     private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_SPEED;
     private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_LENGTH;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_WAVE_LIFETIME;
@@ -135,6 +136,9 @@ public class Config {
             {
                 BUILDER.push("blade-wave");
 
+                SOUL_SWORD_WAVE_COST = BUILDER
+                        .comment("How many points of soul will it take to use the skill")
+                        .defineInRange("bladeWaveCost", 50, 0, Integer.MAX_VALUE);
                 SOUL_SWORD_WAVE_SPEED = BUILDER
                         .comment("How far (in blocks) should the wave move in one tick")
                         .defineInRange("bladeWaveSpeed",1,0,Double.MAX_VALUE);
@@ -375,6 +379,7 @@ public class Config {
     public static double bladeWaveSpeed;
     public static double bladeWaveLength;
     public static int bladeWaveLifetime;
+    public static int bladeWaveCost;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -425,5 +430,6 @@ public class Config {
         bladeWaveSpeed = SOUL_SWORD_WAVE_SPEED.get();
         bladeWaveLength = SOUL_SWORD_WAVE_LENGTH.get();
         bladeWaveLifetime = SOUL_SWORD_WAVE_LIFETIME.get();
+        bladeWaveCost = SOUL_SWORD_WAVE_COST.get();
     }
 }

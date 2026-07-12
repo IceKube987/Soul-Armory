@@ -106,20 +106,20 @@ public class BladeWaveEntity extends Projectile {
         return true;
     }
 
-    @Override
-    public boolean isInvisible() {
-        return true;
-    }
+//    @Override
+//    public boolean isInvisible() {
+//        return true;
+//    }
 
     @Override
     public boolean isPickable() {
         return false;
     }
 
-    @Override
-    public boolean shouldRenderAtSqrDistance(double pDistance) {
-        return false;
-    }
+//    @Override
+//    public boolean shouldRenderAtSqrDistance(double pDistance) {
+//        return false;
+//    }
 
     /** Do not stop on block contact — passes through walls. */
     @Override
@@ -152,7 +152,7 @@ public class BladeWaveEntity extends Projectile {
 
         // 4. Spawn firework particles
         // TODO: visual effect
-        spawnParticles(newPos);
+//        spawnParticles(newPos);
 
         // 5. Damage entities in target but not yet in hitTarget
         applyDamage();
@@ -197,12 +197,12 @@ public class BladeWaveEntity extends Projectile {
         }
     }
 
-    private Vec3 getMoveDirection() {
+    public Vec3 getMoveDirection() {
         Vector3f v = this.entityData.get(SYNC_MOVE_DIR);
         return new Vec3(v.x(), v.y(), v.z());
     }
 
-    private Vec3 getRightVector() {
+    public Vec3 getRightVector() {
         Vector3f v = this.entityData.get(SYNC_RIGHT_VEC);
         return new Vec3(v.x(), v.y(), v.z());
     }
