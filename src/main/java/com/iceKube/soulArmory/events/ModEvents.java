@@ -7,7 +7,6 @@ import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.utils.KeyBinding;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;

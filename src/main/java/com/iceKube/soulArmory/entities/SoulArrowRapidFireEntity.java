@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
 // Soul Arrow that grants no soul points when hit enemy
-public class SoulArrowRapidFireEntity extends SoulArrowEntity{
+public class SoulArrowRapidFireEntity extends SoulArrowEntity {
     public SoulArrowRapidFireEntity(EntityType<? extends AbstractArrow> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }

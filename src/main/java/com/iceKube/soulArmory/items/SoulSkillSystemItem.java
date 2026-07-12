@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface SoulSkillSystemItem {
     BaseSoulSkill getCurrentSkill(ItemStack stack);
+
     List<BaseSoulSkill> getAvailableSkills(ItemStack stack);
+
     void setDefaultSkill(ItemStack stack, Level level);
 }

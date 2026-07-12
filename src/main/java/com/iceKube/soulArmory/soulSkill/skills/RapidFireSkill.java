@@ -2,7 +2,6 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.entities.SoulArrowRapidFireEntity;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.registries.EntityRegistry;
@@ -19,7 +18,7 @@ import static com.iceKube.soulArmory.items.SoulBowItem.lastExecutedTime;
 
 public class RapidFireSkill extends ContinuousSoulSkill {
     public RapidFireSkill() {
-        super(new ResourceLocation(SoulArmoryMod.MODID,"rapid_fire"),
+        super(new ResourceLocation(SoulArmoryMod.MODID, "rapid_fire"),
                 new ResourceLocation("textures/item/bow.png"),
                 "rapid_fire",
                 Config.soulBowSkillRFConsumption,
@@ -60,6 +59,6 @@ public class RapidFireSkill extends ContinuousSoulSkill {
                 1.0F,
                 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
 
-        return super.execute(stack,level,player);
+        return super.execute(stack, level, player);
     }
 }

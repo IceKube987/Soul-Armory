@@ -3,7 +3,6 @@ package com.iceKube.soulArmory.soulSkill.skills;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.entities.SoulArrowRapidFireEntity;
-import com.iceKube.soulArmory.entities.SoulArrowScatterEntity;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
@@ -20,7 +19,7 @@ import static com.iceKube.soulArmory.items.SoulBowItem.lastExecutedTime;
 
 public class BarrageSkill extends ContinuousSoulSkill {
     public BarrageSkill() {
-        super(new ResourceLocation(SoulArmoryMod.MODID,"barrage"),
+        super(new ResourceLocation(SoulArmoryMod.MODID, "barrage"),
                 new ResourceLocation("textures/item/bow_pulling_2.png"),
                 "barrage",
                 Config.soulBowSkillBConsumption,

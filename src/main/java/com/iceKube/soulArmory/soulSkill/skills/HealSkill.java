@@ -2,12 +2,12 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.registries.SoundRegistry;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import com.iceKube.soulArmory.registries.SoundRegistry;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -57,13 +57,13 @@ public class HealSkill extends InstantSoulSkill {
 
         playParticle(level, player);
 
-        playSound(level,player);
+        playSound(level, player);
 
         return true; // dynamically deduce soul, not use super()
     }
 
     private void playParticle(Level level, Player player) {
-        AABB aabb = player.getBoundingBox().inflate(0.5,0,0.5);
+        AABB aabb = player.getBoundingBox().inflate(0.5, 0, 0.5);
         Random random = new Random();
         double xSize = aabb.getXsize();
         double ySize = aabb.getYsize();
@@ -88,7 +88,7 @@ public class HealSkill extends InstantSoulSkill {
             Vec3 particlePos = new Vec3(aabb.minX + xOffset, aabb.minY + yOffset, aabb.minZ + zOffset);
             Vec3 speedVector = particlePos.vectorTo(center).scale(0.1);
 
-            level.addParticle(ParticleTypes.SCULK_CHARGE_POP, particlePos.x,particlePos.y,particlePos.z, speedVector.x, speedVector.y, speedVector.z);
+            level.addParticle(ParticleTypes.SCULK_CHARGE_POP, particlePos.x, particlePos.y, particlePos.z, speedVector.x, speedVector.y, speedVector.z);
         }
 
         // add Sculk Soul and Soul Flame Particles

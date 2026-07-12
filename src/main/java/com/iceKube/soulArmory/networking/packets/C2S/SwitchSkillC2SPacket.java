@@ -35,7 +35,7 @@ public class SwitchSkillC2SPacket extends BasePacket {
 
             if (item instanceof SoulBowItem soulBowItem) {
                 soulBowItem.cycleToNextSkill(stack);
-                player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(),SoundSource.PLAYERS,1,1);
+                player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
             }
 
             if (item instanceof SoulSwordItem soulSwordItem) {

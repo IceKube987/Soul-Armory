@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -34,7 +33,9 @@ public class BladeWaveEntity extends Projectile {
     private static final double PARTICLE_GAP = 0.1;
     private static final double AABB_HALF_SIZE = 0.05; // 0.1 x 0.1 → half = 0.05
 
-    /** Normalized travel direction, set once at spawn. */
+    /**
+     * Normalized travel direction, set once at spawn.
+     */
     private static final EntityDataAccessor<Vector3f> SYNC_MOVE_DIR = SynchedEntityData.defineId(BladeWaveEntity.class, EntityDataSerializers.VECTOR3);
 
     /**
@@ -43,13 +44,19 @@ public class BladeWaveEntity extends Projectile {
      */
     private static final EntityDataAccessor<Vector3f> SYNC_RIGHT_VEC = SynchedEntityData.defineId(BladeWaveEntity.class, EntityDataSerializers.VECTOR3);
 
-    /** Entities collected for damage this tick. */
+    /**
+     * Entities collected for damage this tick.
+     */
     private final HashSet<LivingEntity> target = new HashSet<>();
 
-    /** Entities already dealt damage to (not hurt again). */
+    /**
+     * Entities already dealt damage to (not hurt again).
+     */
     private final HashSet<LivingEntity> hitTarget = new HashSet<>();
 
-    /** Position at the start of the previous tick (used for AABB sweep). */
+    /**
+     * Position at the start of the previous tick (used for AABB sweep).
+     */
     private Vec3 prevTickPos = null;
 
     private float damage = 0;
@@ -81,8 +88,8 @@ public class BladeWaveEntity extends Projectile {
         // Precompute right vector once — direction is constant
         Vec3 rightVec = normalized.cross(new Vec3(0, 1, 0)).normalize();
 
-        entity.entityData.set(SYNC_MOVE_DIR, new Vector3f((float)normalized.x, (float)normalized.y, (float)normalized.z));
-        entity.entityData.set(SYNC_RIGHT_VEC, new Vector3f((float)rightVec.x, (float)rightVec.y, (float)rightVec.z));
+        entity.entityData.set(SYNC_MOVE_DIR, new Vector3f((float) normalized.x, (float) normalized.y, (float) normalized.z));
+        entity.entityData.set(SYNC_RIGHT_VEC, new Vector3f((float) rightVec.x, (float) rightVec.y, (float) rightVec.z));
 
         return entity;
     }
@@ -121,13 +128,17 @@ public class BladeWaveEntity extends Projectile {
 //        return false;
 //    }
 
-    /** Do not stop on block contact — passes through walls. */
+    /**
+     * Do not stop on block contact — passes through walls.
+     */
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
         // intentionally empty
     }
 
-    /** Do not react to entity contact via the projectile hit path. */
+    /**
+     * Do not react to entity contact via the projectile hit path.
+     */
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         // intentionally empty — damage is handled in tick()
@@ -262,7 +273,7 @@ public class BladeWaveEntity extends Projectile {
      */
     private void applyDamage() {
         Entity ownerEntity = getOwner();
-        DamageSource source = ModDamageTypes.skillDamage(level(),ownerEntity);
+        DamageSource source = ModDamageTypes.skillDamage(level(), ownerEntity);
 
         for (LivingEntity entity : target) {
             if (!hitTarget.contains(entity)) {

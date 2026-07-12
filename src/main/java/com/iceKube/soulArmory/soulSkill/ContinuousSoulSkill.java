@@ -2,7 +2,7 @@ package com.iceKube.soulArmory.soulSkill;
 
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class ContinuousSoulSkill extends BaseSoulSkill{
+public abstract class ContinuousSoulSkill extends BaseSoulSkill {
 
     public final int executeInterval;
 

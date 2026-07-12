@@ -141,13 +141,13 @@ public class Config {
                         .defineInRange("bladeWaveCost", 50, 0, Integer.MAX_VALUE);
                 SOUL_SWORD_WAVE_SPEED = BUILDER
                         .comment("How far (in blocks) should the wave move in one tick")
-                        .defineInRange("bladeWaveSpeed",1,0,Double.MAX_VALUE);
+                        .defineInRange("bladeWaveSpeed", 1, 0, Double.MAX_VALUE);
                 SOUL_SWORD_WAVE_LENGTH = BUILDER
                         .comment("How long (in blocks) is the wave")
-                        .defineInRange("bladeWaveLength",3,0,Double.MAX_VALUE);
+                        .defineInRange("bladeWaveLength", 3, 0, Double.MAX_VALUE);
                 SOUL_SWORD_WAVE_LIFETIME = BUILDER
                         .comment("How long (in ticks) will it exist")
-                        .defineInRange("bladeWaveLifetime",20,1,Integer.MAX_VALUE);
+                        .defineInRange("bladeWaveLifetime", 20, 1, Integer.MAX_VALUE);
 
                 BUILDER.pop();
             }

@@ -5,21 +5,19 @@ import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.entities.BladeWaveEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class BladeWaveRenderer extends EntityRenderer<BladeWaveEntity> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(SoulArmoryMod.MODID,"textures/entity/blade_wave.png");
+            new ResourceLocation(SoulArmoryMod.MODID, "textures/entity/blade_wave.png");
 
     public BladeWaveRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
@@ -30,12 +28,12 @@ public class BladeWaveRenderer extends EntityRenderer<BladeWaveEntity> {
                        PoseStack poseStack, MultiBufferSource bufferSource, int light) {
         poseStack.pushPose();
 
-        Vec3 dir   = entity.getMoveDirection();
+        Vec3 dir = entity.getMoveDirection();
         Vec3 right = entity.getRightVector();
 
         float half = (float) (Config.bladeWaveLength * 0.5F);
         Vec3 forward = dir.scale(half);
-        Vec3 side    = right.scale(half);
+        Vec3 side = right.scale(half);
 
         // Four corners: forward/back left/right
         Vec3 fl = forward.subtract(side);
@@ -44,7 +42,7 @@ public class BladeWaveRenderer extends EntityRenderer<BladeWaveEntity> {
         Vec3 bl = forward.reverse().subtract(side);
 
         PoseStack.Pose pose = poseStack.last();
-        Matrix4f pos  = pose.pose();
+        Matrix4f pos = pose.pose();
         Matrix3f norm = pose.normal();
 
         VertexConsumer consumer = bufferSource.getBuffer(

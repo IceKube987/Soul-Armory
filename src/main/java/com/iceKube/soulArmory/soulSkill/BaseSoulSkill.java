@@ -1,6 +1,5 @@
 package com.iceKube.soulArmory.soulSkill;
 
-import com.iceKube.soulArmory.Config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +24,10 @@ public abstract class BaseSoulSkill {
         return "skills.soul_armory." + this.soulSkillName;
     }
 
-    public boolean execute(ItemStack stack, Level level, Player player){
+    public boolean execute(ItemStack stack, Level level, Player player) {
         stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - soulCost);
         return true;
-    };
+    }
+
+    ;
 }

@@ -153,7 +153,7 @@ public class OverlayHandler {
         if (texture == null) return;
         if (!mc.getResourceManager().getResource(texture).isPresent()) return;
 
-        gui.blit(texture, x, y, w, h, 0, 0, 32, 32,32,32);
+        gui.blit(texture, x, y, w, h, 0, 0, 32, 32, 32, 32);
     }
 
     // Advances the client tick counter. Called once per client tick.
@@ -204,12 +204,12 @@ public class OverlayHandler {
         for (int i = 0; i < count; i++) {
             // All per-bar properties derived deterministically from the seed.
             // Dimensions/speed are fractions of the window size, converted to pixels here.
-            float x         = rand.nextFloat() * screenWidth;
+            float x = rand.nextFloat() * screenWidth;
             float baseY = rand.nextFloat() * screenHeight * 0.1f; // spawn at random locations at the bottom 10% of the screen
-            float height    = (rand.nextFloat() * MAX_HEIGHT_EXTRA + MIN_HEIGHT) * screenHeight;
-            float width     = (rand.nextFloat() * MAX_WIDTH_EXTRA + MIN_WIDTH) * screenWidth;
+            float height = (rand.nextFloat() * MAX_HEIGHT_EXTRA + MIN_HEIGHT) * screenHeight;
+            float width = (rand.nextFloat() * MAX_WIDTH_EXTRA + MIN_WIDTH) * screenWidth;
             float speedFrac = rand.nextFloat() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
-            float speed     = speedFrac * screenHeight;   // pixels per tick
+            float speed = speedFrac * screenHeight;   // pixels per tick
 
             // Faster bars fade out sooner so they don't outlive their travel.
             // The ratio is scale-independent, so the raw fractions work directly.

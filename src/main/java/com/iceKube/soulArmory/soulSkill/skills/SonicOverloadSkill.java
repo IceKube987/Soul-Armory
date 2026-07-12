@@ -25,7 +25,7 @@ import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 
 public class SonicOverloadSkill extends InstantSoulSkill {
     public SonicOverloadSkill() {
-        super(new ResourceLocation(SoulArmoryMod.MODID,"sonic_overload"),
+        super(new ResourceLocation(SoulArmoryMod.MODID, "sonic_overload"),
                 new ResourceLocation("textures/item/echo_shard.png"),
                 "sonic_overload",
                 Config.soulBowSkillSOConsumption);
@@ -49,7 +49,7 @@ public class SonicOverloadSkill extends InstantSoulSkill {
 
         Set<LivingEntity> hitEntities = new HashSet<>();
 
-        for (int a = 0; a < blastCount; a++){
+        for (int a = 0; a < blastCount; a++) {
             // Sonic Boom: trace 2-block AABBs along player's view vector and damage all entities hit
 
             // Calculate spread angles

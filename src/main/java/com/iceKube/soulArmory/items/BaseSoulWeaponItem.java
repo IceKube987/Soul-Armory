@@ -50,7 +50,7 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public abstract int getOverflowThreshold();
 
-    public boolean canUseSkill(){
+    public boolean canUseSkill() {
         return this instanceof SoulSkillSystemItem;
     }
 
@@ -110,7 +110,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             pStack.setTag(NBT);
 
             if (this instanceof SoulSkillSystemItem soulSkillSystemItem) {
-                soulSkillSystemItem.setDefaultSkill(pStack,pLevel);
+                soulSkillSystemItem.setDefaultSkill(pStack, pLevel);
             }
         }
 
@@ -192,7 +192,7 @@ public abstract class BaseSoulWeaponItem extends Item {
                     stack.getTag().put(availableSkills, listTag);
                     i--;
                 }
-            }else {
+            } else {
                 // if the string somehow does not represent a skill, remove it from the list.
                 listTag.remove(listTag.getString(i));
                 stack.getTag().put(availableSkills, listTag);

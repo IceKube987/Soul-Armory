@@ -46,7 +46,8 @@ public class ModForgeEvents {
         // Check if the source of the damage is a player holding a Soul Weapon
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         // Check if the damage is caused by skills.
-        if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE)) return;
+        if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE))
+            return;
 
         ItemStack mainHandItem = player.getMainHandItem();
         if (mainHandItem.getItem() instanceof BaseSoulWeaponItem item) {
@@ -128,7 +129,7 @@ public class ModForgeEvents {
                 shader.getUniform("Started").set(0);
             }
         }
-        if (KeyBinding.SWITCH_SKILL.consumeClick()){
+        if (KeyBinding.SWITCH_SKILL.consumeClick()) {
             ModPacketHandler.sendToServer(new SwitchSkillC2SPacket());
         }
     }

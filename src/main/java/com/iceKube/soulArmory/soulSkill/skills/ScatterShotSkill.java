@@ -2,7 +2,6 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.entities.SoulArrowScatterEntity;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.registries.EntityRegistry;

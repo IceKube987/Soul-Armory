@@ -16,12 +16,12 @@ public class CoreShaders {
 
     public static void init(TriConsumer<ResourceLocation, VertexFormat, Consumer<ShaderInstance>> registrations) {
         registrations.accept(
-                new ResourceLocation(SoulArmoryMod.MODID ,"soul_bar"),
+                new ResourceLocation(SoulArmoryMod.MODID, "soul_bar"),
                 DefaultVertexFormat.POSITION_TEX,
                 inst -> soulBar = inst
         );
         registrations.accept(
-                new ResourceLocation(SoulArmoryMod.MODID ,"show_uv"),
+                new ResourceLocation(SoulArmoryMod.MODID, "show_uv"),
                 DefaultVertexFormat.POSITION_TEX,
                 inst -> showUV = inst
         );
@@ -33,15 +33,15 @@ public class CoreShaders {
 
     }
 
-    public static ShaderInstance soulBar(){
+    public static ShaderInstance soulBar() {
         return soulBar;
     }
 
-    public static ShaderInstance showUV(){
+    public static ShaderInstance showUV() {
         return showUV;
     }
 
-    public static ShaderInstance soulVignette(){
+    public static ShaderInstance soulVignette() {
         return soulVignette;
     }
 }

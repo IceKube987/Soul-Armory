@@ -4,7 +4,6 @@ import com.iceKube.soulArmory.soulSkill.skills.*;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

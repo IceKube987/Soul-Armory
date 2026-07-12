@@ -11,13 +11,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
@@ -30,9 +27,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.stringtemplate.v4.ST;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -145,7 +140,8 @@ public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemIt
 
             // Try to use skill
             if (player.isShiftKeyDown()) {
-                if (getCurrentSkill(pStack) instanceof ContinuousSoulSkill) return; // Do not shoot arrow if player is using a continuous skill
+                if (getCurrentSkill(pStack) instanceof ContinuousSoulSkill)
+                    return; // Do not shoot arrow if player is using a continuous skill
                 if (useInstantSkill(pStack, pLevel, player)) return;
             }
 
@@ -267,7 +263,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemIt
         for (LivingEntity entity : candidates) {
             Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
             Vec3 entityEye = entity.getEyePosition();
-            Vec3 entityFeet = entity.getPosition(1.0f).add(new Vec3(0,0.05,0));
+            Vec3 entityFeet = entity.getPosition(1.0f).add(new Vec3(0, 0.05, 0));
 
             // Perform block raycast with COLLIDER shape and empty fluid handling
             ClipContext centerClipContext = new ClipContext(
