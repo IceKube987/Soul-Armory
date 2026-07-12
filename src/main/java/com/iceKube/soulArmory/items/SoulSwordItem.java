@@ -121,8 +121,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
         tag.putString(currentSkill, nextSkillId);
 
         // Soul Sword only: deduce soul when switching
-        // TODO: Switch Skill Cost in config file
-        tag.putFloat(soulAmountNBT, Math.max(0,tag.getFloat(soulAmountNBT) - 100));
+        tag.putFloat(soulAmountNBT, Math.max(0, tag.getFloat(soulAmountNBT) - Config.soulSwordSwitchSkillCost));
 
         // Play the switch sound and signal the client to play the switch VFX.
         // TODO: Get my own SFX

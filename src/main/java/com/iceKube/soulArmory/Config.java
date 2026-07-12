@@ -19,6 +19,7 @@ public class Config {
     private static final ForgeConfigSpec.BooleanValue SOUL_SWORD_DISABLE_SHIELD_USAGE;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_SPEED;
     private static final ForgeConfigSpec.IntValue SOUL_SWORD_OVERFLOW_THRESHOLD;
+    private static final ForgeConfigSpec.IntValue SOUL_SWORD_SWITCH_SKILL_COST;
 
     private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_SPEED;
     private static final ForgeConfigSpec.DoubleValue SOUL_SWORD_WAVE_LENGTH;
@@ -116,6 +117,10 @@ public class Config {
             SOUL_SWORD_DISABLE_SHIELD_USAGE = BUILDER
                     .comment("Whether holding a Soul Sword in main hand prevents using shields in off-hand")
                     .define("soulSwordDisableShieldUsage", true);
+
+            SOUL_SWORD_SWITCH_SKILL_COST = BUILDER
+                    .comment("How much soul is consumed when switching skills on the Soul Sword")
+                    .defineInRange("soulSwordSwitchSkillCost", 100, 0, Integer.MAX_VALUE);
 
             {
                 BUILDER.push("healing");
@@ -359,6 +364,7 @@ public class Config {
     public static double soulArrowTurnFactor;
     public static int soulSwordOverflowSpeed;
     public static int soulSwordOverflowThreshold;
+    public static int soulSwordSwitchSkillCost;
     public static int soulBowOverflowSpeed;
     public static int soulBowOverflowThreshold;
     public static int soulBowSkillSOConsumption;
@@ -408,6 +414,7 @@ public class Config {
         soulBowSkillBAngle = SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE.get();
         soulSwordOverflowSpeed = SOUL_SWORD_OVERFLOW_SPEED.get();
         soulSwordOverflowThreshold = SOUL_SWORD_OVERFLOW_THRESHOLD.get();
+        soulSwordSwitchSkillCost = SOUL_SWORD_SWITCH_SKILL_COST.get();
         soulBowOverflowSpeed = SOUL_BOW_OVERFLOW_SPEED.get();
         soulBowOverflowThreshold = SOUL_BOW_OVERFLOW_THRESHOLD.get();
         soulBowSkillSOConsumption = SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION.get();
