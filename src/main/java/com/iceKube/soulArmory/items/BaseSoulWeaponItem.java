@@ -33,10 +33,10 @@ public abstract class BaseSoulWeaponItem extends Item {
     public boolean doApplySpeedModifier = false;
 
     // Skill System
-    public static final String lastExecutedTime = "soul_armory.soul_bow.last_executed_time";
-    public static final String availableSkills = "soul_armory.soul_bow.available_skills";
-    public static final String currentSkill = "soul_armory.soul_bow.current_skill";
-    public static final String currentSkillIndex = "soul_armory.soul_bow.current_skill_index";
+    public static final String lastExecutedTime = "soul_armory.soul_weapon.last_executed_time";
+    public static final String availableSkills = "soul_armory.soul_weapon.available_skills";
+    public static final String currentSkill = "soul_armory.soul_weapon.current_skill";
+    public static final String currentSkillIndex = "soul_armory.soul_weapon.current_skill_index";
 
     public abstract int getGracePeriodTicks();
 
