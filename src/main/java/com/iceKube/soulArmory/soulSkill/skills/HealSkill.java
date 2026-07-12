@@ -7,7 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import com.iceKube.soulArmory.registries.SoundRegistry;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -102,10 +102,7 @@ public class HealSkill extends InstantSoulSkill {
         }
     }
 
-    // TODO: Use better sound effect
-    private void playSound(Level level, Player player){
-        level.playSound(null,player.getOnPos(), SoundEvents.SCULK_BLOCK_PLACE, SoundSource.PLAYERS,1,1f);
-        level.playSound(null,player.getOnPos(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS,1,1f);
-        level.playSound(null,player.getOnPos(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS,0.3f,1f);
+    private void playSound(Level level, Player player) {
+        level.playSound(null, player.getOnPos(), SoundRegistry.SOUL_SWORD_HEAL.get(), SoundSource.PLAYERS, 1f, 1f);
     }
 }

@@ -10,5 +10,7 @@
   "skills.soul_armory.scatter_shot": "Scatter Shot",
   "skills.soul_armory.sonic_overload": "Sonic Overload",
 
-  "itemGroup.soul_armory": "Soul Armory"
+  "itemGroup.soul_armory": "Soul Armory",
+
+  "subtitles.soul_armory.soul_sword_heal": "Soul Sword heals"
 }

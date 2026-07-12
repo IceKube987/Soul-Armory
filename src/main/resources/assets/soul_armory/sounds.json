@@ -1,0 +1,8 @@
+{
+  "soul_sword_heal": {
+    "subtitle": "subtitles.soul_armory.soul_sword_heal",
+    "sounds": [
+      "soul_armory:soul_sword_heal"
+    ]
+  }
+}

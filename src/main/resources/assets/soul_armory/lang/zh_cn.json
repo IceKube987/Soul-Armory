@@ -10,5 +10,7 @@
   "skills.soul_armory.scatter_shot": "齐射",
   "skills.soul_armory.sonic_overload": "音爆",
 
-  "itemGroup.soul_armory": "Soul Armory"
+  "itemGroup.soul_armory": "Soul Armory",
+
+  "subtitles.soul_armory.soul_sword_heal": "灵魂剑：治愈"
 }
