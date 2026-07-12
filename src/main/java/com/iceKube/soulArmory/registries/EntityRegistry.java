@@ -21,6 +21,22 @@ public class EntityRegistry {
                             .updateInterval(20)
                             .build("soul_armory:soul_arrow"));
 
+    public static final RegistryObject<EntityType<SoulArrowEntity>> SOUL_ARROW_RAPID_FIRE =
+            ENTITIES.register("soul_arrow_rapid_fire", () ->
+                    EntityType.Builder.<SoulArrowEntity>of(SoulArrowEntity::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(4)
+                            .updateInterval(20)
+                            .build("soul_armory:soul_arrow_rapid_fire"));
+
+    public static final RegistryObject<EntityType<SoulArrowEntity>> SOUL_ARROW_SCATTER =
+            ENTITIES.register("soul_arrow_scatter", () ->
+                    EntityType.Builder.<SoulArrowEntity>of(SoulArrowEntity::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(4)
+                            .updateInterval(20)
+                            .build("soul_armory:soul_arrow_scatter"));
+
     public static final RegistryObject<EntityType<BladeWaveEntity>> BLADE_WAVE =
             ENTITIES.register("blade_wave", () ->
                     EntityType.Builder.<BladeWaveEntity>of(BladeWaveEntity::new, MobCategory.MISC)

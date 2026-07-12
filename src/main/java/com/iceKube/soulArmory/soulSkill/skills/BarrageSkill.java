@@ -65,7 +65,7 @@ public class BarrageSkill extends ContinuousSoulSkill {
 
             // Create and spawn the arrow
             SoulArrowRapidFireEntity arrow = new SoulArrowRapidFireEntity(
-                    EntityRegistry.SOUL_ARROW.get(), player, level);
+                    EntityRegistry.SOUL_ARROW_RAPID_FIRE.get(), player, level);
 
             arrow.shoot(shootDir.x, shootDir.y, shootDir.z, 3.0F, 0.0F);
             arrow.setBaseDamage(damage);

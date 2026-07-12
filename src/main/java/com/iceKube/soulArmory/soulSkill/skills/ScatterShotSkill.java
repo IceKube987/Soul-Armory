@@ -58,7 +58,7 @@ public class ScatterShotSkill extends InstantSoulSkill {
 
             // Create and spawn the arrow
             SoulArrowScatterEntity arrow = new SoulArrowScatterEntity(
-                    EntityRegistry.SOUL_ARROW.get(), player, level);
+                    EntityRegistry.SOUL_ARROW_SCATTER.get(), player, level);
 
             arrow.shoot(shootDir.x, shootDir.y, shootDir.z, 3.0F, 0.0F);
             arrow.setBaseDamage(damage);

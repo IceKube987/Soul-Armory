@@ -42,7 +42,7 @@ public class RapidFireSkill extends ContinuousSoulSkill {
             double damage = Config.soulBowSkillRFDamage;
 
             SoulArrowRapidFireEntity arrow = new SoulArrowRapidFireEntity(
-                    EntityRegistry.SOUL_ARROW.get(), player, level);
+                    EntityRegistry.SOUL_ARROW_RAPID_FIRE.get(), player, level);
 
             // Shoot in the direction the player is looking; power * 3.0 is
             // the max speed as a fully-charged vanilla bow.

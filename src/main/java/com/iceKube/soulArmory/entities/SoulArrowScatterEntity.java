@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
+// Soul Arrow that has no homing behavior and grants no soul points when hit enemy
 public class SoulArrowScatterEntity extends AbstractArrow {
     public SoulArrowScatterEntity(EntityType<? extends AbstractArrow> pEntityType, LivingEntity pOwner, Level pLevel) {
         super(pEntityType, pOwner, pLevel);
