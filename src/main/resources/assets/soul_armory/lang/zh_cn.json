@@ -1,6 +1,8 @@
 {
   "item.soul_armory.soul_sword": "灵魂剑",
   "item.soul_armory.soul_bow": "灵魂弓",
+  "item.soul_armory.incomplete_soul_sword": "灵魂剑原胚",
+  "item.soul_armory.incomplete_soul_bow": "灵魂弓原胚",
 
   "tooltip.soul_armory.soul": "灵魂: ",
 

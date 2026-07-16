@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.registries;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.items.BaseIncompleteSoulItem;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.items.SoulSwordItem;
 import net.minecraft.world.item.Item;
@@ -16,4 +17,11 @@ public class ItemRegistry {
 
     public static final RegistryObject<Item> SOUL_BOW = ITEMS.register("soul_bow",
             () -> new SoulBowItem(new Item.Properties().stacksTo(1)));
+
+    // TODO: Unique incomplete soul item
+    public static final RegistryObject<Item> INCOMPLETE_SOUL_SWORD = ITEMS.register("incomplete_soul_sword",
+            () -> new BaseIncompleteSoulItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> INCOMPLETE_SOUL_BOW = ITEMS.register("incomplete_soul_bow",
+            () -> new BaseIncompleteSoulItem(new Item.Properties().stacksTo(1)));
 }

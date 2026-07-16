@@ -1,0 +1,11 @@
+{
+  "type": "soul_armory:ancient_city_incomplete_soul_items",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/ancient_city"
+    }
+  ],
+  "sword_chance": 1.0,
+  "bow_chance": 1.0
+}
