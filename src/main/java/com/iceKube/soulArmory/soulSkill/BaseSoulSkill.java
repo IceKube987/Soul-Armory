@@ -28,6 +28,4 @@ public abstract class BaseSoulSkill {
         stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - soulCost);
         return true;
     }
-
-    ;
 }

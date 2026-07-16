@@ -44,14 +44,12 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public abstract int getMaxSoul();
 
-    public abstract int getPointPerSpeedPercent();
-
     public abstract int getOverflowSpeed();
 
     public abstract int getOverflowThreshold();
 
     public boolean canUseSkill() {
-        return this instanceof SoulSkillSystemItem;
+        return this instanceof UseSoulSkillSystem;
     }
 
     /**
@@ -109,7 +107,7 @@ public abstract class BaseSoulWeaponItem extends Item {
 
             pStack.setTag(NBT);
 
-            if (this instanceof SoulSkillSystemItem soulSkillSystemItem) {
+            if (this instanceof UseSoulSkillSystem soulSkillSystemItem) {
                 soulSkillSystemItem.setDefaultSkill(pStack, pLevel);
             }
         }
@@ -141,11 +139,6 @@ public abstract class BaseSoulWeaponItem extends Item {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged;
-    }
-
-    public double getSpeedAdditionPercentage(ItemStack stack) {
-        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
-        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 
     public BaseSoulSkill getCurrentSkill(ItemStack stack) {

@@ -32,7 +32,7 @@ import net.minecraftforge.common.ToolActions;
 
 import java.util.List;
 
-public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystemItem {
+public class SoulSwordItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost {
 
     public SoulSwordItem(Properties pProperties) {
         super(pProperties);
@@ -81,6 +81,12 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements SoulSkillSystem
     private float getAttackDamage(ItemStack stack) {
         if (stack.getTag() == null) return (float) (Config.soulSwordBaseDamage - 1);
         return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
+    }
+
+    @Override
+    public double getSpeedAdditionPercentage(ItemStack stack) {
+        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
+        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 
     @Override

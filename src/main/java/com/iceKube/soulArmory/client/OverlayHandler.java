@@ -2,7 +2,7 @@ package com.iceKube.soulArmory.client;
 
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
-import com.iceKube.soulArmory.items.SoulSkillSystemItem;
+import com.iceKube.soulArmory.items.UseSoulSkillSystem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -146,7 +146,7 @@ public class OverlayHandler {
         ItemStack itemStack = mc.player.getMainHandItem();
         Item item = itemStack.getItem();
 
-        if (!(item instanceof SoulSkillSystemItem skillItem)) return;
+        if (!(item instanceof UseSoulSkillSystem skillItem)) return;
 
         ResourceLocation texture = skillItem.getCurrentSkill(itemStack).soulSkillTexture;
         if (texture == null) return;

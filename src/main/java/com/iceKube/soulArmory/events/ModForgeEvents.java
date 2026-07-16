@@ -4,10 +4,11 @@ import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.OverlayHandler;
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
-import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
-import com.iceKube.soulArmory.items.SoulSwordItem;
+import com.iceKube.soulArmory.items.*;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
+import com.iceKube.soulArmory.soulForging.ForgingEventType;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.utils.KeyBinding;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.client.Minecraft;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,6 +28,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,6 +64,50 @@ public class ModForgeEvents {
             float newSoul = Math.min(item.getMaxSoul(), currentSoul + damageDealt);
             tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
         }
+
+        if (mainHandItem.getItem() instanceof Forgeable forgeable) {
+            ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
+            if (task == null) return;
+
+            CompoundTag tag = mainHandItem.getOrCreateTag();
+            EntityType<?> targetType = event.getEntity().getType();
+            float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
+            if (damage <= 0) return;
+
+            if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
+                incompleteItem.activate(mainHandItem);
+            }
+
+            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
+                    targetType, damage, player.level().getGameTime());
+
+            if (completed) {
+                task.onComplete.execute(player, mainHandItem, player.level());
+                task.removeTaskTag(tag);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
+
+        ItemStack mainHandItem = player.getMainHandItem();
+        if (!(mainHandItem.getItem() instanceof Forgeable forgeable)) return;
+
+        ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
+        if (task == null) return;
+
+        CompoundTag tag = mainHandItem.getOrCreateTag();
+        EntityType<?> killedType = event.getEntity().getType();
+
+        boolean completed = task.processEvent(tag, ForgingEventType.KILL_ENTITY,
+                killedType, 1, player.level().getGameTime());
+
+        if (completed) {
+            task.onComplete.execute(player, mainHandItem, player.level());
+            task.removeTaskTag(tag);
+        }
     }
 
     // Apply speed modifier if the player is holding a soul weapon that applies speed modifier.
@@ -77,13 +124,12 @@ public class ModForgeEvents {
             attr.removeModifier(SOUL_SPEED_MODIFIER_UUID);
         }
 
-        if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof BaseSoulWeaponItem soulWeaponItem))
+        if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof CanApplySpeedBoost item))
             return;
-        if (!soulWeaponItem.doApplySpeedModifier) return;
 
         double baseSpeed = attr.getBaseValue();
         double currentSpeed = attr.getValue();
-        double targetSpeed = currentSpeed * (1 + soulWeaponItem.getSpeedAdditionPercentage(stack));
+        double targetSpeed = currentSpeed * (1 + item.getSpeedAdditionPercentage(stack));
 
         double modifierAmount = Config.speedBoostHasCeil
                 ? Math.max(0, Math.min(baseSpeed * Config.speedBoostCeil, targetSpeed))
@@ -92,9 +138,12 @@ public class ModForgeEvents {
         // Subtract current speed because it's an addition modifier.
         modifierAmount -= currentSpeed;
 
+        // otherwise the speed will be negative if the holder is applied too much speed boost effect.
+        modifierAmount = Math.max(0, modifierAmount);
+
         attr.addTransientModifier(new AttributeModifier(
                 SOUL_SPEED_MODIFIER_UUID,
-                "Soul Weapon Modifier",
+                "Soul Speed Modifier",
                 modifierAmount,
                 AttributeModifier.Operation.ADDITION));
 

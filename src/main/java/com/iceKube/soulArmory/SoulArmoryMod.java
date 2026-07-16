@@ -21,6 +21,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import com.iceKube.soulArmory.soulForging.ForgingTasks;
+
 import static com.iceKube.soulArmory.soulSkill.SoulSkills.registerSoulSkills;
 
 @Mod(SoulArmoryMod.MODID)
@@ -55,6 +57,7 @@ public class SoulArmoryMod {
         event.enqueueWork(() -> {
             ModPacketHandler.register();
             registerSoulSkills();
+            ForgingTasks.registerForgingTasks();
         });
     }
 
@@ -62,12 +65,15 @@ public class SoulArmoryMod {
         ModItemProperties.addCustomProperties();
     }
 
+    // TODO: temp creative mode tab for debugging purpose. Will remove the tab and move the items into vanilla tags in future.
     public static final RegistryObject<CreativeModeTab> SOUL_ARMORY_TAB = CREATIVE_MODE_TABS.register("soul_armory_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> ItemRegistry.SOUL_SWORD.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(ItemRegistry.SOUL_SWORD.get());
                 output.accept(ItemRegistry.SOUL_BOW.get());
+                output.accept(ItemRegistry.INCOMPLETE_SOUL_SWORD.get());
+                output.accept(ItemRegistry.INCOMPLETE_SOUL_BOW.get());
             }).build());
 
 }

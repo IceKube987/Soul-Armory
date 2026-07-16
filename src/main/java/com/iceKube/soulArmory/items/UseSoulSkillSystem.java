@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public interface SoulSkillSystemItem {
+public interface UseSoulSkillSystem {
     BaseSoulSkill getCurrentSkill(ItemStack stack);
 
     List<BaseSoulSkill> getAvailableSkills(ItemStack stack);

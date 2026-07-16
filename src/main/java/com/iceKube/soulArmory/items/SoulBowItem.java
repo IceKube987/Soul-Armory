@@ -32,7 +32,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Comparator;
 import java.util.List;
 
-public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemItem {
+public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost {
 
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
@@ -67,6 +67,12 @@ public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemIt
     @Override
     public int getOverflowThreshold() {
         return Config.soulBowOverflowThreshold;
+    }
+
+    @Override
+    public double getSpeedAdditionPercentage(ItemStack stack) {
+        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
+        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 
     // -------------------------------------------------------------------------

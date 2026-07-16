@@ -67,6 +67,16 @@ public class Config {
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
     private static final ForgeConfigSpec.DoubleValue SOUL_SPEED_BOOST_CEIL;
 
+    private static final ForgeConfigSpec.IntValue FORGING_SWORD_DAMAGE_TARGET;
+    private static final ForgeConfigSpec.IntValue FORGING_SWORD_TIMEOUT_TICKS;
+    private static final ForgeConfigSpec.IntValue FORGING_SWORD_ACTIVE_TICKS;
+    private static final ForgeConfigSpec.IntValue FORGING_BOW_DAMAGE_TARGET;
+    private static final ForgeConfigSpec.IntValue FORGING_BOW_TIMEOUT_TICKS;
+    private static final ForgeConfigSpec.IntValue FORGING_BOW_ACTIVE_TICKS;
+    private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_SONIC_HITS;
+    private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_TIMEOUT_TICKS;
+    private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_ACTIVE_TICKS;
+
 
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
@@ -328,6 +338,66 @@ public class Config {
             BUILDER.pop();
         }
 
+        {
+            BUILDER.comment("Soul Forging Settings").push("soul-forging");
+
+            {
+                BUILDER.push("sword");
+
+                FORGING_SWORD_DAMAGE_TARGET = BUILDER
+                        .comment("Total damage to Wardens required to forge the soul sword")
+                        .defineInRange("forgingSwordDamageTarget", 500, 1, Integer.MAX_VALUE);
+
+                FORGING_SWORD_TIMEOUT_TICKS = BUILDER
+                        .comment("Ticks of inactivity before sword forging progress resets (0 = no timeout)")
+                        .defineInRange("forgingSwordTimeoutTicks", 3600, 0, Integer.MAX_VALUE);
+
+                FORGING_SWORD_ACTIVE_TICKS = BUILDER
+                        .comment("Duration in ticks the incomplete sword stays active after hitting a Warden")
+                        .defineInRange("forgingSwordActiveTicks", 100, 1, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
+            {
+                BUILDER.push("bow");
+
+                FORGING_BOW_DAMAGE_TARGET = BUILDER
+                        .comment("Total damage to Wardens required to forge the soul bow")
+                        .defineInRange("forgingBowDamageTarget", 500, 1, Integer.MAX_VALUE);
+
+                FORGING_BOW_TIMEOUT_TICKS = BUILDER
+                        .comment("Ticks of inactivity before bow forging progress resets (0 = no timeout)")
+                        .defineInRange("forgingBowTimeoutTicks", 3600, 0, Integer.MAX_VALUE);
+
+                FORGING_BOW_ACTIVE_TICKS = BUILDER
+                        .comment("Duration in ticks the incomplete bow stays active after hitting a Warden")
+                        .defineInRange("forgingBowActiveTicks", 100, 1, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
+            {
+                BUILDER.push("chestplate");
+
+                FORGING_CHESTPLATE_SONIC_HITS = BUILDER
+                        .comment("Number of Warden sonic boom hits required to forge the chestplate")
+                        .defineInRange("forgingChestplateSonicHits", 5, 1, Integer.MAX_VALUE);
+
+                FORGING_CHESTPLATE_TIMEOUT_TICKS = BUILDER
+                        .comment("Ticks of inactivity before chestplate forging progress resets (0 = no timeout)")
+                        .defineInRange("forgingChestplateTimeoutTicks", 3600, 0, Integer.MAX_VALUE);
+
+                FORGING_CHESTPLATE_ACTIVE_TICKS = BUILDER
+                        .comment("Duration in ticks the incomplete chestplate stays active after a sonic boom hit")
+                        .defineInRange("forgingChestplateActiveTicks", 100, 1, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
+            BUILDER.pop();
+        }
+
     }
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
@@ -380,6 +450,15 @@ public class Config {
     public static double bladeWaveLength;
     public static int bladeWaveLifetime;
     public static int bladeWaveCost;
+    public static int forgingSwordDamageTarget;
+    public static int forgingSwordTimeoutTicks;
+    public static int forgingSwordActiveTicks;
+    public static int forgingBowDamageTarget;
+    public static int forgingBowTimeoutTicks;
+    public static int forgingBowActiveTicks;
+    public static int forgingChestplateSonicHits;
+    public static int forgingChestplateTimeoutTicks;
+    public static int forgingChestplateActiveTicks;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -431,5 +510,14 @@ public class Config {
         bladeWaveLength = SOUL_SWORD_WAVE_LENGTH.get();
         bladeWaveLifetime = SOUL_SWORD_WAVE_LIFETIME.get();
         bladeWaveCost = SOUL_SWORD_WAVE_COST.get();
+        forgingSwordDamageTarget = FORGING_SWORD_DAMAGE_TARGET.get();
+        forgingSwordTimeoutTicks = FORGING_SWORD_TIMEOUT_TICKS.get();
+        forgingSwordActiveTicks = FORGING_SWORD_ACTIVE_TICKS.get();
+        forgingBowDamageTarget = FORGING_BOW_DAMAGE_TARGET.get();
+        forgingBowTimeoutTicks = FORGING_BOW_TIMEOUT_TICKS.get();
+        forgingBowActiveTicks = FORGING_BOW_ACTIVE_TICKS.get();
+        forgingChestplateSonicHits = FORGING_CHESTPLATE_SONIC_HITS.get();
+        forgingChestplateTimeoutTicks = FORGING_CHESTPLATE_TIMEOUT_TICKS.get();
+        forgingChestplateActiveTicks = FORGING_CHESTPLATE_ACTIVE_TICKS.get();
     }
 }
