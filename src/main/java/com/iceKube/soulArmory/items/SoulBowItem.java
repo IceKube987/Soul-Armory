@@ -7,6 +7,7 @@ import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -357,6 +358,8 @@ public class SoulBowItem extends BaseSoulWeaponItem implements SoulSkillSystemIt
         // actually switch to next skill
         String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
         tag.putString(currentSkill, nextSkillId);
+
+        Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
     }
 
     @Override

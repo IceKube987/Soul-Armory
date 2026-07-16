@@ -38,7 +38,6 @@ public class ScatterShotSkill extends InstantSoulSkill {
         Vec3 viewVector = player.getViewVector(1.0F);
         Vec3 upVector = player.getUpVector(1.0F);
 
-        // Make sure it is always RIGHT.
         Vec3 rightVector = viewVector.cross(upVector).normalize();
 
         // Spawn multiple arrows in a spread pattern

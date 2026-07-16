@@ -113,20 +113,10 @@ public class BladeWaveEntity extends Projectile {
         return true;
     }
 
-//    @Override
-//    public boolean isInvisible() {
-//        return true;
-//    }
-
     @Override
     public boolean isPickable() {
         return false;
     }
-
-//    @Override
-//    public boolean shouldRenderAtSqrDistance(double pDistance) {
-//        return false;
-//    }
 
     /**
      * Do not stop on block contact — passes through walls.

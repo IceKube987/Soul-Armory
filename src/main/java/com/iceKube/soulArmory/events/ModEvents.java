@@ -21,12 +21,13 @@ public class ModEvents {
 
     /**
      * Registers the renderer for {@link com.iceKube.soulArmory.entities.SoulArrowEntity}.
-     * Uses the vanilla tipped-arrow renderer as a placeholder so the arrow is
-     * visible in-game; replace with a custom renderer/model later if desired.
+     * Uses the vanilla tipped-arrow renderer as a placeholder.
      */
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.SOUL_ARROW.get(), SoulArrowRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.SOUL_ARROW_SCATTER.get(), SoulArrowRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.SOUL_ARROW_RAPID_FIRE.get(), SoulArrowRenderer::new);
         event.registerEntityRenderer(EntityRegistry.BLADE_WAVE.get(), BladeWaveRenderer::new);
     }
 

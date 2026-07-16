@@ -60,7 +60,6 @@ public class SonicBoomSkill extends InstantSoulSkill {
             entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
         }
 
-//        player.playSound(SoundEvents.WARDEN_SONIC_BOOM, 3.0F, 1.0F);
         level.playSound(
                 null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS,

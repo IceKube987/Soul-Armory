@@ -67,10 +67,5 @@ public class SoulArmoryMod {
                 output.accept(ItemRegistry.SOUL_SWORD.get());
                 output.accept(ItemRegistry.SOUL_BOW.get());
             }).build());
-//
-//    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-//            event.accept(EXAMPLE_BLOCK_ITEM);
-//    }
 
 }

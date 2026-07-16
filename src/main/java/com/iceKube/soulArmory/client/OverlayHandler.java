@@ -95,7 +95,6 @@ public class OverlayHandler {
 
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        RenderSystem.setShaderTexture(0, BAR_TEXTURE);
 
         builder.vertex(matrix, x, y + h, 0).uv(minU, maxV).endVertex();
         builder.vertex(matrix, x + w, y + h, 0).uv(maxU, maxV).endVertex();
