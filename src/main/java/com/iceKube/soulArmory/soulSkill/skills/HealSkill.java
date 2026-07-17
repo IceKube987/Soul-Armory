@@ -23,7 +23,7 @@ import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 public class HealSkill extends InstantSoulSkill {
     public HealSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "heal"),
-                null,
+                new ResourceLocation(SoulArmoryMod.MODID ,"textures/icon/soul_heal.png"),
                 "heal",
                 0); // dynamically deduce soul
     }

@@ -235,7 +235,7 @@ public class BladeWaveEntity extends Projectile {
     }
 
     /**
-     * Spawn cyan firework particles at 0.1-block intervals along rightVec,
+     * Spawn firework particles at 0.1-block intervals along rightVec,
      * both left and right of the entity center.
      */
     private void spawnParticles(Vec3 pos) {

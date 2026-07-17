@@ -72,7 +72,14 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         ForgingTask task = getActiveForgingTask(pStack);
-        if (task == null || pStack.getTag() == null) return;
+        if (task == null) return;
+        if (pStack.getTag() == null) {
+            for (ForgingCriterion criterion : task.criteria) {
+                String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
+                pTooltipComponents.add(Component.literal("§9" + label + ": " + "0" + " / " + criterion.targetValue));
+            }
+            return;
+        }
 
         CompoundTag tag = pStack.getTag();
         CompoundTag taskTag = task.getOrCreateTaskTag(tag);

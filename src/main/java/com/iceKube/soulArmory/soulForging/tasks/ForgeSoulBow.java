@@ -16,7 +16,7 @@ public class ForgeSoulBow extends ForgingTask {
     public ForgeSoulBow() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "forge_soul_bow"),
                 List.of(
-                        new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
+                        new ForgingCriterion("deal_damage", ForgingEventType.DEAL_ANY_DAMAGE,
                                 Config.forgingBowDamageTarget,
                                 Config.forgingBowTimeoutTicks,
                                 type -> type == EntityType.WARDEN),

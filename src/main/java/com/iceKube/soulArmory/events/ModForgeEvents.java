@@ -43,49 +43,26 @@ public class ModForgeEvents {
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
 
-    // Add soul when player is hurting entity with soul weapons.
+    // When player is hurting entity with soul weapons.
     @SubscribeEvent
     public static void onLivingHurt(LivingDamageEvent event) {
         // Check if the source of the damage is a player holding a Soul Weapon
         if (!(event.getSource().getEntity() instanceof Player player)) return;
+
+        ItemStack mainHandItem = player.getMainHandItem();
+
+        // Handle "Deal Any Damage" forging criterion.
+        if (ForgingDealAnyDamage(event, player, mainHandItem)) return;
+
         // Check if the damage is caused by skills.
         if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE))
             return;
 
-        ItemStack mainHandItem = player.getMainHandItem();
-        if (mainHandItem.getItem() instanceof BaseSoulWeaponItem item) {
-            // Add soul equal to the damage dealt, capped at maxSoul
-            float damageDealt = event.getAmount();
-            if (damageDealt <= 0) return;
-            damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
+        // Handle add soul points for regular soul weapons.
+        if (AddSoulPoints(event, mainHandItem)) return;
 
-            CompoundTag tag = mainHandItem.getOrCreateTag();
-            float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
-            float newSoul = Math.min(item.getMaxSoul(), currentSoul + damageDealt);
-            tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
-        }
-
-        if (mainHandItem.getItem() instanceof Forgeable forgeable) {
-            ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
-            if (task == null) return;
-
-            CompoundTag tag = mainHandItem.getOrCreateTag();
-            EntityType<?> targetType = event.getEntity().getType();
-            float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
-            if (damage <= 0) return;
-
-            if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
-                incompleteItem.activate(mainHandItem);
-            }
-
-            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
-                    targetType, damage, player.level().getGameTime());
-
-            if (completed) {
-                task.onComplete.execute(player, mainHandItem, player.level());
-                task.removeTaskTag(tag);
-            }
-        }
+        // Handle "deal damage" forging criterion, which will only calculate damage that is not from skills.
+        ForgingDealDamage(event, player, mainHandItem);
     }
 
     @SubscribeEvent
@@ -218,5 +195,65 @@ public class ModForgeEvents {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         OverlayHandler.onClientTick();
+    }
+
+    private static boolean ForgingDealAnyDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
+        if (mainHandItem.getItem() instanceof Forgeable forgeable){
+            ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
+            if (task == null) return true;
+
+            CompoundTag tag = mainHandItem.getOrCreateTag();
+            EntityType<?> targetType = event.getEntity().getType();
+            float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
+            if (damage <= 0) return true;
+
+            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_ANY_DAMAGE,
+                    targetType, damage, player.level().getGameTime());
+
+            if (completed) {
+                task.onComplete.execute(player, mainHandItem, player.level());
+                task.removeTaskTag(tag);
+            }
+        }
+        return false;
+    }
+
+    private static void ForgingDealDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
+        if (mainHandItem.getItem() instanceof Forgeable forgeable) {
+            ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
+            if (task == null) return;
+
+            CompoundTag tag = mainHandItem.getOrCreateTag();
+            EntityType<?> targetType = event.getEntity().getType();
+            float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
+            if (damage <= 0) return;
+
+            if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
+                incompleteItem.activate(mainHandItem);
+            }
+
+            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
+                    targetType, damage, player.level().getGameTime());
+
+            if (completed) {
+                task.onComplete.execute(player, mainHandItem, player.level());
+                task.removeTaskTag(tag);
+            }
+        }
+    }
+
+    private static boolean AddSoulPoints(LivingDamageEvent event, ItemStack mainHandItem) {
+        if (mainHandItem.getItem() instanceof BaseSoulWeaponItem item) {
+            // Add soul equal to the damage dealt, capped at maxSoul
+            float damageDealt = event.getAmount();
+            if (damageDealt <= 0) return true;
+            damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
+
+            CompoundTag tag = mainHandItem.getOrCreateTag();
+            float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
+            float newSoul = Math.min(item.getMaxSoul(), currentSoul + damageDealt);
+            tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
+        }
+        return false;
     }
 }
