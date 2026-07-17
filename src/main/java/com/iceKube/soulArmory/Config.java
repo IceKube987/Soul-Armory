@@ -406,11 +406,11 @@ public class Config {
 
             INCOMPLETE_SWORD_SPAWN_CHANCE = BUILDER
                     .comment("The chance of the incomplete sword spawning inside a chest in ancient city")
-                    .defineInRange("swordSpawnChance",0.1,0.0,1.0);
+                    .defineInRange("swordSpawnChance", 0.1, 0.0, 1.0);
 
             INCOMPLETE_BOW_SPAWN_CHANCE = BUILDER
                     .comment("The chance of the incomplete bow spawning inside a chest in ancient city")
-                    .defineInRange("bowSpawnChance",0.1,0.0,1.0);
+                    .defineInRange("bowSpawnChance", 0.1, 0.0, 1.0);
         }
     }
 

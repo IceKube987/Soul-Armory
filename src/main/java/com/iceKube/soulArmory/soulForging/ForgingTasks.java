@@ -1,17 +1,12 @@
 package com.iceKube.soulArmory.soulForging;
 
-import com.iceKube.soulArmory.Config;
-import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeChestplate;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeSoulBow;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeSoulSword;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ForgingTasks {

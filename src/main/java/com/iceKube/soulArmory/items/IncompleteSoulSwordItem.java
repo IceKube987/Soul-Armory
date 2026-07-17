@@ -11,7 +11,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -95,10 +94,10 @@ public class IncompleteSoulSwordItem extends BaseIncompleteSoulItem implements C
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-        if (isActive(pStack)){
-            if (pLevel.getGameTime() % 20 == 0){
-                if (pEntity instanceof Player player){
-                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,100,2,false,false,true));
+        if (isActive(pStack)) {
+            if (pLevel.getGameTime() % 20 == 0) {
+                if (pEntity instanceof Player player) {
+                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2, false, false, true));
                 }
             }
         }

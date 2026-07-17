@@ -198,7 +198,7 @@ public class ModForgeEvents {
     }
 
     private static boolean ForgingDealAnyDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
-        if (mainHandItem.getItem() instanceof Forgeable forgeable){
+        if (mainHandItem.getItem() instanceof Forgeable forgeable) {
             ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
             if (task == null) return true;
 

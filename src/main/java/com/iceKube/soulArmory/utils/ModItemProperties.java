@@ -60,7 +60,7 @@ public class ModItemProperties {
 
             // speed up the bow pulling animation.
             double soulMultiplier = 1;
-            if (stack.getItem() instanceof IncompleteSoulBowItem incompleteSoulBowItem && incompleteSoulBowItem.isActive(stack)){
+            if (stack.getItem() instanceof IncompleteSoulBowItem incompleteSoulBowItem && incompleteSoulBowItem.isActive(stack)) {
                 soulMultiplier += 0.01 * (int) (Config.soulBowMaxSoul / Config.soulBowPointPerDamagePercent);
             }
             int chargedTicks = stack.getUseDuration() - livingEntity.getUseItemRemainingTicks();

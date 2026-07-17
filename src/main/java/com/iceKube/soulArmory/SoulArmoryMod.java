@@ -5,6 +5,7 @@ import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.iceKube.soulArmory.registries.LootModifierRegistry;
 import com.iceKube.soulArmory.registries.SoundRegistry;
+import com.iceKube.soulArmory.soulForging.ForgingTasks;
 import com.iceKube.soulArmory.utils.ModItemProperties;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
@@ -20,8 +21,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-
-import com.iceKube.soulArmory.soulForging.ForgingTasks;
 
 import static com.iceKube.soulArmory.soulSkill.SoulSkills.registerSoulSkills;
 

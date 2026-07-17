@@ -5,9 +5,6 @@ import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulForging.ForgingTasks;
-import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
-import com.iceKube.soulArmory.soulSkill.SoulSkills;
-import com.iceKube.soulArmory.soulSkill.skills.SonicBoomSkill;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -31,8 +28,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
 
 public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
 
@@ -93,7 +88,7 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
 
         double soulMultiplier = 1;
 
-        if (isActive(pStack)){
+        if (isActive(pStack)) {
             soulMultiplier += 0.01 * (int) (Config.soulBowMaxSoul / Config.soulBowPointPerDamagePercent);
         }
 
@@ -107,8 +102,8 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
 
             // Try to use skill
             if (player.isShiftKeyDown()) {
-                if (isActive(pStack)){
-                    execute(pStack,pLevel,player);
+                if (isActive(pStack)) {
+                    execute(pStack, pLevel, player);
                     return;
                 }
             }
@@ -326,6 +321,6 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
             }
         }
         stack.getTag().putInt(ACTIVE_TIME_NBT, 0);
-        onDeactivate(stack,level,player);
+        onDeactivate(stack, level, player);
     }
 }
