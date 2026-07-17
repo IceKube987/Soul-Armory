@@ -77,6 +77,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_TIMEOUT_TICKS;
     private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_ACTIVE_TICKS;
 
+    private static final ForgeConfigSpec.DoubleValue INCOMPLETE_SWORD_SPAWN_CHANCE;
+    private static final ForgeConfigSpec.DoubleValue INCOMPLETE_BOW_SPAWN_CHANCE;
+
 
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
@@ -398,6 +401,17 @@ public class Config {
             BUILDER.pop();
         }
 
+        {
+            BUILDER.comment("Incomplete soul equipments spawn settings").push("spawn-settings");
+
+            INCOMPLETE_SWORD_SPAWN_CHANCE = BUILDER
+                    .comment("The chance of the incomplete sword spawning inside a chest in ancient city")
+                    .defineInRange("swordSpawnChance",0.1,0.0,1.0);
+
+            INCOMPLETE_BOW_SPAWN_CHANCE = BUILDER
+                    .comment("The chance of the incomplete bow spawning inside a chest in ancient city")
+                    .defineInRange("bowSpawnChance",0.1,0.0,1.0);
+        }
     }
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
@@ -459,6 +473,8 @@ public class Config {
     public static int forgingChestplateSonicHits;
     public static int forgingChestplateTimeoutTicks;
     public static int forgingChestplateActiveTicks;
+    public static double swordSpawnChance;
+    public static double bowSpawnChance;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -519,5 +535,7 @@ public class Config {
         forgingChestplateSonicHits = FORGING_CHESTPLATE_SONIC_HITS.get();
         forgingChestplateTimeoutTicks = FORGING_CHESTPLATE_TIMEOUT_TICKS.get();
         forgingChestplateActiveTicks = FORGING_CHESTPLATE_ACTIVE_TICKS.get();
+        swordSpawnChance = INCOMPLETE_SWORD_SPAWN_CHANCE.get();
+        bowSpawnChance = INCOMPLETE_BOW_SPAWN_CHANCE.get();
     }
 }

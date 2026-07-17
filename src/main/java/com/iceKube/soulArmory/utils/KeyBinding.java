@@ -15,6 +15,6 @@ public class KeyBinding {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, KEY_CATEGORY);
 
     public static final KeyMapping SWITCH_SKILL = new KeyMapping(KEY_SWITCH_SKILL, KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSPACE, KEY_CATEGORY);
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, KEY_CATEGORY);
 
 }

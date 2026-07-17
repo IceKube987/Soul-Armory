@@ -16,8 +16,7 @@
 
   "subtitles.soul_armory.soul_sword_heal": "Soul Sword heals",
 
-  "tooltip.soul_armory.forging.deal_damage": "Deal Damage",
+  "tooltip.soul_armory.forging.deal_damage": "Deal Damage to Wardens",
   "tooltip.soul_armory.forging.kill_warden": "Kill Warden",
-  "tooltip.soul_armory.forging.sonic_hits": "Sonic Boom Hits",
-  "tooltip.soul_armory.forging.complete": "COMPLETE"
+  "tooltip.soul_armory.forging.sonic_hits": "Sonic Boom Hits"
 }

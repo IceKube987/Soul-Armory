@@ -5,7 +5,5 @@
       "condition": "forge:loot_table_id",
       "loot_table_id": "minecraft:chests/ancient_city"
     }
-  ],
-  "sword_chance": 1.0,
-  "bow_chance": 1.0
+  ]
 }

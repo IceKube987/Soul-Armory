@@ -16,8 +16,7 @@
 
   "subtitles.soul_armory.soul_sword_heal": "灵魂剑：治愈",
 
-  "tooltip.soul_armory.forging.deal_damage": "造成伤害",
+  "tooltip.soul_armory.forging.deal_damage": "对监守者造成伤害",
   "tooltip.soul_armory.forging.kill_warden": "击杀监守者",
-  "tooltip.soul_armory.forging.sonic_hits": "音波攻击次数",
-  "tooltip.soul_armory.forging.complete": "已完成"
+  "tooltip.soul_armory.forging.sonic_hits": "受到音波攻击次数",
 }

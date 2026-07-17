@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.loot;
 
 import com.google.common.base.Suppliers;
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -18,25 +19,18 @@ public class AncientCityLootModifier extends LootModifier {
 
     public static final Supplier<Codec<AncientCityLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.create(inst -> codecStart(inst)
-                    .and(Codec.FLOAT.fieldOf("sword_chance").forGetter(m -> m.swordChance))
-                    .and(Codec.FLOAT.fieldOf("bow_chance").forGetter(m -> m.bowChance))
                     .apply(inst, AncientCityLootModifier::new)));
 
-    private final float swordChance;
-    private final float bowChance;
-
-    public AncientCityLootModifier(LootItemCondition[] conditions, float swordChance, float bowChance) {
+    public AncientCityLootModifier(LootItemCondition[] conditions) {
         super(conditions);
-        this.swordChance = swordChance;
-        this.bowChance = bowChance;
     }
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (context.getRandom().nextFloat() < swordChance) {
+        if (context.getRandom().nextFloat() < Config.swordSpawnChance) {
             generatedLoot.add(new ItemStack(ItemRegistry.INCOMPLETE_SOUL_SWORD.get()));
         }
-        if (context.getRandom().nextFloat() < bowChance) {
+        if (context.getRandom().nextFloat() < Config.bowSpawnChance) {
             generatedLoot.add(new ItemStack(ItemRegistry.INCOMPLETE_SOUL_BOW.get()));
         }
         return generatedLoot;
