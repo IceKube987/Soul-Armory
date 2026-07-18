@@ -1,0 +1,12 @@
+{
+  "type": "soul_armory:soul_forging",
+  "category": "equipment",
+  "ingredients": [
+    { "item": "soul_armory:soul_bow" },
+    { "item": "minecraft:arrow" },
+    { "item": "minecraft:arrow" },
+    { "item": "minecraft:arrow" }
+  ],
+  "result": { "item": "soul_armory:soul_bow" },
+  "forging_task": "soul_armory:unlock_scatter_shot"
+}

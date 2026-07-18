@@ -1,0 +1,10 @@
+{
+  "type": "soul_armory:soul_forging",
+  "category": "equipment",
+  "ingredients": [
+    { "item": "soul_armory:soul_bow" },
+    { "item": "minecraft:echo_shard" }
+  ],
+  "result": { "item": "soul_armory:soul_bow" },
+  "forging_task": "soul_armory:unlock_sonic_overload"
+}

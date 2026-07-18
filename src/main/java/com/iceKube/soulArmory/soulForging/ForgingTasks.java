@@ -32,6 +32,9 @@ public class ForgingTasks {
     public static ForgingTask FORGE_SOUL_CHESTPLATE = new ForgeChestplate();
     public static ForgingTask UNLOCK_BLADE_WAVE = new UnlockBladeWaveSkill();
     public static ForgingTask UNLOCK_SONIC_OVERLOAD = new UnlockSonicOverloadSkill();
+    public static ForgingTask UNLOCK_BARRAGE = new UnlockBarrageSkill();
+    public static ForgingTask UNLOCK_RAPID_FIRE = new UnlockRapidFireSkill();
+    public static ForgingTask UNLOCK_SCATTER_SHOT = new UnlockScatterShotSkill();
 
     public static void registerForgingTasks() {
         register(FORGE_SOUL_SWORD);
@@ -39,5 +42,8 @@ public class ForgingTasks {
         register(FORGE_SOUL_CHESTPLATE);
         register(UNLOCK_BLADE_WAVE);
         register(UNLOCK_SONIC_OVERLOAD);
+        register(UNLOCK_BARRAGE);
+        register(UNLOCK_RAPID_FIRE);
+        register(UNLOCK_SCATTER_SHOT);
     }
 }

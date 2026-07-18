@@ -3,6 +3,7 @@
   "category": "equipment",
   "ingredients": [
     { "item": "soul_armory:soul_sword" },
+    { "item": "minecraft:echo_shard" },
     { "item": "minecraft:echo_shard" }
   ],
   "result": { "item": "soul_armory:soul_sword" },

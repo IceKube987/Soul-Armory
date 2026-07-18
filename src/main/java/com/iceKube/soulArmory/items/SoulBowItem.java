@@ -3,6 +3,8 @@ package com.iceKube.soulArmory.items;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
+import com.iceKube.soulArmory.soulForging.ForgingTasks;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -28,11 +31,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost {
+public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost, Forgeable {
 
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
@@ -326,7 +330,6 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
      * @return Whether the skill is successfully executed
      */
     private boolean useInstantSkill(ItemStack stack, Level level, Player player) {
-//        return sonicBoomSkill(stack, level, player);
         if (!(getCurrentSkill(stack) instanceof InstantSoulSkill skill)) return false;
 
         return skill.execute(stack, level, player);
@@ -377,12 +380,13 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         ListTag listTag = tag.getList(AVAILABLE_SKILLS, Tag.TAG_STRING);
         listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
 
-        // TODO: This is only for test and marked for removal when soul forging system is completed
-        listTag.add(StringTag.valueOf(SoulSkills.SCATTER_SHOT.soulSkillId.toString()));
-        listTag.add(StringTag.valueOf(SoulSkills.RAPID_FIRE.soulSkillId.toString()));
-        listTag.add(StringTag.valueOf(SoulSkills.BARRAGE.soulSkillId.toString()));
-        listTag.add(StringTag.valueOf(SoulSkills.SONIC_OVERLOAD.soulSkillId.toString()));
-
         tag.put(AVAILABLE_SKILLS, listTag);
+    }
+
+    @Override
+    public @Nullable ForgingTask getActiveForgingTask(ItemStack stack) {
+        String string = stack.getOrCreateTag().getString(CURRENT_FORGING_TASK);
+        if (string.equals(NO_FORGING_TASK)) return null;
+        return ForgingTasks.getTask(ResourceLocation.parse(string));
     }
 }
