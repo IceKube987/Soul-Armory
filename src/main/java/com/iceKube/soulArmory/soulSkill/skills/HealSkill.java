@@ -2,7 +2,10 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.items.Forgeable;
 import com.iceKube.soulArmory.registries.SoundRegistry;
+import com.iceKube.soulArmory.soulForging.ForgingEventType;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
@@ -55,6 +58,8 @@ public class HealSkill extends InstantSoulSkill {
         // Apply healing
         player.heal(healingAmount);
 
+        handleHealTask(player,stack,healingAmount);
+
         playParticle(level, player);
 
         playSound(level, player);
@@ -104,5 +109,22 @@ public class HealSkill extends InstantSoulSkill {
 
     private void playSound(Level level, Player player) {
         level.playSound(null, player.getOnPos(), SoundRegistry.SOUL_SWORD_HEAL.get(), SoundSource.PLAYERS, 1f, 1f);
+    }
+
+    private void handleHealTask(Player player,ItemStack stack, float amount){
+        if (stack.getItem() instanceof Forgeable forgeable) {
+            ForgingTask task = forgeable.getActiveForgingTask(stack);
+            if (task == null) return;
+
+            CompoundTag tag = stack.getOrCreateTag();
+
+            boolean completed = task.processEvent(tag, ForgingEventType.SKILL,
+                    null, null, amount, player.level().getGameTime());
+
+            if (completed) {
+                task.onComplete.execute(player, stack, player.level());
+                task.removeTaskTag(tag);
+            }
+        }
     }
 }

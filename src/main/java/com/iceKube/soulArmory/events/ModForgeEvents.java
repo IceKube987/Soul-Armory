@@ -211,7 +211,7 @@ public class ModForgeEvents {
             if (damage <= 0) return;
 
             boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
-                    targetType, event.getSource().type(), damage, player.level().getGameTime());
+                    targetType, event.getSource(), damage, player.level().getGameTime());
 
             if (completed) {
                 task.onComplete.execute(player, mainHandItem, player.level());

@@ -3,7 +3,7 @@ package com.iceKube.soulArmory.soulForging;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +49,7 @@ public class ForgingTask {
     }
 
     public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType,
-                                EntityType<?> entityType, DamageType damageType, float amount, long gameTime) {
+                                EntityType<?> entityType, DamageSource damageSource, float amount, long gameTime) {
         CompoundTag taskTag = getOrCreateTaskTag(itemTag);
 
         if (resetAllOnTimeout) {
@@ -65,7 +65,7 @@ public class ForgingTask {
             if (criterion.eventType != eventType) continue;
             if (criterion.isComplete(taskTag)) continue;
             if (criterion.entityFilter != null && !criterion.entityFilter.test(entityType)) continue;
-            if (criterion.damageTypeFilter != null && !criterion.damageTypeFilter.test(damageType)) continue;
+            if (criterion.damageSourceFilter != null && !criterion.damageSourceFilter.test(damageSource)) continue;
             criterion.addProgress(taskTag, amount, gameTime);
         }
 

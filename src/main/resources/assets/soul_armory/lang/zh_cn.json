@@ -19,5 +19,8 @@
   "tooltip.soul_armory.forging.deal_damage": "造成伤害",
   "tooltip.soul_armory.forging.deal_damage_to_warden": "对监守者造成伤害",
   "tooltip.soul_armory.forging.kill_warden": "击杀监守者",
-  "tooltip.soul_armory.forging.sonic_hits": "受到音波攻击次数"
+  "tooltip.soul_armory.forging.sonic_hits": "受到音波攻击次数",
+  "tooltip.soul_armory.forging.kill_wardens_in_time": "连续击杀监守者",
+  "tooltip.soul_armory.forging.deal_damage_sonic": "通过音波冲击造成伤害",
+  "tooltip.soul_armory.forging.heal": "治疗自己"
 }

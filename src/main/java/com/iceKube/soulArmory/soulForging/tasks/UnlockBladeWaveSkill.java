@@ -20,14 +20,19 @@ import java.util.List;
 
 public class UnlockBladeWaveSkill extends ForgingTask {
     public UnlockBladeWaveSkill() {
-        super(new ResourceLocation(SoulArmoryMod.MODID,"blade_wave_unlock"),
+        super(new ResourceLocation(SoulArmoryMod.MODID,"unlock_blade_wave"),
                 List.of(
                         new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
-                                2000,
+                                3000,
                                 0,
                                 null,
                                 null),
-                        new ForgingCriterion("kill_3_warden_in_2_min", ForgingEventType.KILL_ENTITY,
+                        new ForgingCriterion("heal",ForgingEventType.SKILL,
+                                100,
+                                0,
+                                null,
+                                null),
+                        new ForgingCriterion("kill_wardens_in_time", ForgingEventType.KILL_ENTITY,
                                 3,
                                 2400,
                                 entityType -> entityType == EntityType.WARDEN,

@@ -6,5 +6,5 @@
     { "item": "minecraft:echo_shard" }
   ],
   "result": { "item": "soul_armory:soul_sword" },
-  "forging_task": "soul_armory:blade_wave_unlock"
+  "forging_task": "soul_armory:unlock_blade_wave"
 }

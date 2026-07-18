@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
+public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements CanApplySpeedBoost{
 
     public IncompleteSoulBowItem(Properties pProperties) {
         super(pProperties);
@@ -322,5 +322,16 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem {
         }
         stack.getTag().putInt(ACTIVE_TIME_NBT, 0);
         onDeactivate(stack, level, player);
+    }
+
+    @Override
+    public int getPointPerSpeedPercent() {
+        return Config.soulBowPointPerSpeedPercent;
+    }
+
+    @Override
+    public double getSpeedAdditionPercentage(ItemStack stack) {
+        if (!isActive(stack) || stack.getTag() == null) return 0;
+        return 0.01 * Config.soulBowMaxSoul / getPointPerSpeedPercent();
     }
 }

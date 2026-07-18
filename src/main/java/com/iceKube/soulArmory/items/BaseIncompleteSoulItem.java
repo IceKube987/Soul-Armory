@@ -76,7 +76,7 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
         if (pStack.getTag() == null) {
             for (ForgingCriterion criterion : task.criteria) {
                 String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
-                pTooltipComponents.add(Component.literal("§9" + label + ": " + "0" + " / " + criterion.targetValue));
+                pTooltipComponents.add(Component.literal("§9§o" + label + ": " + "0" + " / " + criterion.targetValue));
             }
             return;
         }
@@ -87,9 +87,9 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
         for (ForgingCriterion criterion : task.criteria) {
             String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
             if (criterion.isComplete(taskTag)) {
-                pTooltipComponents.add(Component.literal("§b" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
+                pTooltipComponents.add(Component.literal("§b§o" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
             } else {
-                pTooltipComponents.add(Component.literal("§9" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
+                pTooltipComponents.add(Component.literal("§9§o" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
             }
         }
     }
