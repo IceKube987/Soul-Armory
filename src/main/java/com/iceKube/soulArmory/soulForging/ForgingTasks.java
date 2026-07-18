@@ -24,6 +24,11 @@ public class ForgingTasks {
         return TASKS.get(id);
     }
 
+    @Nullable
+    public static ResourceLocation getId(ForgingTask task){
+        return task.taskId;
+    }
+
     public static ForgingTask FORGE_SOUL_SWORD = new ForgeSoulSword();
     public static ForgingTask FORGE_SOUL_BOW = new ForgeSoulBow();
     public static ForgingTask FORGE_SOUL_CHESTPLATE = new ForgeChestplate();

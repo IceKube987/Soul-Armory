@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.soulForging;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,17 +11,11 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class ForgingTask {
+    private static final String FORGING_NBT_PREFIX = "soul_armory.forging.";
     public final ResourceLocation taskId;
     public final List<ForgingCriterion> criteria;
     public final CompletionAction onComplete;
     public final boolean resetAllOnTimeout;
-
-    private static final String FORGING_NBT_PREFIX = "soul_armory.forging.";
-
-    @FunctionalInterface
-    public interface CompletionAction {
-        void execute(Player player, ItemStack stack, Level level);
-    }
 
     public ForgingTask(ResourceLocation taskId, List<ForgingCriterion> criteria,
                        CompletionAction onComplete, boolean resetAllOnTimeout) {
@@ -47,7 +42,7 @@ public class ForgingTask {
     }
 
     public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType,
-                                EntityType<?> entityType, float amount, long gameTime) {
+                                EntityType<?> entityType, DamageType damageType, float amount, long gameTime) {
         CompoundTag taskTag = getOrCreateTaskTag(itemTag);
 
         if (resetAllOnTimeout) {
@@ -63,6 +58,7 @@ public class ForgingTask {
             if (criterion.eventType != eventType) continue;
             if (criterion.isComplete(taskTag)) continue;
             if (criterion.entityFilter != null && !criterion.entityFilter.test(entityType)) continue;
+            if (criterion.damageTypeFilter != null && !criterion.damageTypeFilter.test(damageType)) continue;
             criterion.addProgress(taskTag, amount, gameTime);
         }
 
@@ -99,5 +95,10 @@ public class ForgingTask {
         for (ForgingCriterion criterion : criteria) {
             criterion.resetProgress(taskTag);
         }
+    }
+
+    @FunctionalInterface
+    public interface CompletionAction {
+        void execute(Player player, ItemStack stack, Level level);
     }
 }

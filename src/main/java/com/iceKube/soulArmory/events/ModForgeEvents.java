@@ -51,8 +51,8 @@ public class ModForgeEvents {
 
         ItemStack mainHandItem = player.getMainHandItem();
 
-        // Handle "Deal Any Damage" forging criterion.
-        if (ForgingDealAnyDamage(event, player, mainHandItem)) return;
+        // Handle "Deal Damage" forging criterion.
+        if (ForgingDealDamage(event, player, mainHandItem)) return;
 
         // Check if the damage is caused by skills.
         if (event.getSource().is(DamageTypes.SONIC_BOOM) || event.getSource().is(ModDamageTypes.SKILL_ARROW) || event.getSource().is(ModDamageTypes.SKILL_DAMAGE))
@@ -61,8 +61,10 @@ public class ModForgeEvents {
         // Handle add soul points for regular soul weapons.
         if (AddSoulPoints(event, mainHandItem)) return;
 
-        // Handle "deal damage" forging criterion, which will only calculate damage that is not from skills.
-        ForgingDealDamage(event, player, mainHandItem);
+        EntityType<?> targetType = event.getEntity().getType();
+        if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
+            incompleteItem.activate(mainHandItem);
+        }
     }
 
     @SubscribeEvent
@@ -79,7 +81,7 @@ public class ModForgeEvents {
         EntityType<?> killedType = event.getEntity().getType();
 
         boolean completed = task.processEvent(tag, ForgingEventType.KILL_ENTITY,
-                killedType, 1, player.level().getGameTime());
+                killedType, null, 1, player.level().getGameTime());
 
         if (completed) {
             task.onComplete.execute(player, mainHandItem, player.level());
@@ -197,7 +199,7 @@ public class ModForgeEvents {
         OverlayHandler.onClientTick();
     }
 
-    private static boolean ForgingDealAnyDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
+    private static boolean ForgingDealDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
         if (mainHandItem.getItem() instanceof Forgeable forgeable) {
             ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
             if (task == null) return true;
@@ -207,8 +209,8 @@ public class ModForgeEvents {
             float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
             if (damage <= 0) return true;
 
-            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_ANY_DAMAGE,
-                    targetType, damage, player.level().getGameTime());
+            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
+                    targetType, event.getSource().type(), damage, player.level().getGameTime());
 
             if (completed) {
                 task.onComplete.execute(player, mainHandItem, player.level());
@@ -216,30 +218,6 @@ public class ModForgeEvents {
             }
         }
         return false;
-    }
-
-    private static void ForgingDealDamage(LivingDamageEvent event, Player player, ItemStack mainHandItem) {
-        if (mainHandItem.getItem() instanceof Forgeable forgeable) {
-            ForgingTask task = forgeable.getActiveForgingTask(mainHandItem);
-            if (task == null) return;
-
-            CompoundTag tag = mainHandItem.getOrCreateTag();
-            EntityType<?> targetType = event.getEntity().getType();
-            float damage = Math.min(event.getAmount(), event.getEntity().getHealth());
-            if (damage <= 0) return;
-
-            if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
-                incompleteItem.activate(mainHandItem);
-            }
-
-            boolean completed = task.processEvent(tag, ForgingEventType.DEAL_DAMAGE,
-                    targetType, damage, player.level().getGameTime());
-
-            if (completed) {
-                task.onComplete.execute(player, mainHandItem, player.level());
-                task.removeTaskTag(tag);
-            }
-        }
     }
 
     private static boolean AddSoulPoints(LivingDamageEvent event, ItemStack mainHandItem) {

@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.soulForging;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
@@ -13,14 +14,17 @@ public class ForgingCriterion {
     public final long timeoutTicks;
     @Nullable
     public final Predicate<EntityType<?>> entityFilter;
+    @Nullable
+    public final Predicate<DamageType> damageTypeFilter;
 
     public ForgingCriterion(String id, ForgingEventType eventType, int targetValue,
-                            long timeoutTicks, @Nullable Predicate<EntityType<?>> entityFilter) {
+                            long timeoutTicks, @Nullable Predicate<EntityType<?>> entityFilter, @Nullable Predicate<DamageType> damageTypeFilter) {
         this.id = id;
         this.eventType = eventType;
         this.targetValue = targetValue;
         this.timeoutTicks = timeoutTicks;
         this.entityFilter = entityFilter;
+        this.damageTypeFilter = damageTypeFilter;
     }
 
     private String progressKey() { return id + ".progress"; }

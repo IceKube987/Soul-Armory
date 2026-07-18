@@ -16,14 +16,16 @@ public class ForgeSoulBow extends ForgingTask {
     public ForgeSoulBow() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "forge_soul_bow"),
                 List.of(
-                        new ForgingCriterion("deal_damage", ForgingEventType.DEAL_ANY_DAMAGE,
+                        new ForgingCriterion("deal_damage_to_warden", ForgingEventType.DEAL_DAMAGE,
                                 Config.forgingBowDamageTarget,
                                 Config.forgingBowTimeoutTicks,
-                                type -> type == EntityType.WARDEN),
+                                type -> type == EntityType.WARDEN,
+                                null),
                         new ForgingCriterion("kill_warden", ForgingEventType.KILL_ENTITY,
                                 1,
                                 0,
-                                type -> type == EntityType.WARDEN)
+                                type -> type == EntityType.WARDEN,
+                                null)
                 ),
                 (player, stack, level) -> TransformHelper.transformToFullWeapon(
                         player, stack, ItemRegistry.SOUL_BOW, Config.soulBowMaxSoul, level),

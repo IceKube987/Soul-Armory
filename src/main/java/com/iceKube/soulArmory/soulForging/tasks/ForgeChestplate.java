@@ -18,7 +18,8 @@ public class ForgeChestplate extends ForgingTask {
                         new ForgingCriterion("sonic_hits", ForgingEventType.RECEIVE_DAMAGE,
                                 Config.forgingChestplateSonicHits,
                                 Config.forgingChestplateTimeoutTicks,
-                                type -> type == EntityType.WARDEN)
+                                type -> type == EntityType.WARDEN,
+                                null)
                 ),
                 (player, stack, level) -> TransformHelper.transformChestplate(player, stack, level),
                 false);
