@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulForging.tasks;
 
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.soulForging.ForgingCriterion;
@@ -23,8 +24,8 @@ public class UnlockSonicOverloadSkill extends ForgingTask {
         super(new ResourceLocation(SoulArmoryMod.MODID, "unlock_sonic_overload"),
                 List.of(
                         new ForgingCriterion("deal_damage_sonic", ForgingEventType.DEAL_DAMAGE,
-                                400,
-                                0,
+                                Config.unlockSonicOverloadDamageTarget,
+                                Config.unlockSonicOverloadTimeout,
                                 null,
                                 damageType -> damageType.is(DamageTypes.SONIC_BOOM),
                                 null)

@@ -96,13 +96,13 @@ public abstract class BaseSoulWeaponItem extends Item {
         pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + getMaxSoul()));
 
         // Show forging progress
-        if (this instanceof Forgeable forgeable){
+        if (this instanceof Forgeable forgeable) {
             ForgingTask task = forgeable.getActiveForgingTask(pStack);
             if (task == null) return;
             if (pStack.getTag() == null) {
                 for (ForgingCriterion criterion : task.criteria) {
                     String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
-                    pTooltipComponents.add(Component.literal("§9" + label + ": " + "0" + " / " + criterion.targetValue));
+                    pTooltipComponents.add(Component.literal("§9§o" + label + ": " + "0" + " / " + criterion.targetValue));
                 }
                 return;
             }
@@ -113,9 +113,9 @@ public abstract class BaseSoulWeaponItem extends Item {
             for (ForgingCriterion criterion : task.criteria) {
                 String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
                 if (criterion.isComplete(taskTag)) {
-                    pTooltipComponents.add(Component.literal("§b" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
+                    pTooltipComponents.add(Component.literal("§b§o" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
                 } else {
-                    pTooltipComponents.add(Component.literal("§9" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
+                    pTooltipComponents.add(Component.literal("§9§o" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
                 }
             }
         }
@@ -130,7 +130,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
-            if (this instanceof Forgeable){
+            if (this instanceof Forgeable) {
                 NBT.putString(currentForgingTask, NO_FORGING_TASK);
             }
 
@@ -160,6 +160,17 @@ public abstract class BaseSoulWeaponItem extends Item {
             } else {
                 NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             }
+
+            // test for forging tasks
+            if (pLevel.getGameTime() % 20 == 0) {
+                if (pStack.getItem() instanceof Forgeable forgeable) {
+                    ForgingTask task = forgeable.getActiveForgingTask(pStack);
+                    if (task != null) {
+                        task.checkTimeouts(NBT, pLevel.getGameTime());
+                    }
+                }
+            }
+
         }
 
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);

@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulForging.tasks;
 
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.soulForging.ForgingCriterion;
@@ -24,20 +25,20 @@ public class UnlockBladeWaveSkill extends ForgingTask {
         super(new ResourceLocation(SoulArmoryMod.MODID,"unlock_blade_wave"),
                 List.of(
                         new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
-                                3000,
-                                0,
+                                Config.unlockBladeWaveDamageTarget,
+                                Config.unlockBladeWaveDamageTimeout,
                                 null,
                                 null,
                                 null),
                         new ForgingCriterion("heal",ForgingEventType.SKILL,
-                                100,
-                                0,
+                                Config.unlockBladeWaveHealTarget,
+                                Config.unlockBladeWaveHealTimeout,
                                 null,
                                 null,
                                 skill -> skill instanceof HealSkill),
                         new ForgingCriterion("kill_wardens_in_time", ForgingEventType.KILL_ENTITY,
-                                3,
-                                2400,
+                                Config.unlockBladeWaveKillTarget,
+                                Config.unlockBladeWaveKillTimeout,
                                 entityType -> entityType == EntityType.WARDEN,
                                 null,
                                 null)

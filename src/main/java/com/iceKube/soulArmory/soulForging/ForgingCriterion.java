@@ -18,7 +18,7 @@ public class ForgingCriterion {
     @Nullable
     public final Predicate<DamageSource> damageSourceFilter;
     @Nullable
-    public final Predicate<BaseSoulSkill> skillFilter;
+    public final Predicate<BaseSoulSkill> skillFilter; // Only used when the eventType is SKILL.
 
     public ForgingCriterion(String id, ForgingEventType eventType, int targetValue,
                             long timeoutTicks, @Nullable Predicate<EntityType<?>> entityFilter,

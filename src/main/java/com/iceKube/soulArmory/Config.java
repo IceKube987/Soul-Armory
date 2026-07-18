@@ -36,32 +36,26 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_BOW_OVERFLOW_THRESHOLD;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_TRACE_RANGE;
-
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_RANGE;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SONIC_BOOM_CONSUMPTION;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SONIC_BOOM_DAMAGE;
-
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SCATTER_CONSUMPTION;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_SCATTER_ARROW_COUNT;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SCATTER_SPREAD_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_SCATTER_DAMAGE;
-
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_RAPID_FIRE_CONSUMPTION;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_RAPID_FIRE_EXECUTE_INTERVAL;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_RAPID_FIRE_DAMAGE;
-
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_CONSUMPTION;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_EXECUTE_INTERVAL;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_BARRAGE_ARROW_COUNT;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_SPREAD_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_BARRAGE_DAMAGE;
-
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_CONSUMPTION;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_BLAST_COUNT;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_OVERLOAD_SPREAD_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SOUL_BOW_SKILL_OVERLOAD_DAMAGE;
     private static final ForgeConfigSpec.IntValue SOUL_BOW_SKILL_OVERLOAD_RANGE;
-
     private static final ForgeConfigSpec.DoubleValue SOUL_ARROW_TURN_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
@@ -80,6 +74,15 @@ public class Config {
     private static final ForgeConfigSpec.DoubleValue INCOMPLETE_SWORD_SPAWN_CHANCE;
     private static final ForgeConfigSpec.DoubleValue INCOMPLETE_BOW_SPAWN_CHANCE;
 
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_DAMAGE;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_HEAL;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_HEAL_TIMEOUT;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_WARDEN_KILL;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT;
+    
+    private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_DAMAGE;
+    private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_TIMEOUT;
 
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
@@ -345,7 +348,7 @@ public class Config {
             BUILDER.comment("Soul Forging Settings").push("soul-forging");
 
             {
-                BUILDER.push("sword");
+                BUILDER.comment("When forging incomplete sword into complete sword").push("sword");
 
                 FORGING_SWORD_DAMAGE_TARGET = BUILDER
                         .comment("Total damage to Wardens required to forge the soul sword")
@@ -363,7 +366,7 @@ public class Config {
             }
 
             {
-                BUILDER.push("bow");
+                BUILDER.comment("When forging incomplete bow into complete bow").push("bow");
 
                 FORGING_BOW_DAMAGE_TARGET = BUILDER
                         .comment("Total damage to Wardens required to forge the soul bow")
@@ -381,7 +384,7 @@ public class Config {
             }
 
             {
-                BUILDER.push("chestplate");
+                BUILDER.comment("When forging incomplete chestplate into complete chestplate").push("chestplate");
 
                 FORGING_CHESTPLATE_SONIC_HITS = BUILDER
                         .comment("Number of Warden sonic boom hits required to forge the chestplate")
@@ -395,6 +398,50 @@ public class Config {
                         .comment("Duration in ticks the incomplete chestplate stays active after a sonic boom hit")
                         .defineInRange("forgingChestplateActiveTicks", 100, 1, Integer.MAX_VALUE);
 
+                BUILDER.pop();
+            }
+
+            {
+                BUILDER.comment("When unlocking Blade Wave Skill for Soul Sword").push("unlock-blade-wave");
+
+                UNLOCK_BLADE_WAVE_DAMAGE = BUILDER
+                        .comment("Total damage required to unlock the skill")
+                        .defineInRange("unlockBladeWaveDamageTarget",3000,1,Integer.MAX_VALUE);
+
+                UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before damage progress resets (0 = no timeout)")
+                        .defineInRange("unlockBladeWaveDamageTimeout",0,0,Integer.MAX_VALUE);
+
+                UNLOCK_BLADE_WAVE_HEAL = BUILDER
+                        .comment("Total points of healing required to unlock the skill")
+                        .defineInRange("unlockBladeWaveHealTarget",100,1,Integer.MAX_VALUE);
+
+                UNLOCK_BLADE_WAVE_HEAL_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before healing progress resets (0 = no timeout)")
+                        .defineInRange("unlockBladeWaveHealTimeout",0,0,Integer.MAX_VALUE);
+
+                UNLOCK_BLADE_WAVE_WARDEN_KILL = BUILDER
+                        .comment("Total Warden kills required to unlock the skill")
+                        .defineInRange("unlockBladeWaveKillTarget",3,1,Integer.MAX_VALUE);
+
+                UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before Warden kill progress resets (0 = no timeout)")
+                        .defineInRange("unlockBladeWaveKillTimeout",2400,0,Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
+            {
+                BUILDER.comment("When unlocking Sonic Overload Skill for Soul Bow").push("unlock-sonic-overload");
+                
+                UNLOCK_SONIC_OVERLOAD_DAMAGE = BUILDER
+                        .comment("Total damage (caused by sonic boom skill) required to unlock the skill")
+                        .defineInRange("unlockSonicOverloadDamageTarget",400,1,Integer.MAX_VALUE);
+
+                UNLOCK_SONIC_OVERLOAD_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before forging progress resets (0 = no timeout)")
+                        .defineInRange("unlockSonicOverloadTimeout",0,0,Integer.MAX_VALUE);
+                
                 BUILDER.pop();
             }
 
@@ -475,6 +522,14 @@ public class Config {
     public static int forgingChestplateActiveTicks;
     public static double swordSpawnChance;
     public static double bowSpawnChance;
+    public static int unlockBladeWaveDamageTarget;
+    public static int unlockBladeWaveDamageTimeout;
+    public static int unlockBladeWaveHealTarget;
+    public static int unlockBladeWaveHealTimeout;
+    public static int unlockBladeWaveKillTarget;
+    public static int unlockBladeWaveKillTimeout;
+    public static int unlockSonicOverloadDamageTarget;
+    public static int unlockSonicOverloadTimeout;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -537,5 +592,13 @@ public class Config {
         forgingChestplateActiveTicks = FORGING_CHESTPLATE_ACTIVE_TICKS.get();
         swordSpawnChance = INCOMPLETE_SWORD_SPAWN_CHANCE.get();
         bowSpawnChance = INCOMPLETE_BOW_SPAWN_CHANCE.get();
+        unlockBladeWaveDamageTarget = UNLOCK_BLADE_WAVE_DAMAGE.get();
+        unlockBladeWaveDamageTimeout = UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT.get();
+        unlockBladeWaveHealTarget = UNLOCK_BLADE_WAVE_HEAL.get();
+        unlockBladeWaveHealTimeout = UNLOCK_BLADE_WAVE_HEAL_TIMEOUT.get();
+        unlockBladeWaveKillTarget = UNLOCK_BLADE_WAVE_WARDEN_KILL.get();
+        unlockBladeWaveKillTimeout = UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT.get();
+        unlockSonicOverloadDamageTarget = UNLOCK_SONIC_OVERLOAD_DAMAGE.get();
+        unlockSonicOverloadTimeout = UNLOCK_SONIC_OVERLOAD_TIMEOUT.get();
     }
 }
