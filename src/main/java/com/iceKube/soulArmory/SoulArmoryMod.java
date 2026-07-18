@@ -1,11 +1,7 @@
 package com.iceKube.soulArmory;
 
 import com.iceKube.soulArmory.networking.ModPacketHandler;
-import com.iceKube.soulArmory.registries.EntityRegistry;
-import com.iceKube.soulArmory.registries.ItemRegistry;
-import com.iceKube.soulArmory.registries.LootModifierRegistry;
-import com.iceKube.soulArmory.registries.RecipeRegistry;
-import com.iceKube.soulArmory.registries.SoundRegistry;
+import com.iceKube.soulArmory.registries.*;
 import com.iceKube.soulArmory.soulForging.ForgingTasks;
 import com.iceKube.soulArmory.utils.ModItemProperties;
 import com.mojang.logging.LogUtils;

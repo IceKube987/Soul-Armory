@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements CanApplySpeedBoost{
+public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements CanApplySpeedBoost {
 
     public IncompleteSoulBowItem(Properties pProperties) {
         super(pProperties);

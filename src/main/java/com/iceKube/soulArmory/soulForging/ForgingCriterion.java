@@ -32,9 +32,17 @@ public class ForgingCriterion {
         this.skillFilter = skillFilter;
     }
 
-    private String progressKey() { return id + ".progress"; }
-    private String lastActivityKey() { return id + ".lastActivityTime"; }
-    private String completeKey() { return id + ".complete"; }
+    private String progressKey() {
+        return id + ".progress";
+    }
+
+    private String lastActivityKey() {
+        return id + ".lastActivityTime";
+    }
+
+    private String completeKey() {
+        return id + ".complete";
+    }
 
     public boolean isComplete(CompoundTag taskTag) {
         return taskTag.getBoolean(completeKey());

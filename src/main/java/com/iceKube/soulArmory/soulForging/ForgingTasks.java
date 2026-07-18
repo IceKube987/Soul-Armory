@@ -23,7 +23,7 @@ public class ForgingTasks {
     }
 
     @Nullable
-    public static ResourceLocation getId(ForgingTask task){
+    public static ResourceLocation getId(ForgingTask task) {
         return task.taskId;
     }
 

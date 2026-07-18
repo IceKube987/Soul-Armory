@@ -80,7 +80,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_HEAL_TIMEOUT;
     private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_WARDEN_KILL;
     private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT;
-    
+
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_DAMAGE;
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_TIMEOUT;
 
@@ -406,42 +406,42 @@ public class Config {
 
                 UNLOCK_BLADE_WAVE_DAMAGE = BUILDER
                         .comment("Total damage required to unlock the skill")
-                        .defineInRange("unlockBladeWaveDamageTarget",3000,1,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveDamageTarget", 3000, 1, Integer.MAX_VALUE);
 
                 UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT = BUILDER
                         .comment("Ticks of inactivity before damage progress resets (0 = no timeout)")
-                        .defineInRange("unlockBladeWaveDamageTimeout",0,0,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveDamageTimeout", 0, 0, Integer.MAX_VALUE);
 
                 UNLOCK_BLADE_WAVE_HEAL = BUILDER
                         .comment("Total points of healing required to unlock the skill")
-                        .defineInRange("unlockBladeWaveHealTarget",100,1,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveHealTarget", 100, 1, Integer.MAX_VALUE);
 
                 UNLOCK_BLADE_WAVE_HEAL_TIMEOUT = BUILDER
                         .comment("Ticks of inactivity before healing progress resets (0 = no timeout)")
-                        .defineInRange("unlockBladeWaveHealTimeout",0,0,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveHealTimeout", 0, 0, Integer.MAX_VALUE);
 
                 UNLOCK_BLADE_WAVE_WARDEN_KILL = BUILDER
                         .comment("Total Warden kills required to unlock the skill")
-                        .defineInRange("unlockBladeWaveKillTarget",3,1,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveKillTarget", 3, 1, Integer.MAX_VALUE);
 
                 UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT = BUILDER
                         .comment("Ticks of inactivity before Warden kill progress resets (0 = no timeout)")
-                        .defineInRange("unlockBladeWaveKillTimeout",2400,0,Integer.MAX_VALUE);
+                        .defineInRange("unlockBladeWaveKillTimeout", 2400, 0, Integer.MAX_VALUE);
 
                 BUILDER.pop();
             }
 
             {
                 BUILDER.comment("When unlocking Sonic Overload Skill for Soul Bow").push("unlock-sonic-overload");
-                
+
                 UNLOCK_SONIC_OVERLOAD_DAMAGE = BUILDER
                         .comment("Total damage (caused by sonic boom skill) required to unlock the skill")
-                        .defineInRange("unlockSonicOverloadDamageTarget",400,1,Integer.MAX_VALUE);
+                        .defineInRange("unlockSonicOverloadDamageTarget", 400, 1, Integer.MAX_VALUE);
 
                 UNLOCK_SONIC_OVERLOAD_TIMEOUT = BUILDER
                         .comment("Ticks of inactivity before forging progress resets (0 = no timeout)")
-                        .defineInRange("unlockSonicOverloadTimeout",0,0,Integer.MAX_VALUE);
-                
+                        .defineInRange("unlockSonicOverloadTimeout", 0, 0, Integer.MAX_VALUE);
+
                 BUILDER.pop();
             }
 

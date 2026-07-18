@@ -1,6 +1,5 @@
 package com.iceKube.soulArmory.soulForging.tasks;
 
-import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.soulForging.ForgingCriterion;
@@ -12,7 +11,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

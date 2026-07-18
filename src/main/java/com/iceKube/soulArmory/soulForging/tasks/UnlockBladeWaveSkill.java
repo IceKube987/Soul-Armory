@@ -22,7 +22,7 @@ import java.util.List;
 
 public class UnlockBladeWaveSkill extends ForgingTask {
     public UnlockBladeWaveSkill() {
-        super(new ResourceLocation(SoulArmoryMod.MODID,"unlock_blade_wave"),
+        super(new ResourceLocation(SoulArmoryMod.MODID, "unlock_blade_wave"),
                 List.of(
                         new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
                                 Config.unlockBladeWaveDamageTarget,
@@ -30,7 +30,7 @@ public class UnlockBladeWaveSkill extends ForgingTask {
                                 null,
                                 null,
                                 null),
-                        new ForgingCriterion("heal",ForgingEventType.SKILL,
+                        new ForgingCriterion("heal", ForgingEventType.SKILL,
                                 Config.unlockBladeWaveHealTarget,
                                 Config.unlockBladeWaveHealTimeout,
                                 null,
@@ -42,13 +42,13 @@ public class UnlockBladeWaveSkill extends ForgingTask {
                                 entityType -> entityType == EntityType.WARDEN,
                                 null,
                                 null)
-                        ),
+                ),
                 UnlockBladeWaveSkill::onComplete,
                 SoulSkills.BLADE_WAVE,
                 false);
     }
 
-    public static void onComplete(Player player, ItemStack stack, Level level){
+    public static void onComplete(Player player, ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
         tag.putString(BaseSoulWeaponItem.CURRENT_FORGING_TASK, BaseSoulWeaponItem.NO_FORGING_TASK);
 
