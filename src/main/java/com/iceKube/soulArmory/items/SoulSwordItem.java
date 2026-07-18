@@ -5,6 +5,8 @@ import com.google.common.collect.Multimap;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.S2C.SwitchSkillVFXS2CPacket;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
+import com.iceKube.soulArmory.soulForging.ForgingTasks;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
 import net.minecraft.core.BlockPos;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,14 +32,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SoulSwordItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost {
+public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBoost, UseSoulSkillSystem, Forgeable {
 
     public SoulSwordItem(Properties pProperties) {
         super(pProperties);
-        doApplySpeedModifier = true;
     }
 
     @Override
@@ -85,7 +88,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements UseSoulSkillSys
 
     @Override
     public double getSpeedAdditionPercentage(ItemStack stack) {
-        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
+        if (stack.getTag() == null) return 0;
         return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 
@@ -175,5 +178,12 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements UseSoulSkillSys
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon Modifier", getAttackDamage(stack), AttributeModifier.Operation.ADDITION));
 
         return slot == EquipmentSlot.MAINHAND ? builder.build() : super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public @Nullable ForgingTask getActiveForgingTask(ItemStack stack) {
+        String string = stack.getOrCreateTag().getString(currentForgingTask);
+        if (string.equals("none")) return null;
+        return ForgingTasks.getTask(ResourceLocation.parse(string));
     }
 }

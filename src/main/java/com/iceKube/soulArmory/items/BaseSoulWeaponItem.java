@@ -20,23 +20,20 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class BaseSoulWeaponItem extends Item {
-    public BaseSoulWeaponItem(Properties pProperties) {
-        super(pProperties);
-    }
-
     public static final String soulAmountNBT = "soul_armory.soul_weapon.soulAmount";
-
     public static final String lastHeldGameTimeNBT = "soul_armory.soul_weapon.lastHeldGameTime";
-
     public static final String lastSoulOverflowTimeNBT = "soul_armory.soul_weapon.lastSoulOverflowTime";
-
-    public boolean doApplySpeedModifier = false;
-
     // Skill System
     public static final String lastExecutedTime = "soul_armory.soul_weapon.last_executed_time";
     public static final String availableSkills = "soul_armory.soul_weapon.available_skills";
     public static final String currentSkill = "soul_armory.soul_weapon.current_skill";
     public static final String currentSkillIndex = "soul_armory.soul_weapon.current_skill_index";
+    // Forging system
+    public static final String currentForgingTask = "soul_armory.soul_weapon.current_forging_task";
+
+    public BaseSoulWeaponItem(Properties pProperties) {
+        super(pProperties);
+    }
 
     public abstract int getGracePeriodTicks();
 
@@ -104,6 +101,10 @@ public abstract class BaseSoulWeaponItem extends Item {
             NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
             NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
+
+            if (this instanceof Forgeable){
+                NBT.putString(currentForgingTask,"none");
+            }
 
             pStack.setTag(NBT);
 

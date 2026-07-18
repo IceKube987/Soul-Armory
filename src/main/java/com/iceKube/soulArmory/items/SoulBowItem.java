@@ -3,6 +3,7 @@ package com.iceKube.soulArmory.items;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
@@ -36,7 +37,6 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
 
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
-        doApplySpeedModifier = true;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
 
     @Override
     public double getSpeedAdditionPercentage(ItemStack stack) {
-        if (!doApplySpeedModifier || stack.getTag() == null) return 0;
+        if (stack.getTag() == null) return 0;
         return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
     }
 
