@@ -19,6 +19,7 @@ public class ForgeChestplate extends ForgingTask {
                                 Config.forgingChestplateSonicHits,
                                 Config.forgingChestplateTimeoutTicks,
                                 type -> type == EntityType.WARDEN,
+                                null,
                                 null)
                 ),
                 (player, stack, level) -> TransformHelper.transformChestplate(player, stack, level),

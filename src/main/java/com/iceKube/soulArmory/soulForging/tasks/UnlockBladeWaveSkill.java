@@ -6,6 +6,7 @@ import com.iceKube.soulArmory.soulForging.ForgingCriterion;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
+import com.iceKube.soulArmory.soulSkill.skills.HealSkill;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -26,16 +27,19 @@ public class UnlockBladeWaveSkill extends ForgingTask {
                                 3000,
                                 0,
                                 null,
+                                null,
                                 null),
                         new ForgingCriterion("heal",ForgingEventType.SKILL,
                                 100,
                                 0,
                                 null,
-                                null),
+                                null,
+                                skill -> skill instanceof HealSkill),
                         new ForgingCriterion("kill_wardens_in_time", ForgingEventType.KILL_ENTITY,
                                 3,
                                 2400,
                                 entityType -> entityType == EntityType.WARDEN,
+                                null,
                                 null)
                         ),
                 UnlockBladeWaveSkill::onComplete,

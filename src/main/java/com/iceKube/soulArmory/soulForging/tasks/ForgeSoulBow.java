@@ -20,11 +20,13 @@ public class ForgeSoulBow extends ForgingTask {
                                 Config.forgingBowDamageTarget,
                                 Config.forgingBowTimeoutTicks,
                                 type -> type == EntityType.WARDEN,
+                                null,
                                 null),
                         new ForgingCriterion("kill_warden", ForgingEventType.KILL_ENTITY,
                                 1,
                                 0,
                                 type -> type == EntityType.WARDEN,
+                                null,
                                 null)
                 ),
                 (player, stack, level) -> TransformHelper.transformToFullWeapon(

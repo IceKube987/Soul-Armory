@@ -26,7 +26,8 @@ public class UnlockSonicOverloadSkill extends ForgingTask {
                                 400,
                                 0,
                                 null,
-                                damageType -> damageType.is(DamageTypes.SONIC_BOOM))
+                                damageType -> damageType.is(DamageTypes.SONIC_BOOM),
+                                null)
                 ),
                 UnlockSonicOverloadSkill::onComplete,
                 SoulSkills.SONIC_OVERLOAD,

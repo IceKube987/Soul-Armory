@@ -119,7 +119,7 @@ public class HealSkill extends InstantSoulSkill {
             CompoundTag tag = stack.getOrCreateTag();
 
             boolean completed = task.processEvent(tag, ForgingEventType.SKILL,
-                    null, null, amount, player.level().getGameTime());
+                     amount, player.level().getGameTime());
 
             if (completed) {
                 task.onComplete.execute(player, stack, player.level());

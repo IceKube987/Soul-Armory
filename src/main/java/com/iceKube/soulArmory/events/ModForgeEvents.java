@@ -82,7 +82,7 @@ public class ModForgeEvents {
         EntityType<?> killedType = event.getEntity().getType();
 
         boolean completed = task.processEvent(tag, ForgingEventType.KILL_ENTITY,
-                killedType, null, 1, player.level().getGameTime());
+                killedType, 1, player.level().getGameTime());
 
         if (completed) {
             task.onComplete.execute(player, mainHandItem, player.level());

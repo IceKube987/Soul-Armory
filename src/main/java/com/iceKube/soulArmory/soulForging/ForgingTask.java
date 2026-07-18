@@ -17,7 +17,9 @@ public class ForgingTask {
     public final ResourceLocation taskId;
     public final List<ForgingCriterion> criteria;
     public final CompletionAction onComplete;
-    /** The skill this task unlocks, or {@code null} for tasks that forge an incomplete weapon into a full one. */
+    /**
+     * The skill this task unlocks, or {@code null} for tasks that forge an incomplete weapon into a full one.
+     */
     @Nullable
     public final BaseSoulSkill unlockedSkill;
     public final boolean resetAllOnTimeout;
@@ -48,8 +50,22 @@ public class ForgingTask {
         itemTag.remove(getTaskNbtKey());
     }
 
+    public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType, float amount, long gameTime) {
+        return processEvent(itemTag, eventType, null, null, null, amount, gameTime);
+    }
+
+    public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType,
+                                EntityType<?> entityType, float amount, long gameTime) {
+        return processEvent(itemTag, eventType, entityType, null, null, amount, gameTime);
+    }
+
     public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType,
                                 EntityType<?> entityType, DamageSource damageSource, float amount, long gameTime) {
+        return processEvent(itemTag, eventType, entityType, damageSource, null, amount, gameTime);
+    }
+
+    public boolean processEvent(CompoundTag itemTag, ForgingEventType eventType,
+                                EntityType<?> entityType, DamageSource damageSource, BaseSoulSkill skill, float amount, long gameTime) {
         CompoundTag taskTag = getOrCreateTaskTag(itemTag);
 
         if (resetAllOnTimeout) {
@@ -66,6 +82,7 @@ public class ForgingTask {
             if (criterion.isComplete(taskTag)) continue;
             if (criterion.entityFilter != null && !criterion.entityFilter.test(entityType)) continue;
             if (criterion.damageSourceFilter != null && !criterion.damageSourceFilter.test(damageSource)) continue;
+            if (criterion.skillFilter != null && !criterion.skillFilter.test(skill)) continue;
             criterion.addProgress(taskTag, amount, gameTime);
         }
 

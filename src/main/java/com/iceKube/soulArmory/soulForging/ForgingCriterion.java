@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulForging;
 
+import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -16,15 +17,19 @@ public class ForgingCriterion {
     public final Predicate<EntityType<?>> entityFilter;
     @Nullable
     public final Predicate<DamageSource> damageSourceFilter;
+    @Nullable
+    public final Predicate<BaseSoulSkill> skillFilter;
 
     public ForgingCriterion(String id, ForgingEventType eventType, int targetValue,
-                            long timeoutTicks, @Nullable Predicate<EntityType<?>> entityFilter, @Nullable Predicate<DamageSource> damageSourceFilter) {
+                            long timeoutTicks, @Nullable Predicate<EntityType<?>> entityFilter,
+                            @Nullable Predicate<DamageSource> damageSourceFilter, @Nullable Predicate<BaseSoulSkill> skillFilter) {
         this.id = id;
         this.eventType = eventType;
         this.targetValue = targetValue;
         this.timeoutTicks = timeoutTicks;
         this.entityFilter = entityFilter;
         this.damageSourceFilter = damageSourceFilter;
+        this.skillFilter = skillFilter;
     }
 
     private String progressKey() { return id + ".progress"; }
