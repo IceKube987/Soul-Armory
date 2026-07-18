@@ -83,27 +83,27 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
 
     private float getAttackDamage(ItemStack stack) {
         if (stack.getTag() == null) return (float) (Config.soulSwordBaseDamage - 1);
-        return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulSwordPointsPerDamage));
+        return (float) (Config.soulSwordBaseDamage - 1 + (int) (stack.getTag().getFloat(SOUL_AMOUNT) / Config.soulSwordPointsPerDamage));
     }
 
     @Override
     public double getSpeedAdditionPercentage(ItemStack stack) {
         if (stack.getTag() == null) return 0;
-        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
+        return 0.01 * (int) (stack.getTag().getFloat(SOUL_AMOUNT) / getPointPerSpeedPercent());
     }
 
     @Override
     public void setDefaultSkill(ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
-        tag.putLong(lastExecutedTime, level.getGameTime());
-        tag.putString(currentSkill, SoulSkills.HEAL.soulSkillId.toString());
-        tag.putInt(currentSkillIndex, 0);
+        tag.putLong(LAST_EXECUTED_TIME, level.getGameTime());
+        tag.putString(CURRENT_SKILL, SoulSkills.HEAL.soulSkillId.toString());
+        tag.putInt(CURRENT_SKILL_INDEX, 0);
 
-        ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
+        ListTag listTag = tag.getList(AVAILABLE_SKILLS, Tag.TAG_STRING);
 
         listTag.add(StringTag.valueOf(SoulSkills.HEAL.soulSkillId.toString()));
 
-        tag.put(availableSkills, listTag);
+        tag.put(AVAILABLE_SKILLS, listTag);
     }
 
     public void cycleToNextSkill(ItemStack stack, ServerPlayer player) {
@@ -117,17 +117,17 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
         // Check if there is only one skill
         if (size <= 1) return;
 
-        int currentIndex = tag.getInt(currentSkillIndex);
+        int currentIndex = tag.getInt(CURRENT_SKILL_INDEX);
         // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
         int nextIndex = (currentIndex + 1) % size;
-        tag.putInt(currentSkillIndex, nextIndex);
+        tag.putInt(CURRENT_SKILL_INDEX, nextIndex);
 
         // actually switch to next skill
         String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
-        tag.putString(currentSkill, nextSkillId);
+        tag.putString(CURRENT_SKILL, nextSkillId);
 
         // Soul Sword only: deduce soul when switching
-        tag.putFloat(soulAmountNBT, Math.max(0, tag.getFloat(soulAmountNBT) - Config.soulSwordSwitchSkillCost));
+        tag.putFloat(SOUL_AMOUNT, Math.max(0, tag.getFloat(SOUL_AMOUNT) - Config.soulSwordSwitchSkillCost));
 
         // Play the switch sound and signal the client to play the switch VFX.
         // TODO: Get my own SFX
@@ -179,7 +179,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
 
     @Override
     public @Nullable ForgingTask getActiveForgingTask(ItemStack stack) {
-        String string = stack.getOrCreateTag().getString(currentForgingTask);
+        String string = stack.getOrCreateTag().getString(CURRENT_FORGING_TASK);
         if (string.equals(NO_FORGING_TASK)) return null;
         return ForgingTasks.getTask(ResourceLocation.parse(string));
     }

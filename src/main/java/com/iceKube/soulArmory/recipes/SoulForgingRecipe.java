@@ -30,7 +30,7 @@ import net.minecraft.world.level.Level;
  * A shapeless crafting recipe that assigns a forging task to a {@link Forgeable} soul weapon.
  * <p>
  * Matches only when the grid contains exactly one Forgeable stack whose
- * {@link BaseSoulWeaponItem#currentForgingTask} tag is present and equals
+ * {@link BaseSoulWeaponItem#CURRENT_FORGING_TASK} tag is present and equals
  * {@link BaseSoulWeaponItem#NO_FORGING_TASK}. The output is that same stack (all other NBT
  * preserved) with the tag set to the recipe's configured forging task id.
  */
@@ -64,8 +64,8 @@ public class SoulForgingRecipe extends ShapelessRecipe {
         // getTag (not getOrCreateTag): matches must not mutate stacks, and a missing tag must fail
         CompoundTag tag = forgeable.getTag();
         if (tag == null
-                || !tag.contains(BaseSoulWeaponItem.currentForgingTask, Tag.TAG_STRING)
-                || !tag.getString(BaseSoulWeaponItem.currentForgingTask).equals(BaseSoulWeaponItem.NO_FORGING_TASK)) {
+                || !tag.contains(BaseSoulWeaponItem.CURRENT_FORGING_TASK, Tag.TAG_STRING)
+                || !tag.getString(BaseSoulWeaponItem.CURRENT_FORGING_TASK).equals(BaseSoulWeaponItem.NO_FORGING_TASK)) {
             return false;
         }
 
@@ -80,7 +80,7 @@ public class SoulForgingRecipe extends ShapelessRecipe {
     }
 
     private static boolean hasSkill(CompoundTag tag, String skillId) {
-        ListTag listTag = tag.getList(BaseSoulWeaponItem.availableSkills, Tag.TAG_STRING);
+        ListTag listTag = tag.getList(BaseSoulWeaponItem.AVAILABLE_SKILLS, Tag.TAG_STRING);
         for (int i = 0; i < listTag.size(); i++) {
             if (listTag.getString(i).equals(skillId)) return true;
         }
@@ -93,7 +93,7 @@ public class SoulForgingRecipe extends ShapelessRecipe {
             ItemStack stack = pContainer.getItem(i);
             if (!stack.isEmpty() && stack.getItem() instanceof Forgeable) {
                 ItemStack result = stack.copyWithCount(1);
-                result.getOrCreateTag().putString(BaseSoulWeaponItem.currentForgingTask, this.forgingTaskId.toString());
+                result.getOrCreateTag().putString(BaseSoulWeaponItem.CURRENT_FORGING_TASK, this.forgingTaskId.toString());
                 return result;
             }
         }

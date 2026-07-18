@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
 
 public class ModItemProperties {
     public static void addCustomProperties() {
@@ -27,7 +27,7 @@ public class ModItemProperties {
             if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
 
             // speed up the bow pulling animation.
-            double soulMultiplier = (1 + 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
+            double soulMultiplier = (1 + 0.01 * (int) (stack.getTag().getFloat(SOUL_AMOUNT) / Config.soulBowPointPerDamagePercent));
             int chargedTicks = stack.getUseDuration() - livingEntity.getUseItemRemainingTicks();
             chargedTicks /= 2; // Same as releaseUsing
             return (float) Math.min(chargedTicks * soulMultiplier / 20.0F, 1.0F);

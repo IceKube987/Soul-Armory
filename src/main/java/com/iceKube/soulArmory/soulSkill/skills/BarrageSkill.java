@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
-import static com.iceKube.soulArmory.items.SoulBowItem.lastExecutedTime;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
+import static com.iceKube.soulArmory.items.SoulBowItem.LAST_EXECUTED_TIME;
 
 public class BarrageSkill extends ContinuousSoulSkill {
     public BarrageSkill() {
@@ -29,11 +29,11 @@ public class BarrageSkill extends ContinuousSoulSkill {
     @Override
     public boolean execute(ItemStack stack, Level level, Player player) {
         if (!(stack.getItem() instanceof SoulBowItem soulBowItem)) return false;
-        if (stack.getTag() == null || !stack.getTag().contains(lastExecutedTime)) return false;
-        if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;
+        if (stack.getTag() == null || !stack.getTag().contains(LAST_EXECUTED_TIME)) return false;
+        if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
 
-        Long lastExecuted = stack.getTag().getLong(lastExecutedTime);
+        Long lastExecuted = stack.getTag().getLong(LAST_EXECUTED_TIME);
         Long currentTime = level.getGameTime();
         if (currentTime - lastExecuted < executeInterval) return false;
 

@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
 
 public abstract class BaseSoulSkill {
     public final ResourceLocation soulSkillId;
@@ -25,7 +25,7 @@ public abstract class BaseSoulSkill {
     }
 
     public boolean execute(ItemStack stack, Level level, Player player) {
-        stack.getTag().putFloat(soulAmountNBT, stack.getTag().getFloat(soulAmountNBT) - soulCost);
+        stack.getTag().putFloat(SOUL_AMOUNT, stack.getTag().getFloat(SOUL_AMOUNT) - soulCost);
         return true;
     }
 }

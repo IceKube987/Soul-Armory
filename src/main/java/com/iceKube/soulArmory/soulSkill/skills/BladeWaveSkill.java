@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
 
 // Skill for Soul Sword
 public class BladeWaveSkill extends InstantSoulSkill {
@@ -29,11 +29,11 @@ public class BladeWaveSkill extends InstantSoulSkill {
     public boolean execute(ItemStack stack, Level level, Player player) {
         if (!(stack.getItem() instanceof SoulSwordItem)) return false;
         if (stack.getTag() == null) return false;
-        if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;
+        if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
         if (player.getAttackStrengthScale(0f) < 0.95f) return false;
 
-        float effectiveSoul = Math.min(stack.getTag().getFloat(soulAmountNBT) + 100, Config.soulSwordMaxSoul);
+        float effectiveSoul = Math.min(stack.getTag().getFloat(SOUL_AMOUNT) + 100, Config.soulSwordMaxSoul);
 
         float damage = (float) (Config.soulSwordBaseDamage + (int) (effectiveSoul / Config.soulSwordPointsPerDamage));
 

@@ -3,7 +3,6 @@ package com.iceKube.soulArmory.items;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
-import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
@@ -72,7 +71,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
     @Override
     public double getSpeedAdditionPercentage(ItemStack stack) {
         if (stack.getTag() == null) return 0;
-        return 0.01 * (int) (stack.getTag().getFloat(soulAmountNBT) / getPointPerSpeedPercent());
+        return 0.01 * (int) (stack.getTag().getFloat(SOUL_AMOUNT) / getPointPerSpeedPercent());
     }
 
     // -------------------------------------------------------------------------
@@ -114,7 +113,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
 
         if (pLivingEntity instanceof Player player) {
             // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed and arrow damage.
-            double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
+            double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(SOUL_AMOUNT) / Config.soulBowPointPerDamagePercent));
 
             int chargedTicks = getUseDuration(pStack) - pRemainingUseDuration;
             chargedTicks /= 2; // Base charge speed for soul bow is half of vanilla bow.
@@ -135,7 +134,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         if (!(pEntityLiving instanceof Player player)) return;
 
         // For every Config.soulBowPointPerDamagePercent points of soul, add 1% of drawing speed and arrow damage.
-        double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(soulAmountNBT) / Config.soulBowPointPerDamagePercent));
+        double soulMultiplier = (1 + 0.01 * (int) (pStack.getTag().getFloat(SOUL_AMOUNT) / Config.soulBowPointPerDamagePercent));
 
         int chargedTicks = getUseDuration(pStack) - pTimeLeft;
         chargedTicks /= 2; // Base charge speed for soul bow is half of vanilla bow.
@@ -338,10 +337,10 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
      */
     private void useContinuousSkill(ItemStack stack, Level level, Player player) {
         if (!(getCurrentSkill(stack) instanceof ContinuousSoulSkill skill)) return;
-        if (stack.getTag() == null || !stack.getTag().contains(lastExecutedTime)) return;
+        if (stack.getTag() == null || !stack.getTag().contains(LAST_EXECUTED_TIME)) return;
 
         if (skill.execute(stack, level, player)) {
-            stack.getTag().putLong(lastExecutedTime, level.getGameTime());
+            stack.getTag().putLong(LAST_EXECUTED_TIME, level.getGameTime());
         }
     }
 
@@ -356,14 +355,14 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         // Check if there is only one skill
         if (size <= 1) return;
 
-        int currentIndex = tag.getInt(currentSkillIndex);
+        int currentIndex = tag.getInt(CURRENT_SKILL_INDEX);
         // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
         int nextIndex = (currentIndex + 1) % size;
-        tag.putInt(currentSkillIndex, nextIndex);
+        tag.putInt(CURRENT_SKILL_INDEX, nextIndex);
 
         // actually switch to next skill
         String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
-        tag.putString(currentSkill, nextSkillId);
+        tag.putString(CURRENT_SKILL, nextSkillId);
 
         Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
     }
@@ -371,11 +370,11 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
     @Override
     public void setDefaultSkill(ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
-        tag.putLong(lastExecutedTime, level.getGameTime());
-        tag.putString(currentSkill, SoulSkills.SONIC_BOOM.soulSkillId.toString());
-        tag.putInt(currentSkillIndex, 0);
+        tag.putLong(LAST_EXECUTED_TIME, level.getGameTime());
+        tag.putString(CURRENT_SKILL, SoulSkills.SONIC_BOOM.soulSkillId.toString());
+        tag.putInt(CURRENT_SKILL_INDEX, 0);
 
-        ListTag listTag = tag.getList(availableSkills, Tag.TAG_STRING);
+        ListTag listTag = tag.getList(AVAILABLE_SKILLS, Tag.TAG_STRING);
         listTag.add(StringTag.valueOf(SoulSkills.SONIC_BOOM.soulSkillId.toString()));
 
         // TODO: This is only for test and marked for removal when soul forging system is completed
@@ -384,6 +383,6 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         listTag.add(StringTag.valueOf(SoulSkills.BARRAGE.soulSkillId.toString()));
         listTag.add(StringTag.valueOf(SoulSkills.SONIC_OVERLOAD.soulSkillId.toString()));
 
-        tag.put(availableSkills, listTag);
+        tag.put(AVAILABLE_SKILLS, listTag);
     }
 }

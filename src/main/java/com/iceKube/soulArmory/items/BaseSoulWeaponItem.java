@@ -22,16 +22,16 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class BaseSoulWeaponItem extends Item {
-    public static final String soulAmountNBT = "soul_armory.soul_weapon.soulAmount";
-    public static final String lastHeldGameTimeNBT = "soul_armory.soul_weapon.lastHeldGameTime";
-    public static final String lastSoulOverflowTimeNBT = "soul_armory.soul_weapon.lastSoulOverflowTime";
+    public static final String SOUL_AMOUNT = "soul_armory.soul_weapon.soulAmount";
+    public static final String LAST_HELD_GAME_TIME = "soul_armory.soul_weapon.lastHeldGameTime";
+    public static final String LAST_SOUL_OVERFLOW_TIME = "soul_armory.soul_weapon.lastSoulOverflowTime";
     // Skill System
-    public static final String lastExecutedTime = "soul_armory.soul_weapon.last_executed_time";
-    public static final String availableSkills = "soul_armory.soul_weapon.available_skills";
-    public static final String currentSkill = "soul_armory.soul_weapon.current_skill";
-    public static final String currentSkillIndex = "soul_armory.soul_weapon.current_skill_index";
+    public static final String LAST_EXECUTED_TIME = "soul_armory.soul_weapon.last_executed_time";
+    public static final String AVAILABLE_SKILLS = "soul_armory.soul_weapon.available_skills";
+    public static final String CURRENT_SKILL = "soul_armory.soul_weapon.current_skill";
+    public static final String CURRENT_SKILL_INDEX = "soul_armory.soul_weapon.current_skill_index";
     // Forging system
-    public static final String currentForgingTask = "soul_armory.soul_weapon.current_forging_task";
+    public static final String CURRENT_FORGING_TASK = "soul_armory.soul_weapon.current_forging_task";
     public static final String NO_FORGING_TASK = "none";
 
     public BaseSoulWeaponItem(Properties pProperties) {
@@ -68,7 +68,7 @@ public abstract class BaseSoulWeaponItem extends Item {
     protected int calculateSoulDecay(ItemStack stack, long currentGameTime) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return 0;
-        long lastHeld = tag.getLong(lastHeldGameTimeNBT);
+        long lastHeld = tag.getLong(LAST_HELD_GAME_TIME);
         long ticksDecaying = (currentGameTime - lastHeld) - getGracePeriodTicks(); // 200 ticks = 10 second grace period
         if (ticksDecaying <= 0) return 0;
         return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks
@@ -77,7 +77,7 @@ public abstract class BaseSoulWeaponItem extends Item {
     protected int calculateOverflowDecay(ItemStack stack, long currentGameTime) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return 0;
-        long lastDecayed = tag.getLong(lastSoulOverflowTimeNBT);
+        long lastDecayed = tag.getLong(LAST_SOUL_OVERFLOW_TIME);
         long ticksDecaying = (currentGameTime - lastDecayed);
         if (ticksDecaying <= 0) return 0;
         return (int) (ticksDecaying / getOverflowSpeed());
@@ -91,7 +91,7 @@ public abstract class BaseSoulWeaponItem extends Item {
         }
 
         long currentGameTime = pLevel != null ? pLevel.getGameTime() : 0;
-        float currentSoul = pStack.getTag().getFloat(soulAmountNBT);
+        float currentSoul = pStack.getTag().getFloat(SOUL_AMOUNT);
         int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast it to int to avoid showing decimals in tooltip.
         pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + getMaxSoul()));
 
@@ -125,13 +125,13 @@ public abstract class BaseSoulWeaponItem extends Item {
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         if (pStack.getTag() == null) {
             CompoundTag NBT = new CompoundTag();
-            NBT.putFloat(soulAmountNBT, 0);
-            NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
-            NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
+            NBT.putFloat(SOUL_AMOUNT, 0);
+            NBT.putLong(LAST_HELD_GAME_TIME, pLevel.getGameTime());
+            NBT.putLong(LAST_SOUL_OVERFLOW_TIME, pLevel.getGameTime());
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
             if (this instanceof Forgeable) {
-                NBT.putString(currentForgingTask, NO_FORGING_TASK);
+                NBT.putString(CURRENT_FORGING_TASK, NO_FORGING_TASK);
             }
 
             pStack.setTag(NBT);
@@ -145,20 +145,20 @@ public abstract class BaseSoulWeaponItem extends Item {
             CompoundTag NBT = pStack.getTag();
             if (player.getMainHandItem() == pStack) {
                 // Apply accumulated soul decay (calculated since the weapon was last held)
-                NBT.putFloat(soulAmountNBT, Math.max(0, NBT.getFloat(soulAmountNBT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
+                NBT.putFloat(SOUL_AMOUNT, Math.max(0, NBT.getFloat(SOUL_AMOUNT) - calculateSoulDecay(pStack, pLevel.getGameTime())));
                 // Refresh the last held game time since the weapon is held in player's main hand.
-                NBT.putLong(lastHeldGameTimeNBT, pLevel.getGameTime());
+                NBT.putLong(LAST_HELD_GAME_TIME, pLevel.getGameTime());
             }
 
             // Handle soul decay beyond the threshold.
             // 2 points of soul is decayed per second by default.
-            if (NBT.getFloat(soulAmountNBT) > getOverflowThreshold()) {
-                if (pLevel.getGameTime() - NBT.getLong(lastSoulOverflowTimeNBT) >= getOverflowSpeed()) {
-                    NBT.putFloat(soulAmountNBT, Math.max(getOverflowThreshold(), NBT.getFloat(soulAmountNBT) - calculateOverflowDecay(pStack, pLevel.getGameTime())));
-                    NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
+            if (NBT.getFloat(SOUL_AMOUNT) > getOverflowThreshold()) {
+                if (pLevel.getGameTime() - NBT.getLong(LAST_SOUL_OVERFLOW_TIME) >= getOverflowSpeed()) {
+                    NBT.putFloat(SOUL_AMOUNT, Math.max(getOverflowThreshold(), NBT.getFloat(SOUL_AMOUNT) - calculateOverflowDecay(pStack, pLevel.getGameTime())));
+                    NBT.putLong(LAST_SOUL_OVERFLOW_TIME, pLevel.getGameTime());
                 }
             } else {
-                NBT.putLong(lastSoulOverflowTimeNBT, pLevel.getGameTime());
+                NBT.putLong(LAST_SOUL_OVERFLOW_TIME, pLevel.getGameTime());
             }
 
             // test for forging tasks
@@ -184,21 +184,21 @@ public abstract class BaseSoulWeaponItem extends Item {
     public BaseSoulSkill getCurrentSkill(ItemStack stack) {
         if (!canUseSkill()) return null;
         CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(currentSkill, Tag.TAG_STRING)) {
+        if (tag == null || !tag.contains(CURRENT_SKILL, Tag.TAG_STRING)) {
             return null;
         }
 
-        String skillIdString = tag.getString(currentSkill);
+        String skillIdString = tag.getString(CURRENT_SKILL);
 
         ResourceLocation skillId = ResourceLocation.tryParse(skillIdString);
 
         if (skillId == null) {
-            tag.remove(currentSkill);
-            tag.putInt(currentSkillIndex, 0);
+            tag.remove(CURRENT_SKILL);
+            tag.putInt(CURRENT_SKILL_INDEX, 0);
             List<BaseSoulSkill> available = getAvailableSkills(stack);
             if (available == null) return null;
             if (!available.isEmpty()) {
-                tag.putString(currentSkill, available.get(0).soulSkillId.toString());
+                tag.putString(CURRENT_SKILL, available.get(0).soulSkillId.toString());
             }
             return null;
         }
@@ -211,7 +211,7 @@ public abstract class BaseSoulWeaponItem extends Item {
         List<BaseSoulSkill> skills = new ArrayList<>();
         if (!stack.hasTag()) return skills;
 
-        ListTag listTag = stack.getTag().getList(availableSkills, Tag.TAG_STRING);
+        ListTag listTag = stack.getTag().getList(AVAILABLE_SKILLS, Tag.TAG_STRING);
 
         for (int i = 0; i < listTag.size(); i++) {
             ResourceLocation id = ResourceLocation.tryParse(listTag.getString(i));
@@ -222,13 +222,13 @@ public abstract class BaseSoulWeaponItem extends Item {
                 } else {
                     // if the skill is somehow missing, remove it from the list.
                     listTag.remove(listTag.getString(i));
-                    stack.getTag().put(availableSkills, listTag);
+                    stack.getTag().put(AVAILABLE_SKILLS, listTag);
                     i--;
                 }
             } else {
                 // if the string somehow does not represent a skill, remove it from the list.
                 listTag.remove(listTag.getString(i));
-                stack.getTag().put(availableSkills, listTag);
+                stack.getTag().put(AVAILABLE_SKILLS, listTag);
                 i--;
             }
         }

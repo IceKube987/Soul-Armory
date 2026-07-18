@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
 
 // Healing Skill for Soul Sword
 public class HealSkill extends InstantSoulSkill {
@@ -36,7 +36,7 @@ public class HealSkill extends InstantSoulSkill {
         if (stack.getTag() == null) return false;
 
         CompoundTag tag = stack.getTag();
-        float currentSoul = tag.getFloat(soulAmountNBT);
+        float currentSoul = tag.getFloat(SOUL_AMOUNT);
 
         float currentHealth = player.getHealth();
         float maxHealth = player.getMaxHealth();
@@ -53,7 +53,7 @@ public class HealSkill extends InstantSoulSkill {
         if (healingAmount <= 0) return false;
 
         // Deduct soul
-        tag.putFloat(soulAmountNBT, currentSoul - (float) (healingAmount * Config.soulSwordPointsPerHealing));
+        tag.putFloat(SOUL_AMOUNT, currentSoul - (float) (healingAmount * Config.soulSwordPointsPerHealing));
 
         // Apply healing
         player.heal(healingAmount);

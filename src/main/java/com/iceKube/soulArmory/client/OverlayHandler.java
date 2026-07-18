@@ -41,8 +41,8 @@ public class OverlayHandler {
         if (item == null) return;
         if (!(item instanceof BaseSoulWeaponItem baseSoulWeaponItem)) return;
         float soulPoint = 0;
-        if (itemStack.getTag() != null && itemStack.getTag().contains(BaseSoulWeaponItem.soulAmountNBT)) {
-            soulPoint = itemStack.getTag().getFloat(BaseSoulWeaponItem.soulAmountNBT);
+        if (itemStack.getTag() != null && itemStack.getTag().contains(BaseSoulWeaponItem.SOUL_AMOUNT)) {
+            soulPoint = itemStack.getTag().getFloat(BaseSoulWeaponItem.SOUL_AMOUNT);
         }
 
         float soulPercentage = soulPoint / baseSoulWeaponItem.getMaxSoul();

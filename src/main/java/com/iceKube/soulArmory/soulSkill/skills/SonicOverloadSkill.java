@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.soulAmountNBT;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.SOUL_AMOUNT;
 
 public class SonicOverloadSkill extends InstantSoulSkill {
     public SonicOverloadSkill() {
@@ -35,8 +35,8 @@ public class SonicOverloadSkill extends InstantSoulSkill {
     public boolean execute(ItemStack stack, Level level, Player player) {
         if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
-        if (!stack.getTag().contains(soulAmountNBT)) return false;
-        if (stack.getTag().getFloat(soulAmountNBT) < soulCost) return false;
+        if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
 
         int blastCount = Config.soulBowSkillSOBlastCount;
 

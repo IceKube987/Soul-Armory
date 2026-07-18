@@ -21,9 +21,9 @@ public class TransformHelper {
         ItemStack newStack = new ItemStack(newItemReg.get());
 
         CompoundTag tag = newStack.getOrCreateTag();
-        tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, maxSoul);
-        tag.putLong(BaseSoulWeaponItem.lastHeldGameTimeNBT, level.getGameTime());
-        tag.putLong(BaseSoulWeaponItem.lastSoulOverflowTimeNBT, level.getGameTime());
+        tag.putFloat(BaseSoulWeaponItem.SOUL_AMOUNT, maxSoul);
+        tag.putLong(BaseSoulWeaponItem.LAST_HELD_GAME_TIME, level.getGameTime());
+        tag.putLong(BaseSoulWeaponItem.LAST_SOUL_OVERFLOW_TIME, level.getGameTime());
         tag.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
         if (newItemReg.get() instanceof UseSoulSkillSystem useSoulSkillSystem) {

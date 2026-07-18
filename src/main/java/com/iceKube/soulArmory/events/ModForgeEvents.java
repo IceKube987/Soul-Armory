@@ -228,9 +228,9 @@ public class ModForgeEvents {
             damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
 
             CompoundTag tag = mainHandItem.getOrCreateTag();
-            float currentSoul = tag.getFloat(BaseSoulWeaponItem.soulAmountNBT);
+            float currentSoul = tag.getFloat(BaseSoulWeaponItem.SOUL_AMOUNT);
             float newSoul = Math.min(item.getMaxSoul(), currentSoul + damageDealt);
-            tag.putFloat(BaseSoulWeaponItem.soulAmountNBT, newSoul);
+            tag.putFloat(BaseSoulWeaponItem.SOUL_AMOUNT, newSoul);
         }
     }
 }

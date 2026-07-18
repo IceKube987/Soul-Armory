@@ -37,10 +37,10 @@ public class UnlockSonicOverloadSkill extends ForgingTask {
 
     public static void onComplete(Player player, ItemStack stack, Level level) {
         CompoundTag tag = stack.getTag();
-        tag.putString(BaseSoulWeaponItem.currentForgingTask, BaseSoulWeaponItem.NO_FORGING_TASK);
+        tag.putString(BaseSoulWeaponItem.CURRENT_FORGING_TASK, BaseSoulWeaponItem.NO_FORGING_TASK);
 
-        ListTag listTag = tag.getList(BaseSoulWeaponItem.availableSkills, Tag.TAG_STRING);
+        ListTag listTag = tag.getList(BaseSoulWeaponItem.AVAILABLE_SKILLS, Tag.TAG_STRING);
         listTag.add(StringTag.valueOf(SoulSkills.SONIC_OVERLOAD.soulSkillId.toString()));
-        tag.put(BaseSoulWeaponItem.availableSkills, listTag);
+        tag.put(BaseSoulWeaponItem.AVAILABLE_SKILLS, listTag);
     }
 }
