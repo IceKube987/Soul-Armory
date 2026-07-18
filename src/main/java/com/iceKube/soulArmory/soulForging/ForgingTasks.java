@@ -1,6 +1,6 @@
 package com.iceKube.soulArmory.soulForging;
 
-import com.iceKube.soulArmory.soulForging.tasks.BladeWaveSkill;
+import com.iceKube.soulArmory.soulForging.tasks.UnlockBladeWaveSkill;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeChestplate;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeSoulBow;
 import com.iceKube.soulArmory.soulForging.tasks.ForgeSoulSword;
@@ -33,7 +33,7 @@ public class ForgingTasks {
     public static ForgingTask FORGE_SOUL_SWORD = new ForgeSoulSword();
     public static ForgingTask FORGE_SOUL_BOW = new ForgeSoulBow();
     public static ForgingTask FORGE_SOUL_CHESTPLATE = new ForgeChestplate();
-    public static ForgingTask UNLOCK_BLADE_WAVE = new BladeWaveSkill();
+    public static ForgingTask UNLOCK_BLADE_WAVE = new UnlockBladeWaveSkill();
 
     public static void registerForgingTasks() {
         register(FORGE_SOUL_SWORD);

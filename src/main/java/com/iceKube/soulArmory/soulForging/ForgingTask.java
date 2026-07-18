@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulForging;
 
+import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ForgingTask {
@@ -15,13 +17,18 @@ public class ForgingTask {
     public final ResourceLocation taskId;
     public final List<ForgingCriterion> criteria;
     public final CompletionAction onComplete;
+    /** The skill this task unlocks, or {@code null} for tasks that forge an incomplete weapon into a full one. */
+    @Nullable
+    public final BaseSoulSkill unlockedSkill;
     public final boolean resetAllOnTimeout;
 
     public ForgingTask(ResourceLocation taskId, List<ForgingCriterion> criteria,
-                       CompletionAction onComplete, boolean resetAllOnTimeout) {
+                       CompletionAction onComplete, @Nullable BaseSoulSkill unlockedSkill,
+                       boolean resetAllOnTimeout) {
         this.taskId = taskId;
         this.criteria = List.copyOf(criteria);
         this.onComplete = onComplete;
+        this.unlockedSkill = unlockedSkill;
         this.resetAllOnTimeout = resetAllOnTimeout;
     }
 

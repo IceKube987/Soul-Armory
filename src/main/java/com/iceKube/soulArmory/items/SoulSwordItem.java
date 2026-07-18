@@ -103,9 +103,6 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
 
         listTag.add(StringTag.valueOf(SoulSkills.HEAL.soulSkillId.toString()));
 
-        // TODO: Blade wave skill is temp.
-        listTag.add(StringTag.valueOf(SoulSkills.BLADE_WAVE.soulSkillId.toString()));
-
         tag.put(availableSkills, listTag);
     }
 
@@ -183,7 +180,7 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
     @Override
     public @Nullable ForgingTask getActiveForgingTask(ItemStack stack) {
         String string = stack.getOrCreateTag().getString(currentForgingTask);
-        if (string.equals("none")) return null;
+        if (string.equals(NO_FORGING_TASK)) return null;
         return ForgingTasks.getTask(ResourceLocation.parse(string));
     }
 }

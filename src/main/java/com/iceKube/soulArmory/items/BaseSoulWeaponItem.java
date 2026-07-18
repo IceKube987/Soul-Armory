@@ -1,5 +1,7 @@
 package com.iceKube.soulArmory.items;
 
+import com.iceKube.soulArmory.soulForging.ForgingCriterion;
+import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
 import net.minecraft.nbt.CompoundTag;
@@ -30,6 +32,7 @@ public abstract class BaseSoulWeaponItem extends Item {
     public static final String currentSkillIndex = "soul_armory.soul_weapon.current_skill_index";
     // Forging system
     public static final String currentForgingTask = "soul_armory.soul_weapon.current_forging_task";
+    public static final String NO_FORGING_TASK = "none";
 
     public BaseSoulWeaponItem(Properties pProperties) {
         super(pProperties);
@@ -91,6 +94,31 @@ public abstract class BaseSoulWeaponItem extends Item {
         float currentSoul = pStack.getTag().getFloat(soulAmountNBT);
         int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast it to int to avoid showing decimals in tooltip.
         pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + getMaxSoul()));
+
+        // Show forging progress
+        if (this instanceof Forgeable forgeable){
+            ForgingTask task = forgeable.getActiveForgingTask(pStack);
+            if (task == null) return;
+            if (pStack.getTag() == null) {
+                for (ForgingCriterion criterion : task.criteria) {
+                    String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
+                    pTooltipComponents.add(Component.literal("§9" + label + ": " + "0" + " / " + criterion.targetValue));
+                }
+                return;
+            }
+
+            CompoundTag tag = pStack.getTag();
+            CompoundTag taskTag = task.getOrCreateTaskTag(tag);
+
+            for (ForgingCriterion criterion : task.criteria) {
+                String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
+                if (criterion.isComplete(taskTag)) {
+                    pTooltipComponents.add(Component.literal("§b" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
+                } else {
+                    pTooltipComponents.add(Component.literal("§9" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
+                }
+            }
+        }
     }
 
     @Override
@@ -103,7 +131,7 @@ public abstract class BaseSoulWeaponItem extends Item {
             NBT.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
             if (this instanceof Forgeable){
-                NBT.putString(currentForgingTask,"none");
+                NBT.putString(currentForgingTask, NO_FORGING_TASK);
             }
 
             pStack.setTag(NBT);

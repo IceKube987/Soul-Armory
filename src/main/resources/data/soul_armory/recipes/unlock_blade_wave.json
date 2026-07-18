@@ -1,0 +1,10 @@
+{
+  "type": "soul_armory:soul_forging",
+  "category": "equipment",
+  "ingredients": [
+    { "item": "soul_armory:soul_sword" },
+    { "item": "minecraft:echo_shard" }
+  ],
+  "result": { "item": "soul_armory:soul_sword" },
+  "forging_task": "soul_armory:blade_wave_unlock"
+}

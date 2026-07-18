@@ -5,6 +5,11 @@ import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.soulForging.ForgingCriterion;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
+import com.iceKube.soulArmory.soulSkill.SoulSkills;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -13,8 +18,8 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class BladeWaveSkill extends ForgingTask {
-    public BladeWaveSkill() {
+public class UnlockBladeWaveSkill extends ForgingTask {
+    public UnlockBladeWaveSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID,"blade_wave_unlock"),
                 List.of(
                         new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
@@ -28,11 +33,17 @@ public class BladeWaveSkill extends ForgingTask {
                                 entityType -> entityType == EntityType.WARDEN,
                                 null)
                         ),
-                BladeWaveSkill::onComplete,
+                UnlockBladeWaveSkill::onComplete,
+                SoulSkills.BLADE_WAVE,
                 false);
     }
 
     public static void onComplete(Player player, ItemStack stack, Level level){
-        stack.getTag().putString(BaseSoulWeaponItem.currentForgingTask,"none");
+        CompoundTag tag = stack.getTag();
+        tag.putString(BaseSoulWeaponItem.currentForgingTask, BaseSoulWeaponItem.NO_FORGING_TASK);
+
+        ListTag listTag = tag.getList(BaseSoulWeaponItem.availableSkills, Tag.TAG_STRING);
+        listTag.add(StringTag.valueOf(SoulSkills.BLADE_WAVE.soulSkillId.toString()));
+        tag.put(BaseSoulWeaponItem.availableSkills, listTag);
     }
 }

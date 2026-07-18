@@ -29,6 +29,7 @@ public class ForgeSoulBow extends ForgingTask {
                 ),
                 (player, stack, level) -> TransformHelper.transformToFullWeapon(
                         player, stack, ItemRegistry.SOUL_BOW, Config.soulBowMaxSoul, level),
+                null,
                 false);
     }
 }

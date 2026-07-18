@@ -4,6 +4,7 @@ import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import com.iceKube.soulArmory.registries.LootModifierRegistry;
+import com.iceKube.soulArmory.registries.RecipeRegistry;
 import com.iceKube.soulArmory.registries.SoundRegistry;
 import com.iceKube.soulArmory.soulForging.ForgingTasks;
 import com.iceKube.soulArmory.utils.ModItemProperties;
@@ -43,6 +44,7 @@ public class SoulArmoryMod {
         EntityRegistry.ENTITIES.register(modEventBus);
         SoundRegistry.SOUNDS.register(modEventBus);
         LootModifierRegistry.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
+        RecipeRegistry.RECIPE_SERIALIZERS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);

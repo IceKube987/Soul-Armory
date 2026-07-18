@@ -22,6 +22,7 @@ public class ForgeChestplate extends ForgingTask {
                                 null)
                 ),
                 (player, stack, level) -> TransformHelper.transformChestplate(player, stack, level),
+                null,
                 false);
     }
 }
