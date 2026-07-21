@@ -19,6 +19,6 @@
 
     { "name": "GameTime", "type": "float", "count": 1, "values": [ 0.0 ] },
     { "name": "FadeinTime", "type": "int","count": 1,"values": [0]},
-    { "name": "Started", "type": "int","count": 1,"values": [0]}
+    { "name": "AlphaScale", "type": "float","count": 1,"values": [1]}
   ]
 }

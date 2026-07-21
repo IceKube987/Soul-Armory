@@ -12,7 +12,9 @@
   "skills.soul_armory.scatter_shot": "齐射",
   "skills.soul_armory.sonic_overload": "音爆",
 
-  "itemGroup.soul_armory": "Soul Armory",
+  "itemGroup.soul_armory": "灵魂军械库",
+
+  "key.category.soul_armory": "灵魂军械库",
 
   "subtitles.soul_armory.soul_sword_heal": "灵魂剑：治愈",
 

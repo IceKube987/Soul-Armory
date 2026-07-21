@@ -149,14 +149,7 @@ public class ModForgeEvents {
         if (KeyBinding.TEST_KEY.consumeClick()) {
             var shader = CoreShaders.soulVignette();
             if (shader == null) return;
-            Minecraft mc = Minecraft.getInstance();
-            shader.safeGetUniform("FadeinTime").set(mc.level.getDayTime());
-            int i = shader.getUniform("Started").getIntBuffer().get();
-            if (i == 0) {
-                shader.getUniform("Started").set(1);
-            } else {
-                shader.getUniform("Started").set(0);
-            }
+            OverlayHandler.switchVignette();
         }
         if (KeyBinding.SWITCH_SKILL.consumeClick()) {
             ModPacketHandler.sendToServer(new SwitchSkillC2SPacket());
@@ -164,14 +157,14 @@ public class ModForgeEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderGui(RenderGuiOverlayEvent event) {
 
         // Only render ONCE.
-        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
+        if (event.getOverlay() != VanillaGuiOverlay.PORTAL.type()) {
             return;
         }
 
-        // Draw after rendering all vanilla GUIs
+        // Draw after rendering vanilla GUIs, but before rendering hotbars (So that my overlays do not block the hotbars)
         GuiGraphics gui = event.getGuiGraphics();
         int screenWidth = event.getWindow().getGuiScaledWidth();
         int screenHeight = event.getWindow().getGuiScaledHeight();
@@ -183,10 +176,10 @@ public class ModForgeEvents {
         int x = (int) (screenWidth * 0.025);
         int y = screenHeight - 15;
 
-        // Call method
-        renderSoulBar(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
+        // Call method, vignette first to prevent blocking soul bars
+        renderVignette(gui, screenWidth, screenHeight);
 
-//        renderVignette(gui, screenWidth, screenHeight);
+        renderSoulBar(gui, x, y, barWidth, barHeight, renderWidth, renderHeight);
 
         renderSkillIcon(gui, (int) (screenWidth * 0.94), (int) (screenHeight - (screenWidth * 0.06)), ((int) (screenWidth * 0.05)), (int) (screenWidth * 0.05));
 

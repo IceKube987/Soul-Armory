@@ -33,6 +33,10 @@ public class OverlayHandler {
     // Client-side tick counter, advanced once per client tick (see ModForgeEvents.onClientTick).
     private static int clientTick;
 
+    private static boolean doVignette;
+
+    private static int vignetteUpdateTick;
+
     public static void renderSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
@@ -120,8 +124,27 @@ public class OverlayHandler {
     }
 
     public static void renderVignette(GuiGraphics gui, int w, int h) {
+        int currentTick = clientTick;
+        float partialTick = Minecraft.getInstance().getPartialTick();
+        float elapsed = (currentTick - vignetteUpdateTick) + partialTick;
+
+        float alphaScale = 0;
+
+        if (doVignette) {
+            alphaScale = elapsed / 5;
+        } else {
+            alphaScale = 1 - elapsed / 5;
+        }
+
+        // Clamp into [0,1]
+        alphaScale = Math.max(0, alphaScale);
+        alphaScale = Math.min(1, alphaScale);
+
+        if (alphaScale == 0) return;
+
         var shader = CoreShaders.soulVignette();
         if (shader == null) return;
+        shader.safeGetUniform("AlphaScale").set(alphaScale);
 
         var matrix = gui.pose().last().pose();
         RenderSystem.setShader(CoreShaders::soulVignette);
@@ -267,6 +290,11 @@ public class OverlayHandler {
 
         bufferSource.endBatch();
         poseStack.popPose();
+    }
+
+    public static void switchVignette() {
+        doVignette = !doVignette;
+        vignetteUpdateTick = clientTick;
     }
 
 }
