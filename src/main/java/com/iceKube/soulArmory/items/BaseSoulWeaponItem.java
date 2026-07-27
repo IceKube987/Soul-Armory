@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +37,27 @@ public abstract class BaseSoulWeaponItem extends Item {
 
     public BaseSoulWeaponItem(Properties pProperties) {
         super(pProperties);
+    }
+
+    // No durability, not enchantable.
+    @Override
+    public int getDamage(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return false;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
 
     public abstract int getGracePeriodTicks();
@@ -69,9 +91,9 @@ public abstract class BaseSoulWeaponItem extends Item {
         CompoundTag tag = stack.getTag();
         if (tag == null) return 0;
         long lastHeld = tag.getLong(LAST_HELD_GAME_TIME);
-        long ticksDecaying = (currentGameTime - lastHeld) - getGracePeriodTicks(); // 200 ticks = 10 second grace period
+        long ticksDecaying = (currentGameTime - lastHeld) - getGracePeriodTicks();
         if (ticksDecaying <= 0) return 0;
-        return (int) (ticksDecaying / getSoulDecaySpeed()); // 1 soul per 6 ticks
+        return (int) (ticksDecaying / getSoulDecaySpeed());
     }
 
     protected int calculateOverflowDecay(ItemStack stack, long currentGameTime) {
@@ -92,7 +114,7 @@ public abstract class BaseSoulWeaponItem extends Item {
 
         long currentGameTime = pLevel != null ? pLevel.getGameTime() : 0;
         float currentSoul = pStack.getTag().getFloat(SOUL_AMOUNT);
-        int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast it to int to avoid showing decimals in tooltip.
+        int effectiveSoul = ((int) Math.max(0, currentSoul - calculateSoulDecay(pStack, currentGameTime))); // cast to avoid showing decimals in tooltip
         pTooltipComponents.add(Component.literal(Component.translatable("tooltip.soul_armory.soul").getString() + effectiveSoul + " / " + getMaxSoul()));
 
         // Show forging progress

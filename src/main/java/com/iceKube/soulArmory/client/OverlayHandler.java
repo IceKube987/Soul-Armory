@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.client;
 
 import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
+import com.iceKube.soulArmory.items.SoulChestplateItem;
 import com.iceKube.soulArmory.items.UseSoulSkillSystem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -37,7 +39,9 @@ public class OverlayHandler {
 
     private static int vignetteUpdateTick;
 
-    public static void renderSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
+    private static final int VIGNETTE_FADE_DURATION = 3;
+
+    public static void renderWeaponSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
         ItemStack itemStack = mc.player.getMainHandItem();
@@ -54,7 +58,30 @@ public class OverlayHandler {
 
         drawSoulBarOutline(gui, x, y, 0, 10, tex_w, tex_h, w, h);
         drawSoulBar(gui, x, y, 0, 15, tex_w * soulPercentage, tex_h, w * soulPercentage, h, soulOverflowPercentage);
-        renderItem(gui, x - 8, y - 4, 0.5F);
+        renderItem(gui, x - 8, y - 4, 0.5F, itemStack);
+    }
+
+    public static void renderArmorSoulBar(GuiGraphics gui, int x, int y, int tex_w, int tex_h, int w, int h) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+        ItemStack itemStack = mc.player.getItemBySlot(EquipmentSlot.CHEST);
+        Item item = itemStack.getItem();
+        if (item == null) return;
+        if (!(item instanceof SoulChestplateItem soulChestplateItem)) return;
+        float soulPoint = SoulChestplateItem.getSoul(itemStack);
+
+        float soulPercentage = soulPoint / SoulChestplateItem.getMaxSoulForArmor(mc.player);
+
+        float soulOverflowPercentage = 0;
+        if (SoulChestplateItem.isRaging(itemStack)){
+            soulOverflowPercentage = 0;
+        }else {
+            soulOverflowPercentage = 1;
+        }
+
+        drawSoulBarOutline(gui, x, y, 0, 10, tex_w, tex_h, w, h);
+        drawSoulBar(gui, x, y, 0, 15, tex_w * soulPercentage, tex_h, w * soulPercentage, h, soulOverflowPercentage);
+        renderItem(gui, x - 8, y - 4, 0.5F, itemStack);
     }
 
     private static void drawSoulBarOutline(GuiGraphics gui, int x, int y, int u, int v, float tex_w, float tex_h, float w, float h) {
@@ -108,12 +135,9 @@ public class OverlayHandler {
         Tesselator.getInstance().end();
     }
 
-    private static void renderItem(GuiGraphics gui, int x, int y, float scale) {
+    private static void renderItem(GuiGraphics gui, int x, int y, float scale, ItemStack itemStack) {
         PoseStack ps = gui.pose();
         ps.pushPose();
-
-        Minecraft mc = Minecraft.getInstance();
-        ItemStack itemStack = mc.player.getMainHandItem();
 
         ps.translate(x, y, 0);
         ps.scale(scale, scale, scale);
@@ -124,21 +148,7 @@ public class OverlayHandler {
     }
 
     public static void renderVignette(GuiGraphics gui, int w, int h) {
-        int currentTick = clientTick;
-        float partialTick = Minecraft.getInstance().getPartialTick();
-        float elapsed = (currentTick - vignetteUpdateTick) + partialTick;
-
-        float alphaScale = 0;
-
-        if (doVignette) {
-            alphaScale = elapsed / 5;
-        } else {
-            alphaScale = 1 - elapsed / 5;
-        }
-
-        // Clamp into [0,1]
-        alphaScale = Math.max(0, alphaScale);
-        alphaScale = Math.min(1, alphaScale);
+        float alphaScale = getAlphaScaleForVignette();
 
         if (alphaScale == 0) return;
 
@@ -160,6 +170,25 @@ public class OverlayHandler {
         builder.vertex(matrix, 0, 0, 0).uv(-1, -1).endVertex();
 
         Tesselator.getInstance().end();
+    }
+
+    private static float getAlphaScaleForVignette() {
+        int currentTick = clientTick;
+        float partialTick = Minecraft.getInstance().getPartialTick();
+        float elapsed = (currentTick - vignetteUpdateTick) + partialTick;
+
+        float alphaScale = 0;
+
+        if (doVignette) {
+            alphaScale = elapsed / VIGNETTE_FADE_DURATION;
+        } else {
+            alphaScale = 1 - elapsed / VIGNETTE_FADE_DURATION;
+        }
+
+        // Clamp into [0,1]
+        alphaScale = Math.max(0, alphaScale);
+        alphaScale = Math.min(1, alphaScale);
+        return alphaScale;
     }
 
     public static void renderSkillIcon(GuiGraphics gui, int x, int y, int w, int h) {
@@ -292,8 +321,12 @@ public class OverlayHandler {
         poseStack.popPose();
     }
 
-    public static void switchVignette() {
-        doVignette = !doVignette;
+    // Turns the vignette on or off, restarting the fade from the current tick. Polled every client
+    // tick, so calls that don't change anything have to be ignored — otherwise the fade would be
+    // reset to its first frame every tick and never finish.
+    public static void setVignette(boolean on) {
+        if (doVignette == on) return;
+        doVignette = on;
         vignetteUpdateTick = clientTick;
     }
 

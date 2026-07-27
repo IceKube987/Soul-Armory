@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,27 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
 
     public BaseIncompleteSoulItem(Properties pProperties) {
         super(pProperties);
+    }
+
+    // No durability, not enchantable.
+    @Override
+    public int getDamage(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return false;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
 
     public abstract int getMaxActiveTimeTicks();

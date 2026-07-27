@@ -84,6 +84,21 @@ public class Config {
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_DAMAGE;
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_TIMEOUT;
 
+    private static final ForgeConfigSpec.IntValue SOUL_CHESTPLATE_MAX_SOUL;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_SOUL_ADDITION_PER_PIECE;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_GRACE_PERIOD;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_SOUL_DECAY_SPEED;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_RAGE_THRESHOLD;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_DAMAGE_REDUCTION;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_SOUL_PER_TICK;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_LIFESTEAL_RATIO;
+    private static final ForgeConfigSpec.BooleanValue SOUL_ARMOR_ABSORB_SONIC_BOOM;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_RAGE_SPEED_BONUS;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_RADIUS;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER;
+
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
                 .comment("Whether the speed boost provided by soul weapons or armor is capped at a maximum multiplier")
@@ -100,7 +115,7 @@ public class Config {
 
             SOUL_SWORD_MAX_SOUL = BUILDER
                     .comment("The maximum soul amount of Soul Sword")
-                    .defineInRange("soulSwordMaxSoul", 300, 0, Integer.MAX_VALUE);
+                    .defineInRange("soulSwordMaxSoul", 300, 1, Integer.MAX_VALUE);
 
             SOUL_SWORD_BASE_DAMAGE = BUILDER
                     .comment("The base damage of Soul Sword")
@@ -345,6 +360,70 @@ public class Config {
         }
 
         {
+            BUILDER.comment("Soul Armor Settings").push("soul-armor");
+
+            SOUL_CHESTPLATE_MAX_SOUL = BUILDER
+                    .comment("The maximum soul amount of armor set with only chestplate equipped")
+                    .defineInRange("soulChestplateMaxSoul",300,1,Integer.MAX_VALUE);
+
+            SOUL_ARMOR_SOUL_ADDITION_PER_PIECE = BUILDER
+                    .comment("How many points of soul will be added with each additional armor piece (that is, every soul armor other than chestplate) equipped")
+                    .defineInRange("soulArmorAdditionalSoul",200,1,Integer.MAX_VALUE);
+
+            SOUL_ARMOR_GRACE_PERIOD = BUILDER
+                    .comment("How long (in ticks) will the soul start to decay after gaining points of soul")
+                    .defineInRange("soulArmorGracePeriod", 1200, 1, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_SOUL_DECAY_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul decay (in ticks)")
+                    .defineInRange("soulArmorSoulDecaySpeed", 4, 1, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_THRESHOLD = BUILDER
+                    .comment("How many points of soul is required to start Soul Rage")
+                    .defineInRange("soulArmorRageThreshold",50,1,Integer.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_SOUL_PER_TICK = BUILDER
+                    .comment("How many points of soul is consumed per tick while in Soul Rage")
+                    .defineInRange("soulArmorRageSoulPerTick", 1.0, 0.0, Double.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_DAMAGE_REDUCTION = BUILDER
+                    .comment("The fraction of incoming damage negated while in Soul Rage (0.6 = 60% less damage taken)")
+                    .defineInRange("soulArmorRageDamageReduction", 0.6, 0.0, 1.0);
+
+            SOUL_ARMOR_RAGE_LIFESTEAL_RATIO = BUILDER
+                    .comment("How much damage must be dealt to heal 1 point of health while in Soul Rage")
+                    .defineInRange("soulArmorRageLifestealRatio", 10.0, 0.01, Double.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_SPEED_BONUS = BUILDER
+                    .comment("The percentage of movement speed granted by the soul leggings while in Soul Rage")
+                    .comment("This boost is still subject to speedBoostCeil unless speedBoostHasCeil is false")
+                    .defineInRange("soulArmorRageSpeedBonus", 100, 0, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER = BUILDER
+                    .comment("How long (in ticks) the night vision granted by the soul helmet persists after Soul Rage ends")
+                    .defineInRange("soulArmorRageNightVisionLinger", 1200, 1, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_FALL_AOE_RADIUS = BUILDER
+                    .comment("The radius of the shockwave dealt by the soul boots when landing during Soul Rage")
+                    .defineInRange("soulArmorRageFallAoeRadius", 5.0, 0.0, Double.MAX_VALUE);
+
+            SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER = BUILDER
+                    .comment("The damage of the landing shockwave, as a multiple of the fall damage that was negated")
+                    .defineInRange("soulArmorRageFallAoeDamageMultiplier", 1.0, 0.0, Double.MAX_VALUE);
+
+            SOUL_ARMOR_ABSORB_SONIC_BOOM = BUILDER
+                    .comment("Whether wearing a soul chestplate negates the damage of the Warden's sonic boom")
+                    .comment("The soul reward is granted either way")
+                    .define("soulArmorAbsorbSonicBoom", true);
+
+            SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD = BUILDER
+                    .comment("How many points of soul is granted when the soul chestplate is hit by a sonic boom")
+                    .defineInRange("soulArmorSonicBoomSoulReward", 100, 0, Integer.MAX_VALUE);
+
+            BUILDER.pop();
+        }
+
+        {
             BUILDER.comment("Soul Forging Settings").push("soul-forging");
 
             {
@@ -530,6 +609,21 @@ public class Config {
     public static int unlockBladeWaveKillTimeout;
     public static int unlockSonicOverloadDamageTarget;
     public static int unlockSonicOverloadTimeout;
+    public static int soulChestplateMaxSoul;
+    public static int soulArmorAdditionalSoul;
+    public static int soulArmorGracePeriod;
+    public static int soulArmorSoulDecaySpeed;
+    public static int soulArmorRageThreshold;
+    public static double soulArmorRageDamageReduction;
+    public static double soulArmorRageSoulPerTick;
+    public static double soulArmorRageLifestealRatio;
+    public static boolean soulArmorAbsorbSonicBoom;
+    public static int soulArmorSonicBoomSoulReward;
+    public static int soulArmorRageNightVisionLinger;
+    public static int soulArmorRageSpeedBonus;
+    public static double soulArmorRageFallAoeRadius;
+    public static double soulArmorRageFallAoeDamageMultiplier;
+
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -600,5 +694,19 @@ public class Config {
         unlockBladeWaveKillTimeout = UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT.get();
         unlockSonicOverloadDamageTarget = UNLOCK_SONIC_OVERLOAD_DAMAGE.get();
         unlockSonicOverloadTimeout = UNLOCK_SONIC_OVERLOAD_TIMEOUT.get();
+        soulChestplateMaxSoul = SOUL_CHESTPLATE_MAX_SOUL.get();
+        soulArmorAdditionalSoul = SOUL_ARMOR_SOUL_ADDITION_PER_PIECE.get();
+        soulArmorGracePeriod = SOUL_ARMOR_GRACE_PERIOD.get();
+        soulArmorSoulDecaySpeed = SOUL_ARMOR_SOUL_DECAY_SPEED.get();
+        soulArmorRageThreshold = SOUL_ARMOR_RAGE_THRESHOLD.get();
+        soulArmorRageDamageReduction = SOUL_ARMOR_RAGE_DAMAGE_REDUCTION.get();
+        soulArmorRageSoulPerTick = SOUL_ARMOR_RAGE_SOUL_PER_TICK.get();
+        soulArmorRageLifestealRatio = SOUL_ARMOR_RAGE_LIFESTEAL_RATIO.get();
+        soulArmorAbsorbSonicBoom = SOUL_ARMOR_ABSORB_SONIC_BOOM.get();
+        soulArmorSonicBoomSoulReward = SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD.get();
+        soulArmorRageNightVisionLinger = SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER.get();
+        soulArmorRageSpeedBonus = SOUL_ARMOR_RAGE_SPEED_BONUS.get();
+        soulArmorRageFallAoeRadius = SOUL_ARMOR_RAGE_FALL_AOE_RADIUS.get();
+        soulArmorRageFallAoeDamageMultiplier = SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER.get();
     }
 }

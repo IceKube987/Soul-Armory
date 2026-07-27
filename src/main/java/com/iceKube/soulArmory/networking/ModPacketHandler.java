@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.networking;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.networking.packets.C2S.ActivateSoulRageC2SPacket;
 import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
 import com.iceKube.soulArmory.networking.packets.S2C.SwitchSkillVFXS2CPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +38,14 @@ public class ModPacketHandler {
                 .decoder(SwitchSkillVFXS2CPacket::new)
                 .encoder(SwitchSkillVFXS2CPacket::toBytes)
                 .consumerMainThread(SwitchSkillVFXS2CPacket::handle)
+                .add();
+
+        // Append new packets at the end — id() is a running counter, so inserting above would
+        // renumber every packet registered after it.
+        INSTANCE.messageBuilder(ActivateSoulRageC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ActivateSoulRageC2SPacket::new)
+                .encoder(ActivateSoulRageC2SPacket::toBytes)
+                .consumerMainThread(ActivateSoulRageC2SPacket::handle)
                 .add();
     }
 

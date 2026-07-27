@@ -33,8 +33,8 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-        event.register(KeyBinding.TEST_KEY);
         event.register(KeyBinding.SWITCH_SKILL);
+        event.register(KeyBinding.ACTIVATE_RAGE);
     }
 
     @SubscribeEvent

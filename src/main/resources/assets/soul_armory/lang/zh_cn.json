@@ -3,6 +3,10 @@
   "item.soul_armory.soul_bow": "灵魂弓",
   "item.soul_armory.incomplete_soul_sword": "灵魂剑原胚",
   "item.soul_armory.incomplete_soul_bow": "灵魂弓原胚",
+  "item.soul_armory.soul_helmet": "灵魂头盔",
+  "item.soul_armory.soul_chestplate": "灵魂胸甲",
+  "item.soul_armory.soul_leggings": "灵魂护腿",
+  "item.soul_armory.soul_boots": "灵魂靴子",
 
   "tooltip.soul_armory.soul": "灵魂: ",
 
@@ -15,6 +19,9 @@
   "itemGroup.soul_armory": "灵魂军械库",
 
   "key.category.soul_armory": "灵魂军械库",
+  "key.soul_armory.test": "调试开关",
+  "key.soul_armory.switch_skill": "切换技能",
+  "key.soul_armory.activate_rage": "灵魂狂怒",
 
   "subtitles.soul_armory.soul_sword_heal": "灵魂剑：治愈",
 

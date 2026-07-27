@@ -71,6 +71,10 @@ public class SoulArmoryMod {
                 output.accept(ItemRegistry.SOUL_BOW.get());
                 output.accept(ItemRegistry.INCOMPLETE_SOUL_SWORD.get());
                 output.accept(ItemRegistry.INCOMPLETE_SOUL_BOW.get());
+                output.accept(ItemRegistry.SOUL_HELMET.get());
+                output.accept(ItemRegistry.SOUL_CHESTPLATE.get());
+                output.accept(ItemRegistry.SOUL_LEGGINGS.get());
+                output.accept(ItemRegistry.SOUL_BOOTS.get());
             }).build());
 
 }

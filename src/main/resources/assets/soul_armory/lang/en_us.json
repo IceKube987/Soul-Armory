@@ -3,6 +3,10 @@
   "item.soul_armory.soul_bow": "Soul Bow",
   "item.soul_armory.incomplete_soul_sword": "Incomplete Soul Sword",
   "item.soul_armory.incomplete_soul_bow": "Incomplete Soul Bow",
+  "item.soul_armory.soul_helmet": "Soul Helmet",
+  "item.soul_armory.soul_chestplate": "Soul Chestplate",
+  "item.soul_armory.soul_leggings": "Soul Leggings",
+  "item.soul_armory.soul_boots": "Soul Boots",
 
   "tooltip.soul_armory.soul": "Soul :",
 
@@ -15,6 +19,9 @@
   "itemGroup.soul_armory": "Soul Armory",
 
   "key.category.soul_armory": "Soul Armory",
+  "key.soul_armory.test": "Debug Toggle",
+  "key.soul_armory.switch_skill": "Switch Skill",
+  "key.soul_armory.activate_rage": "Soul Rage",
 
   "subtitles.soul_armory.soul_sword_heal": "Soul Sword heals",
 
