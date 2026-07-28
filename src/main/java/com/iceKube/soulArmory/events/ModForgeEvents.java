@@ -7,8 +7,10 @@ import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -52,10 +54,7 @@ public class ModForgeEvents {
         // Handle "Deal Damage" forging criterion.
         ForgingDealDamage(event, player, mainHandItem);
 
-        // Soul armor accumulates from damage dealt in any way, skills included, so it has to be
-        // credited before the skill damage types are filtered out below. The landing shockwave is
-        // the one exception: it is attributed to the player, so paying it back into the pool would
-        // let a Soul Rage feed itself.
+        // Soul armor accumulates from damage dealt in any way, skills included.
         if (!event.getSource().is(ModDamageTypes.FALL_SHOCKWAVE)) {
             AddArmorSoulPoints(event, player);
             ApplyRageLifesteal(event, player);
@@ -80,16 +79,9 @@ public class ModForgeEvents {
      * attacking (which is what {@link #onLivingHurt}, despite the name, handles on
      * {@link LivingDamageEvent}).
      * <p>
-     * Hooked on {@link LivingHurtEvent} so the Soul Rage reduction lands <em>before</em> armor:
-     * {@code LivingEntity.actuallyHurt} fires this first, then applies armor, resistance and
-     * protection, then absorption. So the 60% comes off the raw hit and the armor's own mitigation
-     * compounds on top of it, and it still covers sources that bypass armor entirely — which is
-     * what "global damage reduction" asks for.
-     * <p>
-     * {@link EventPriority#LOWEST} so the multiplicative reduction is the last thing applied within
-     * this phase.
+     * Hooked on {@link LivingHurtEvent} so the Soul Rage reduction lands <em>before</em> armor.
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onSoulArmorHurt(LivingHurtEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
@@ -112,6 +104,38 @@ public class ModForgeEvents {
         if (SoulChestplateItem.isRaging(chestplate)) {
             event.setAmount((float) (event.getAmount() * (1 - Config.soulArmorRageDamageReduction)));
         }
+    }
+
+    /**
+     * The full set's idle failsafe: while resting on the sustain floor, no single hit may take more
+     * than a set share of the wearer's maximum health, and activate rage automatically. Default 75%
+     * <p>
+     * Ran after armor, resistance, protection, etc. have all been applied.
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onSoulArmorIdleFailsafe(LivingDamageEvent event) {
+        if (Config.soulArmorFullSetIdleFailsafeMaxHealthFraction >= 0.999) return; // >= 0.999 instead of = 1.0 to prevent possible floating point errors.
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        ItemStack chestplate = SoulChestplateItem.getWornChestplate(player);
+        if (chestplate.isEmpty()) return;
+        if (!SoulChestplateItem.isFullSetBonusActive(player)) return;
+
+        if (SoulChestplateItem.isRaging(chestplate)) return;
+        if ((int) SoulChestplateItem.getSoul(chestplate) != Config.soulArmorFullSetSoulFloor) return;
+        if (isExemptFromIdleFailsafe(event.getSource())) return;
+
+        float cap = (float) (player.getMaxHealth() * Config.soulArmorFullSetIdleFailsafeMaxHealthFraction);
+        if (event.getAmount() <= cap) return; // Never inflate a smaller hit
+
+        event.setAmount(cap);
+
+        SoulChestplateItem.tryActivateRage(player);
+    }
+
+    // Damage that bypasses invulnerability is the void and /kill.
+    private static boolean isExemptFromIdleFailsafe(DamageSource source) {
+        return Config.soulArmorFullSetIdleFailsafeIgnoresVoid && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     /**

@@ -21,7 +21,7 @@ float linearstep(float mini, float maxi, float x) {
 void main() {
     vec4 color = vec4(87.0 / 255.0, 202.0 / 255.0, 247.0 / 255.0, 1.0);
 
-    float edge = 0.85 + 0.03*sin(GameTime*4000);
+    float edge = 0.85 + 0.012*sin(GameTime*7000);
     // Superellipse Norm
     float n = 25.0;
     float tex = pow(pow(abs(texCoord0.x), n) + pow(abs(texCoord0.y), n), 1.0 / n);

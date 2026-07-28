@@ -99,6 +99,12 @@ public class Config {
     private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_RADIUS;
     private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER;
 
+    private static final ForgeConfigSpec.BooleanValue SOUL_ARMOR_FULL_SET_BONUS_ENABLED;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_FULL_SET_SOUL_FLOOR;
+    private static final ForgeConfigSpec.IntValue SOUL_ARMOR_FULL_SET_REGEN_SPEED;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_MAX_HEALTH_FRACTION;
+    private static final ForgeConfigSpec.BooleanValue SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_IGNORES_VOID;
+
     static {
         SOUL_SPEED_BOOST_HAS_CEIL = BUILDER
                 .comment("Whether the speed boost provided by soul weapons or armor is capped at a maximum multiplier")
@@ -420,6 +426,30 @@ public class Config {
                     .comment("How many points of soul is granted when the soul chestplate is hit by a sonic boom")
                     .defineInRange("soulArmorSonicBoomSoulReward", 100, 0, Integer.MAX_VALUE);
 
+            SOUL_ARMOR_FULL_SET_BONUS_ENABLED = BUILDER
+                    .comment("Whether wearing all four soul armor pieces grants the full set bonus")
+                    .define("soulArmorFullSetBonusEnabled", true);
+
+            SOUL_ARMOR_FULL_SET_SOUL_FLOOR = BUILDER
+                    .comment("The soul level the full set sustains: natural decay stops here, and the pool regenerates back up to it")
+                    .comment("Soul Rage still drains straight through this floor to zero")
+                    .comment("Also the soul amount, in whole points, at which the idle failsafe is available")
+                    .defineInRange("soulArmorFullSetSoulFloor", 100, 0, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_FULL_SET_REGEN_SPEED = BUILDER
+                    .comment("How fast should 1 point of soul regenerate below soulArmorFullSetSoulFloor (in ticks)")
+                    .defineInRange("soulArmorFullSetRegenSpeed", 20, 1, Integer.MAX_VALUE);
+
+            SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_MAX_HEALTH_FRACTION = BUILDER
+                    .comment("The largest share of the wearer's maximum health a single hit may deal while resting at soulArmorFullSetSoulFloor")
+                    .comment("Measured after armor, resistance and absorption; anything larger is reduced to exactly this share")
+                    .comment("1.0 disables the cap, 0.0 makes such hits deal nothing")
+                    .defineInRange("soulArmorFullSetIdleFailsafeMaxHealthFraction", 0.75, 0.0, 1.0);
+
+            SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_IGNORES_VOID = BUILDER
+                    .comment("Whether damage that bypasses invulnerability, such as the void and /kill, is exempt from the idle failsafe")
+                    .define("soulArmorFullSetIdleFailsafeIgnoresVoid", true);
+
             BUILDER.pop();
         }
 
@@ -623,6 +653,11 @@ public class Config {
     public static int soulArmorRageSpeedBonus;
     public static double soulArmorRageFallAoeRadius;
     public static double soulArmorRageFallAoeDamageMultiplier;
+    public static boolean soulArmorFullSetBonusEnabled;
+    public static int soulArmorFullSetSoulFloor;
+    public static int soulArmorFullSetRegenSpeed;
+    public static double soulArmorFullSetIdleFailsafeMaxHealthFraction;
+    public static boolean soulArmorFullSetIdleFailsafeIgnoresVoid;
 
 
     @SubscribeEvent
@@ -708,5 +743,10 @@ public class Config {
         soulArmorRageSpeedBonus = SOUL_ARMOR_RAGE_SPEED_BONUS.get();
         soulArmorRageFallAoeRadius = SOUL_ARMOR_RAGE_FALL_AOE_RADIUS.get();
         soulArmorRageFallAoeDamageMultiplier = SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER.get();
+        soulArmorFullSetBonusEnabled = SOUL_ARMOR_FULL_SET_BONUS_ENABLED.get();
+        soulArmorFullSetSoulFloor = SOUL_ARMOR_FULL_SET_SOUL_FLOOR.get();
+        soulArmorFullSetRegenSpeed = SOUL_ARMOR_FULL_SET_REGEN_SPEED.get();
+        soulArmorFullSetIdleFailsafeMaxHealthFraction = SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_MAX_HEALTH_FRACTION.get();
+        soulArmorFullSetIdleFailsafeIgnoresVoid = SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_IGNORES_VOID.get();
     }
 }

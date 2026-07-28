@@ -62,9 +62,22 @@ public class SoulChestplateItem extends ArmorItem {
         return Config.soulChestplateMaxSoul + Config.soulArmorAdditionalSoul * getAdditionalPieceAmount(player);
     }
 
+    /**
+     * @return true if the player is wearing all four pieces. The chestplate is checked separately
+     * because {@link #getAdditionalPieceAmount} deliberately excludes it.
+     */
+    public static boolean isFullSet(Player player) {
+        return !getWornChestplate(player).isEmpty() && getAdditionalPieceAmount(player) == 3;
+    }
+
+    /** {@link #isFullSet} plus the config switch: the gate every set bonus branch goes through. */
+    public static boolean isFullSetBonusActive(Player player) {
+        return Config.soulArmorFullSetBonusEnabled && isFullSet(player);
+    }
+
     // -------------------------------------------------------------------------
     // Soul pool access. The soul pool belongs to the chestplate the player is wearing, so every
-    // one of these takes the player and returns a no-op / zero when no chestplate is equipped.
+    // one of these takes the player and returns a null or zero when no chestplate is equipped.
     // -------------------------------------------------------------------------
 
     /**
@@ -108,12 +121,6 @@ public class SoulChestplateItem extends ArmorItem {
 
     /**
      * Starts Soul Rage if the player is wearing a charged enough chestplate.
-     * <p>
-     * Rage cannot be called off: running the soul pool dry is the only way out. In particular
-     * taking the chestplate off does not stop it — the drain keeps running on the stack wherever
-     * it ends up, so stripping it mid-rage is not an escape hatch. Pressing the key again while
-     * a rage is already running therefore does nothing.
-     *
      * @return true if this call started Soul Rage
      */
     public static boolean tryActivateRage(Player player) {
@@ -177,22 +184,24 @@ public class SoulChestplateItem extends ArmorItem {
         CompoundTag NBT = stack.getTag();
         boolean equipped = player.getItemBySlot(EquipmentSlot.CHEST) == stack;
 
+        boolean fullSet = equipped && isFullSetBonusActive(player);
+
         float soul = NBT.getFloat(SOUL_AMOUNT);
 
-        // Losing a piece lowers the cap, so trim any soul that no longer fits. Done every tick
-        // rather than on an unequip hook because there is no single place a piece can leave from:
-        // dropping, dying, hoppers and inventory drags all bypass one. Only meaningful while worn:
-        // off the body there is no wearer to read the other pieces from, and getMaxSoulForArmor
-        // would report a cap of zero.
+        // Losing a piece lowers the cap, so trim any soul that no longer fits.
         if (equipped) soul = Math.min(soul, getMaxSoulForArmor(player));
 
+        // The level the full set sustains the pool at. Decay stops here and regen climbs back to here.
+        int sustain = fullSet ? Math.min(Config.soulArmorFullSetSoulFloor, getMaxSoulForArmor(player)) : 0;
+
         if (NBT.getBoolean(RAGE_ACTIVE)) {
-            // Burns soul wherever the chestplate is — worn, in a backpack, or in a chest. Only the
-            // effects are tied to actually wearing it.
+            // Burns soul wherever the chestplate is — worn, in a backpack, or in a chest. Note the sustain floor is deliberately not
+            // passed here: rage drains straight through it to zero, which is the only way it ends.
             soul = applyRageDrain(NBT, soul, level.getGameTime());
             if (equipped) applyRageEffects(level, player);
         } else {
-            soul = applySoulDecay(NBT, soul, level.getGameTime());
+            soul = applySoulDecay(NBT, soul, level.getGameTime(), sustain);
+            if (fullSet) soul = applySoulRegen(NBT, soul, level.getGameTime(), sustain);
         }
 
         // Every NBT write resyncs the whole slot to the client, so only write on an actual change.
@@ -204,11 +213,6 @@ public class SoulChestplateItem extends ArmorItem {
     /**
      * Burns the soul that Soul Rage owes for the time since this last ran, and ends the rage once
      * the pool is empty — which is the only thing that ends it.
-     * <p>
-     * Billed off a timestamp rather than a fixed subtraction per tick, the same way the soul
-     * weapons handle their decay. That keeps the drain honest across stretches where this never
-     * runs at all, such as the chestplate sitting in a chest, instead of letting a rage be paused
-     * by putting the armor away.
      */
     private float applyRageDrain(CompoundTag NBT, float soul, long currentGameTime) {
         // An older stack that went into rage before this timestamp existed: start billing now
@@ -242,11 +246,18 @@ public class SoulChestplateItem extends ArmorItem {
     /**
      * Applies the soul owed to idle decay and bills the time it consumed, so decay is charged
      * exactly once whether this runs every tick or catches up after a spell in a chest.
+     *
+     * @param floor the level decay stops at — the full set's sustain level, or zero without it
      */
-    private float applySoulDecay(CompoundTag NBT, float soul, long currentGameTime) {
-        // Nothing left to decay. Leaving the timestamp stale is fine — the next soul gained
-        // refreshes it — and it saves rewriting (and so resyncing) it forever on an empty pool.
-        if (soul <= 0) return soul;
+    private float applySoulDecay(CompoundTag NBT, float soul, long currentGameTime, int floor) {
+        // Nothing left to decay. Leaving the timestamp stale is fine when the floor is zero — the
+        // next soul gained refreshes it — and it saves rewriting (and so resyncing) it forever on
+        // an empty pool. Resting on a set bonus floor is a steady state rather than a dead one,
+        // though, so that case needs the credit actively thrown away instead.
+        if (soul <= floor) {
+            if (floor > 0) discardDeadDecayCredit(NBT, currentGameTime);
+            return soul;
+        }
 
         long lastUpdate = NBT.getLong(LAST_UPDATE_GAME_TIME);
         long ticksDecaying = (currentGameTime - lastUpdate) - Config.soulArmorGracePeriod;
@@ -255,8 +266,39 @@ public class SoulChestplateItem extends ArmorItem {
         int decay = (int) (ticksDecaying / Config.soulArmorSoulDecaySpeed);
         if (decay <= 0) return soul;
 
-        NBT.putLong(LAST_UPDATE_GAME_TIME, lastUpdate + (long) decay * Config.soulArmorSoulDecaySpeed);
-        return Math.max(0, soul - decay);
+        float newSoul = Math.max(floor, soul - decay);
+
+        // Bill only the decay that actually landed, not the whole amount the elapsed time paid for:
+        // the clamp may have stopped it early, and charging for decay that never happened would
+        // push the timestamp into the future. Rounded up because the pool is a float — addSoul pays
+        // in raw damage — and a partial point still used up its tick block.
+        long ticksSpent = (long) Math.ceil(soul - newSoul) * Config.soulArmorSoulDecaySpeed;
+        NBT.putLong(LAST_UPDATE_GAME_TIME, lastUpdate + ticksSpent);
+        return newSoul;
+    }
+
+    /**
+     * While the pool rests on the full set's floor, the gap between the decay timestamp and now is
+     * credit that can never be spent. Left to grow it would all be
+     * redeemed at once the moment a set piece comes off and the floor drops away, wiping the pool.
+     */
+    private void discardDeadDecayCredit(CompoundTag NBT, long currentGameTime) {
+        long lastUpdate = NBT.getLong(LAST_UPDATE_GAME_TIME);
+        if (currentGameTime - lastUpdate <= (long) Config.soulArmorGracePeriod + Config.soulArmorSoulDecaySpeed) return;
+        NBT.putLong(LAST_UPDATE_GAME_TIME, currentGameTime);
+    }
+
+    /**
+     * The full set's regeneration back up to its sustain level. Ignores decay grace period.
+     * this is <em>not</em> billed off a stored timestamp.
+     */
+    private float applySoulRegen(CompoundTag NBT, float soul, long currentGameTime, int target) {
+        if (soul >= target) return soul;
+        if (currentGameTime % Config.soulArmorFullSetRegenSpeed != 0) return soul;
+
+        // Regeneration is soul gained, which is exactly what this timestamp records
+        NBT.putLong(LAST_UPDATE_GAME_TIME, currentGameTime);
+        return Math.min(target, soul + 1);
     }
 
     // The rage effects that have to be pushed onto the player every tick. The ones that only read
@@ -281,12 +323,8 @@ public class SoulChestplateItem extends ArmorItem {
     }
 
     /**
-     * The Soul Leggings movement speed bonus, as a fraction, for the shared soul speed modifier in
-     * {@code ModForgeEvents}. Same units as {@link CanApplySpeedBoost#getSpeedAdditionPercentage}.
-     * <p>
-     * Note this shares {@code speedBoostCeil} with the soul weapons: at the default ceiling of 2x
-     * the rage bonus alone saturates it, so a held soul weapon adds nothing on top until the
-     * ceiling is turned off in the config.
+     * The Soul Leggings movement speed bonus.
+     * This shares {@code speedBoostCeil} with the soul weapons.
      */
     public static double getArmorSpeedAdditionPercentage(Player player) {
         if (!isRaging(player)) return 0;
