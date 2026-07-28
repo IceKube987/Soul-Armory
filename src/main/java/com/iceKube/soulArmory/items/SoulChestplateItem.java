@@ -116,6 +116,8 @@ public class SoulChestplateItem extends ArmorItem {
     }
 
     public static boolean isRaging(Player player) {
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chest.getItem() instanceof IncompleteSoulChestplateItem prototype) return prototype.isActive(chest);
         return isRaging(getWornChestplate(player));
     }
 
@@ -308,10 +310,6 @@ public class SoulChestplateItem extends ArmorItem {
         // Soul Helmet: night vision, which outlives the rage that granted it.
         if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.HEAD)
                 && level.getGameTime() % NIGHT_VISION_REFRESH_INTERVAL == 0) {
-            // Topped back up to the full linger duration on every refresh, so it always has the
-            // configured time left over when rage ends. Deliberately not removed at that point:
-            // letting it run down is what produces the lingering effect, and it also means we
-            // never cut short a night vision potion the player drank themselves.
             player.addEffect(new MobEffectInstance(
                     MobEffects.NIGHT_VISION,
                     Config.soulArmorRageNightVisionLinger + NIGHT_VISION_REFRESH_INTERVAL,

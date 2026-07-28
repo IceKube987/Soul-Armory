@@ -48,10 +48,16 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
     public abstract int getMaxActiveTimeTicks();
 
     public void activate(ItemStack stack) {
-        stack.getOrCreateTag().putInt(ACTIVE_TIME_NBT, getMaxActiveTimeTicks());
+        setActiveTime(stack, getMaxActiveTimeTicks());
     }
 
-    public boolean isActive(ItemStack stack) {
+    // Static so the incomplete chestplate, which has to extend ArmorItem instead of this class, can
+    // share the activation state without sharing the hierarchy.
+    public static void setActiveTime(ItemStack stack, int ticks) {
+        stack.getOrCreateTag().putInt(ACTIVE_TIME_NBT, ticks);
+    }
+
+    public static boolean isActive(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return false;
         return tag.getInt(ACTIVE_TIME_NBT) > 0;
@@ -93,25 +99,29 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        ForgingTask task = getActiveForgingTask(pStack);
+        appendForgingTooltip(pStack, getActiveForgingTask(pStack), pTooltipComponents);
+    }
+
+    /** One line per criterion, blue while in progress and aqua once complete. */
+    public static void appendForgingTooltip(ItemStack stack, @Nullable ForgingTask task, List<Component> tooltipComponents) {
         if (task == null) return;
-        if (pStack.getTag() == null) {
+        if (stack.getTag() == null) {
             for (ForgingCriterion criterion : task.criteria) {
                 String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
-                pTooltipComponents.add(Component.literal("§9§o" + label + ": " + "0" + " / " + criterion.targetValue));
+                tooltipComponents.add(Component.literal("§9§o" + label + ": " + "0" + " / " + criterion.targetValue));
             }
             return;
         }
 
-        CompoundTag tag = pStack.getTag();
+        CompoundTag tag = stack.getTag();
         CompoundTag taskTag = task.getOrCreateTaskTag(tag);
 
         for (ForgingCriterion criterion : task.criteria) {
             String label = Component.translatable("tooltip.soul_armory.forging." + criterion.id).getString();
             if (criterion.isComplete(taskTag)) {
-                pTooltipComponents.add(Component.literal("§b§o" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
+                tooltipComponents.add(Component.literal("§b§o" + label + ": " + criterion.targetValue + " / " + criterion.targetValue));
             } else {
-                pTooltipComponents.add(Component.literal("§9§o" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
+                tooltipComponents.add(Component.literal("§9§o" + label + ": " + criterion.getProgress(taskTag) + " / " + criterion.targetValue));
             }
         }
     }

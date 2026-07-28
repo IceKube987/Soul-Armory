@@ -33,6 +33,9 @@ public class AncientCityLootModifier extends LootModifier {
         if (context.getRandom().nextFloat() < Config.bowSpawnChance) {
             generatedLoot.add(new ItemStack(ItemRegistry.INCOMPLETE_SOUL_BOW.get()));
         }
+        if (context.getRandom().nextFloat() < Config.chestplateSpawnChance) {
+            generatedLoot.add(new ItemStack(ItemRegistry.INCOMPLETE_SOUL_CHESTPLATE.get()));
+        }
         return generatedLoot;
     }
 

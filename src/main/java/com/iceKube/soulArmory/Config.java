@@ -70,9 +70,11 @@ public class Config {
     private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_SONIC_HITS;
     private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_TIMEOUT_TICKS;
     private static final ForgeConfigSpec.IntValue FORGING_CHESTPLATE_ACTIVE_TICKS;
+    private static final ForgeConfigSpec.DoubleValue FORGING_CHESTPLATE_HEAL_FRACTION;
 
     private static final ForgeConfigSpec.DoubleValue INCOMPLETE_SWORD_SPAWN_CHANCE;
     private static final ForgeConfigSpec.DoubleValue INCOMPLETE_BOW_SPAWN_CHANCE;
+    private static final ForgeConfigSpec.DoubleValue INCOMPLETE_CHESTPLATE_SPAWN_CHANCE;
 
     private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_DAMAGE;
     private static final ForgeConfigSpec.IntValue UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT;
@@ -507,6 +509,10 @@ public class Config {
                         .comment("Duration in ticks the incomplete chestplate stays active after a sonic boom hit")
                         .defineInRange("forgingChestplateActiveTicks", 100, 1, Integer.MAX_VALUE);
 
+                FORGING_CHESTPLATE_HEAL_FRACTION = BUILDER
+                        .comment("Fraction of the wearer's maximum health the incomplete chestplate heals when it absorbs a sonic boom (1.0 = a full heal, 0.0 = none)")
+                        .defineInRange("forgingChestplateHealFraction", 1.0, 0.0, 1.0);
+
                 BUILDER.pop();
             }
 
@@ -567,6 +573,12 @@ public class Config {
             INCOMPLETE_BOW_SPAWN_CHANCE = BUILDER
                     .comment("The chance of the incomplete bow spawning inside a chest in ancient city")
                     .defineInRange("bowSpawnChance", 0.1, 0.0, 1.0);
+
+            INCOMPLETE_CHESTPLATE_SPAWN_CHANCE = BUILDER
+                    .comment("The chance of the incomplete chestplate spawning inside a chest in ancient city")
+                    .defineInRange("chestplateSpawnChance", 0.1, 0.0, 1.0);
+
+            BUILDER.pop();
         }
     }
 
@@ -629,8 +641,10 @@ public class Config {
     public static int forgingChestplateSonicHits;
     public static int forgingChestplateTimeoutTicks;
     public static int forgingChestplateActiveTicks;
+    public static double forgingChestplateHealFraction;
     public static double swordSpawnChance;
     public static double bowSpawnChance;
+    public static double chestplateSpawnChance;
     public static int unlockBladeWaveDamageTarget;
     public static int unlockBladeWaveDamageTimeout;
     public static int unlockBladeWaveHealTarget;
@@ -719,8 +733,10 @@ public class Config {
         forgingChestplateSonicHits = FORGING_CHESTPLATE_SONIC_HITS.get();
         forgingChestplateTimeoutTicks = FORGING_CHESTPLATE_TIMEOUT_TICKS.get();
         forgingChestplateActiveTicks = FORGING_CHESTPLATE_ACTIVE_TICKS.get();
+        forgingChestplateHealFraction = FORGING_CHESTPLATE_HEAL_FRACTION.get();
         swordSpawnChance = INCOMPLETE_SWORD_SPAWN_CHANCE.get();
         bowSpawnChance = INCOMPLETE_BOW_SPAWN_CHANCE.get();
+        chestplateSpawnChance = INCOMPLETE_CHESTPLATE_SPAWN_CHANCE.get();
         unlockBladeWaveDamageTarget = UNLOCK_BLADE_WAVE_DAMAGE.get();
         unlockBladeWaveDamageTimeout = UNLOCK_BLADE_WAVE_DAMAGE_TIMEOUT.get();
         unlockBladeWaveHealTarget = UNLOCK_BLADE_WAVE_HEAL.get();

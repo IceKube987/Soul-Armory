@@ -3,6 +3,7 @@ package com.iceKube.soulArmory.registries;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.AdditionalSoulArmorPiece;
 import com.iceKube.soulArmory.items.IncompleteSoulBowItem;
+import com.iceKube.soulArmory.items.IncompleteSoulChestplateItem;
 import com.iceKube.soulArmory.items.IncompleteSoulSwordItem;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.items.SoulChestplateItem;
@@ -27,6 +28,9 @@ public class ItemRegistry {
 
     public static final RegistryObject<Item> INCOMPLETE_SOUL_BOW = ITEMS.register("incomplete_soul_bow",
             () -> new IncompleteSoulBowItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> INCOMPLETE_SOUL_CHESTPLATE = ITEMS.register("incomplete_soul_chestplate",
+            () -> new IncompleteSoulChestplateItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SOUL_CHESTPLATE = ITEMS.register("soul_chestplate",
             () -> new SoulChestplateItem(new Item.Properties().stacksTo(1)));

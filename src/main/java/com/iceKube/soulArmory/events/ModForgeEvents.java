@@ -5,6 +5,7 @@ import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.*;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
+import com.iceKube.soulArmory.soulForging.TransformHelper;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.DamageTypeTags;
@@ -85,6 +86,14 @@ public class ModForgeEvents {
     public static void onSoulArmorHurt(LivingHurtEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
+        // The prototype answers to the same hits but owns none of the machinery below, so it gets
+        // its own branch before the worn-chestplate lookup rejects it.
+        ItemStack wornChest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (wornChest.getItem() instanceof IncompleteSoulChestplateItem prototype) {
+            handleIncompleteChestplateHurt(event, player, wornChest, prototype);
+            return;
+        }
+
         ItemStack chestplate = SoulChestplateItem.getWornChestplate(player);
         if (chestplate.isEmpty()) return;
 
@@ -95,6 +104,9 @@ public class ModForgeEvents {
         // which sit further down actuallyHurt than this event does.
         if (event.getSource().is(DamageTypes.SONIC_BOOM)) {
             SoulChestplateItem.addSoul(player, Config.soulArmorSonicBoomSoulReward);
+            // A finished chestplate keeps converting the wearer's iron armor, but only a piece per
+            // boom rather than the whole set the forging itself claimed.
+            TransformHelper.convertOneWornIronPiece(player);
             if (Config.soulArmorAbsorbSonicBoom) {
                 event.setAmount(0);
                 return;
@@ -102,6 +114,52 @@ public class ModForgeEvents {
         }
 
         if (SoulChestplateItem.isRaging(chestplate)) {
+            event.setAmount((float) (event.getAmount() * (1 - Config.soulArmorRageDamageReduction)));
+        }
+    }
+
+    /**
+     * The Soul Chestplate prototype's half of {@link #onSoulArmorHurt}: it feeds the forging task,
+     * and a sonic boom is absorbed outright for a full heal and a short burst of Soul Rage.
+     */
+    private static void handleIncompleteChestplateHurt(LivingHurtEvent event, Player player,
+                                                       ItemStack chest, IncompleteSoulChestplateItem prototype) {
+        if (player.level().isClientSide()) return;
+
+        ForgingTask task = prototype.getActiveForgingTask(chest);
+        CompoundTag tag = chest.getOrCreateTag();
+
+        // Handed over unfiltered — the criterion's own entity and damage source filters decide what
+        // counts, so this doesn't need to know that only Warden booms do.
+        EntityType<?> attackerType = event.getSource().getEntity() == null
+                ? null
+                : event.getSource().getEntity().getType();
+
+        boolean completed = task.processEvent(tag, ForgingEventType.RECEIVE_HIT,
+                attackerType, event.getSource(), 1, player.level().getGameTime());
+
+        boolean sonicBoom = event.getSource().is(DamageTypes.SONIC_BOOM);
+        if (sonicBoom) {
+            // Zeroed rather than cancelled for the same reason as the finished chestplate above:
+            // the knockback and camera shake are meant to land regardless.
+            event.setAmount(0);
+            // A share of max health rather than a flat amount, so the reward keeps its weight for a
+            // player whose maximum has been raised by other mods.
+            player.heal((float) (player.getMaxHealth() * Config.forgingChestplateHealFraction));
+        }
+
+        if (completed) {
+            task.onComplete.execute(player, chest, player.level());
+            task.removeTaskTag(tag);
+            return;
+        }
+
+        if (sonicBoom) {
+            prototype.activate(chest);
+            return;
+        }
+
+        if (prototype.isActive(chest)) {
             event.setAmount((float) (event.getAmount() * (1 - Config.soulArmorRageDamageReduction)));
         }
     }
