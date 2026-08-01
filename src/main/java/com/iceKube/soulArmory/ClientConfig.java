@@ -16,6 +16,8 @@ public class ClientConfig {
 
     private static final ForgeConfigSpec.DoubleValue RADIAL_MENU_DIAMETER_RATIO;
     private static final ForgeConfigSpec.DoubleValue RADIAL_MENU_DEAD_ZONE_RATIO;
+    private static final ForgeConfigSpec.BooleanValue RADIAL_MENU_RENDER_LABELS;
+    private static final ForgeConfigSpec.BooleanValue RADIAL_MENU_RENDER_BACKGROUND;
 
     static {
         BUILDER.comment("Skill Radial Menu Settings").push("radial-menu");
@@ -30,6 +32,16 @@ public class ClientConfig {
                 .comment("Releasing the key with the cursor still inside this circle leaves the skill unchanged")
                 .defineInRange("radialMenuDeadZoneRatio", 0.25, 0.0, 0.9);
 
+        RADIAL_MENU_RENDER_LABELS = BUILDER
+                .comment("Whether the skill names are drawn around the outside of the radial menu")
+                .comment("Turn off to rely on the skill icons alone")
+                .define("radialMenuRenderLabels", false);
+
+        RADIAL_MENU_RENDER_BACKGROUND = BUILDER
+                .comment("Whether the radial menu dims the screen behind itself")
+                .comment("Turn off to keep full view of the fight while the menu is open")
+                .define("radialMenuRenderBackground", false);
+
         BUILDER.pop();
     }
 
@@ -39,6 +51,8 @@ public class ClientConfig {
     // before the client config has loaded.
     public static double radialMenuDiameterRatio = 0.8;
     public static double radialMenuDeadZoneRatio = 0.25;
+    public static boolean radialMenuRenderLabels = false;
+    public static boolean radialMenuRenderBackground = false;
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
@@ -47,5 +61,7 @@ public class ClientConfig {
 
         radialMenuDiameterRatio = RADIAL_MENU_DIAMETER_RATIO.get();
         radialMenuDeadZoneRatio = RADIAL_MENU_DEAD_ZONE_RATIO.get();
+        radialMenuRenderLabels = RADIAL_MENU_RENDER_LABELS.get();
+        radialMenuRenderBackground = RADIAL_MENU_RENDER_BACKGROUND.get();
     }
 }

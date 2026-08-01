@@ -36,7 +36,7 @@ public class SkillRadialMenuScreen extends Screen {
 
     private static final double TAU = Math.PI * 2;
 
-    /** Subdivisions per wedge. Enough that the arcs don't look faceted at any sane menu size. */
+    // Subdivisions per wedge
     private static final int ARC_STEPS = 24;
 
     /**
@@ -88,10 +88,12 @@ public class SkillRadialMenuScreen extends Screen {
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         // Deliberately no renderBackground() — the vanilla blur/dim is far too heavy to drop over a
         // fight for the fraction of a second this menu is up.
-        gui.fill(0, 0, width, height, 0x40000000);
-        // Force the scrim out before the raw-Tesselator wedges, which draw immediately and would
-        // otherwise end up underneath GuiGraphics' batched geometry.
-        gui.flush();
+        if (ClientConfig.radialMenuRenderBackground) {
+            gui.fill(0, 0, width, height, 0x40000000);
+            // Force the scrim out before the raw-Tesselator wedges, which draw immediately and would
+            // otherwise end up underneath GuiGraphics' batched geometry.
+            gui.flush();
+        }
 
         // Both axes matter: sizing off the smaller one is what keeps the whole ring on screen no
         // matter how the window is shaped.
@@ -104,7 +106,9 @@ public class SkillRadialMenuScreen extends Screen {
 
         drawSectors(gui, cx, cy, innerRadius, radius);
         drawIcons(gui, cx, cy, innerRadius, radius);
-//        drawLabels(gui, cx, cy, radius);
+        if (ClientConfig.radialMenuRenderLabels) {
+            drawLabels(gui, cx, cy, radius);
+        }
     }
 
     /**
