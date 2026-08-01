@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "item/bow"
+    "layer0": "soul_armory:item/incomplete_soul_bow"
   },
   "display": {
     "thirdperson_righthand": {
@@ -30,21 +30,50 @@
       "predicate": {
         "pulling": 1
       },
-      "model": "soul_armory:item/soul_bow_pulling_0"
+      "model": "soul_armory:item/incomplete_soul_bow_pulling_0"
     },
     {
       "predicate": {
         "pulling": 1,
         "pull": 0.65
       },
-      "model": "soul_armory:item/soul_bow_pulling_1"
+      "model": "soul_armory:item/incomplete_soul_bow_pulling_1"
     },
     {
       "predicate": {
         "pulling": 1,
         "pull": 0.9
       },
-      "model": "soul_armory:item/soul_bow_pulling_2"
+      "model": "soul_armory:item/incomplete_soul_bow_pulling_2"
+    },
+    {
+      "predicate": {
+        "active": 1
+      },
+      "model": "soul_armory:item/soul_bow_active"
+    },
+    {
+      "predicate": {
+        "active": 1,
+        "pulling": 1
+      },
+      "model": "soul_armory:item/soul_bow_active_pulling_0"
+    },
+    {
+      "predicate": {
+        "active": 1,
+        "pulling": 1,
+        "pull": 0.65
+      },
+      "model": "soul_armory:item/soul_bow_active_pulling_1"
+    },
+    {
+      "predicate": {
+        "active": 1,
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "soul_armory:item/soul_bow_active_pulling_2"
     }
   ]
 }

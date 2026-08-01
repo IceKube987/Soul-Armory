@@ -1,0 +1,6 @@
+{
+  "parent": "soul_armory:item/incomplete_soul_bow",
+  "textures": {
+    "layer0": "soul_armory:item/incomplete_soul_bow_pulling_0"
+  }
+}

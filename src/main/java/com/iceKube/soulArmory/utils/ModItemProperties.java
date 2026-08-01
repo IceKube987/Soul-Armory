@@ -15,6 +15,7 @@ public class ModItemProperties {
         makeSoulBow();
         makeIncompleteSoulBow();
         makeSoulSword();
+        makeIncompleteSoulSword();
     }
 
     private static void makeSoulBow() {
@@ -46,6 +47,19 @@ public class ModItemProperties {
             if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
             return stackTag.getUUID("soul_armory.instanceId")
                     .equals(useTag.getUUID("soul_armory.instanceId")) ? 1.0F : 0.0F;
+        });
+
+        ItemProperties.register(ItemRegistry.SOUL_BOW.get(), new ResourceLocation("active"), (stack, clientLevel, livingEntity, i) -> {
+            if (livingEntity == null) return 0.0F;
+            if (stack.getTag() == null) return 0.0F;
+
+            CompoundTag stackTag = stack.getTag();
+            if (stackTag == null) return 0.0F;
+            if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
+
+            if (ActiveTextureHelper.isActiveTexture(stack, clientLevel)) return 1;
+
+            return 0;
         });
     }
 
@@ -82,22 +96,46 @@ public class ModItemProperties {
             return stackTag.getUUID("soul_armory.instanceId")
                     .equals(useTag.getUUID("soul_armory.instanceId")) ? 1.0F : 0.0F;
         });
+
+        ItemProperties.register(ItemRegistry.INCOMPLETE_SOUL_BOW.get(), new ResourceLocation("active"), (stack, clientLevel, livingEntity, i) -> {
+            if (livingEntity == null) return 0.0F;
+            if (stack.getTag() == null) return 0.0F;
+
+            CompoundTag stackTag = stack.getTag();
+            if (stackTag == null) return 0.0F;
+            if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
+
+            if (BaseIncompleteSoulItem.isActive(stack)) return 1;
+
+            return 0;
+        });
     }
 
     private static void makeSoulSword() {
         ItemProperties.register(ItemRegistry.SOUL_SWORD.get(), new ResourceLocation("active"), (stack, clientLevel, livingEntity, i) -> {
             if (livingEntity == null) return 0.0F;
             if (stack.getTag() == null) return 0.0F;
-            // Compare ID
+
             CompoundTag stackTag = stack.getTag();
             if (stackTag == null) return 0.0F;
             if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
 
-            if (ActiveTextureHelper.isActiveTexture(stack, clientLevel)) {
-//                return stackTag.getUUID("soul_armory.instanceId")
-//                        .equals(stackTag.getUUID("soul_armory.instanceId")) ? 1.0F : 0.0F;
-                return 1;
-            }
+            if (ActiveTextureHelper.isActiveTexture(stack, clientLevel)) return 1;
+
+            return 0;
+        });
+    }
+
+    private static void makeIncompleteSoulSword() {
+        ItemProperties.register(ItemRegistry.INCOMPLETE_SOUL_SWORD.get(), new ResourceLocation("active"), (stack, clientLevel, livingEntity, i) -> {
+            if (livingEntity == null) return 0.0F;
+            if (stack.getTag() == null) return 0.0F;
+
+            CompoundTag stackTag = stack.getTag();
+            if (stackTag == null) return 0.0F;
+            if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
+
+            if (BaseIncompleteSoulItem.isActive(stack)) return 1;
 
             return 0;
         });

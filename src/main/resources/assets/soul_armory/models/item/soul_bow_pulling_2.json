@@ -1,6 +1,6 @@
 {
   "parent": "soul_armory:item/soul_bow",
   "textures": {
-    "layer0": "item/bow_pulling_2"
+    "layer0": "soul_armory:item/soul_bow_pulling_2"
   }
 }
