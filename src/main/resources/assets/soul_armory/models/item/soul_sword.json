@@ -1,6 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "minecraft:item/iron_sword"
-  }
+    "layer0": "soul_armory:item/soul_sword"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "active": 1
+      },
+      "model": "soul_armory:item/soul_sword_active"
+    }
+  ]
 }

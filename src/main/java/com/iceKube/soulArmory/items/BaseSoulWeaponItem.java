@@ -87,7 +87,7 @@ public abstract class BaseSoulWeaponItem extends Item {
      * When appendHoverText is called — to show the effective soul amount
      * </li>
      */
-    protected int calculateSoulDecay(ItemStack stack, long currentGameTime) {
+    public int calculateSoulDecay(ItemStack stack, long currentGameTime) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return 0;
         long lastHeld = tag.getLong(LAST_HELD_GAME_TIME);

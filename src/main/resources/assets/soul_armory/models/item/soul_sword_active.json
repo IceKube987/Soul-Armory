@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "soul_armory:item/incomplete_soul_sword"
+    "layer0": "soul_armory:item/soul_sword_active"
   }
 }
