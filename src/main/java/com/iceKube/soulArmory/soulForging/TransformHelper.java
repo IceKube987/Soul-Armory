@@ -1,10 +1,14 @@
 package com.iceKube.soulArmory.soulForging;
 
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
+import com.iceKube.soulArmory.items.Forgeable;
 import com.iceKube.soulArmory.items.SoulChestplateItem;
 import com.iceKube.soulArmory.items.UseSoulSkillSystem;
+import com.iceKube.soulArmory.networking.ModPacketHandler;
+import com.iceKube.soulArmory.networking.packets.S2C.ForgingCompleteVFXS2CPacket;
 import com.iceKube.soulArmory.registries.ItemRegistry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +19,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.UUID;
+
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.CURRENT_FORGING_TASK;
+import static com.iceKube.soulArmory.items.BaseSoulWeaponItem.NO_FORGING_TASK;
 
 public class TransformHelper {
 
@@ -34,11 +41,23 @@ public class TransformHelper {
         tag.putLong(BaseSoulWeaponItem.LAST_SOUL_OVERFLOW_TIME, level.getGameTime());
         tag.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
+        if (newItemReg.get() instanceof Forgeable) {
+            tag.putString(CURRENT_FORGING_TASK, NO_FORGING_TASK);
+        }
+
         if (newItemReg.get() instanceof UseSoulSkillSystem useSoulSkillSystem) {
             useSoulSkillSystem.setDefaultSkill(newStack, level);
         }
 
+        newStack.setTag(tag);
+
         replaceStackInInventory(player, oldStack, newStack);
+
+        // Forging only ever resolves on the logical server, so the completion VFX has to be pushed
+        // to the owning client. The cast is what proves we are on that side.
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModPacketHandler.sendToPlayer(new ForgingCompleteVFXS2CPacket(), serverPlayer);
+        }
     }
 
     /**
@@ -60,6 +79,10 @@ public class TransformHelper {
         convertAllWornIronPieces(player);
 
         tag.putFloat(SoulChestplateItem.SOUL_AMOUNT, SoulChestplateItem.getMaxSoulForArmor(player));
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModPacketHandler.sendToPlayer(new ForgingCompleteVFXS2CPacket(), serverPlayer);
+        }
     }
 
     /**
@@ -80,7 +103,12 @@ public class TransformHelper {
      */
     public static boolean convertOneWornIronPiece(Player player) {
         for (EquipmentSlot slot : IRON_CONVERTIBLE_SLOTS) {
-            if (convertWornIronPiece(player, slot)) return true;
+            if (convertWornIronPiece(player, slot)) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    ModPacketHandler.sendToPlayer(new ForgingCompleteVFXS2CPacket(), serverPlayer);
+                }
+                return true;
+            }
         }
         return false;
     }

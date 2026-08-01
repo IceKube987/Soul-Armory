@@ -32,6 +32,11 @@ public class OverlayHandler {
     private static long stanceSeed;
     private static int stanceSpawnTick;
 
+    // --- Forging-complete VFX state ---
+    // Same contract as the switch-skill pair above: written only by triggerForgingCompleteVFX.
+    private static long forgingSeed;
+    private static int forgingSpawnTick;
+
     // Client-side tick counter, advanced once per client tick (see ModForgeEvents.onClientTick).
     private static int clientTick;
 
@@ -73,9 +78,9 @@ public class OverlayHandler {
         float soulPercentage = soulPoint / SoulChestplateItem.getMaxSoulForArmor(mc.player);
 
         float soulOverflowPercentage = 0;
-        if (SoulChestplateItem.isRaging(itemStack)){
+        if (SoulChestplateItem.isRaging(itemStack)) {
             soulOverflowPercentage = 0;
-        }else {
+        } else {
             soulOverflowPercentage = 1;
         }
 
@@ -217,6 +222,98 @@ public class OverlayHandler {
     public static void triggerSwitchSkillVFX() {
         stanceSeed = System.nanoTime();
         stanceSpawnTick = clientTick;
+    }
+
+    // Signals a completed forging task: seeds a fresh burst of squares from the current client tick.
+    // This is the ONLY place forgingSeed / forgingSpawnTick are written.
+    public static void triggerForgingCompleteVFX() {
+        forgingSeed = System.nanoTime();
+        forgingSpawnTick = clientTick;
+    }
+
+    // Used when a forging task completes.
+    // Draws translucent blue squares sweeping in from both screen edges towards the vertical
+    // centre axis.
+    // Purely cosmetic and client-side; all motion/alpha is derived deterministically from the seed.
+    public static void renderForgingCompleteVFX(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        // Skip if no forging has completed yet.
+        if (forgingSeed == 0) return;
+
+        // Constants. Sizes and speeds are fractions of the Minecraft window size, so the effect
+        // scales with the window and GUI scale rather than being fixed. The squares travel
+        // horizontally, so width is the natural axis for size, speed and spawn inset; only the
+        // vertical spread is measured against window height.
+        final int MIN_COUNT = 15;
+        final int MAX_COUNT_EXTRA = 5;         // squares per side
+        final float MIN_SPEED = 0.015f;         // fraction of window width per tick
+        final float MAX_SPEED = 0.020f;
+        final float MIN_SIZE = 0.012f;         // square edge as fraction of window width
+        final float MAX_SIZE_EXTRA = 0.015f;
+        final float SPAWN_BAND = 0.1f;         // spawn within the outer 10% of each side
+        final float VERTICAL_SPREAD = 1.0f;    // fraction of window height the squares occupy
+        final float LIFETIME_BASE = 12.0f;     // ticks, for the slowest square
+        final int ALPHA_CAP = 150;             // cap base opacity, max 255
+        final int COLOR_RGB = 0x4488FF;        // soul blue
+
+        int currentTick = clientTick;
+
+        float partialTick = Minecraft.getInstance().getPartialTick();
+
+        Random rand = new Random(forgingSeed);
+        int count = rand.nextInt(MAX_COUNT_EXTRA) + MIN_COUNT;
+
+        float elapsed = (currentTick - forgingSpawnTick) + partialTick;
+
+        boolean anyVisible = false;
+
+        for (int i = 0; i < count; i++) {
+            // All per-square properties derived deterministically from the seed, and drawn once per
+            // pair: the left and right square of a pair are mirror images of each other.
+            // Dimensions/speed are fractions of the window size, converted to pixels here.
+            float baseInset = (rand.nextFloat() * SPAWN_BAND - 0.1f) * screenWidth;
+            float y = screenHeight * 0.5f + (rand.nextFloat() * 2.0f - 1.0f) * VERTICAL_SPREAD * screenHeight * 0.5f;
+            float size = (rand.nextFloat() * MAX_SIZE_EXTRA + MIN_SIZE) * screenWidth;
+            float speedFrac = rand.nextFloat() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+            float speed = speedFrac * screenWidth;   // pixels per tick
+
+            // Faster squares fade out sooner so they don't outlive their travel.
+            // The ratio is scale-independent, so the raw fractions work directly.
+            float lifetime = LIFETIME_BASE * (MIN_SPEED / speedFrac);
+            float alpha = 1.0f - (elapsed / lifetime);
+
+            if (alpha <= 0.0f) continue;
+            anyVisible = true;
+
+            int a = (int) (alpha * ALPHA_CAP) << 24;
+            int argb = a | COLOR_RGB;
+
+            float travelled = elapsed * speed;
+
+            // Left square flies right, right square flies left.
+            float leftX = baseInset + travelled;
+            float rightX = screenWidth - baseInset - travelled - size;
+
+            guiGraphics.fill(
+                    (int) leftX,
+                    (int) y,
+                    (int) (leftX + size),
+                    (int) (y + size),
+                    argb
+            );
+
+            guiGraphics.fill(
+                    (int) rightX,
+                    (int) y,
+                    (int) (rightX + size),
+                    (int) (y + size),
+                    argb
+            );
+        }
+
+        // Once all squares have faded, stop rendering.
+        if (!anyVisible) {
+            forgingSeed = 0;
+        }
     }
 
     // Used when soul sword switches skill.

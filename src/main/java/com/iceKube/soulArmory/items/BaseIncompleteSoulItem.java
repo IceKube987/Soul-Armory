@@ -102,7 +102,9 @@ public abstract class BaseIncompleteSoulItem extends Item implements Forgeable {
         appendForgingTooltip(pStack, getActiveForgingTask(pStack), pTooltipComponents);
     }
 
-    /** One line per criterion, blue while in progress and aqua once complete. */
+    /**
+     * One line per criterion, blue while in progress and aqua once complete.
+     */
     public static void appendForgingTooltip(ItemStack stack, @Nullable ForgingTask task, List<Component> tooltipComponents) {
         if (task == null) return;
         if (stack.getTag() == null) {

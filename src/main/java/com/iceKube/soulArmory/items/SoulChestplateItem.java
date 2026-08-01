@@ -44,9 +44,9 @@ public class SoulChestplateItem extends ArmorItem {
     // Get how many pieces of soul armor is equipped on player. Chestplate excluded.
     private static int getAdditionalPieceAmount(Player player) {
         int i = 0;
-        if (isSlotEquippedWithSoulArmor(player,EquipmentSlot.HEAD)) i++;
-        if (isSlotEquippedWithSoulArmor(player,EquipmentSlot.LEGS)) i++;
-        if (isSlotEquippedWithSoulArmor(player,EquipmentSlot.FEET)) i++;
+        if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.HEAD)) i++;
+        if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.LEGS)) i++;
+        if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.FEET)) i++;
         return i;
     }
 
@@ -70,7 +70,9 @@ public class SoulChestplateItem extends ArmorItem {
         return !getWornChestplate(player).isEmpty() && getAdditionalPieceAmount(player) == 3;
     }
 
-    /** {@link #isFullSet} plus the config switch: the gate every set bonus branch goes through. */
+    /**
+     * {@link #isFullSet} plus the config switch: the gate every set bonus branch goes through.
+     */
     public static boolean isFullSetBonusActive(Player player) {
         return Config.soulArmorFullSetBonusEnabled && isFullSet(player);
     }
@@ -123,6 +125,7 @@ public class SoulChestplateItem extends ArmorItem {
 
     /**
      * Starts Soul Rage if the player is wearing a charged enough chestplate.
+     *
      * @return true if this call started Soul Rage
      */
     public static boolean tryActivateRage(Player player) {

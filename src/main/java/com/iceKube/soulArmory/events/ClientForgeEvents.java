@@ -61,6 +61,9 @@ public class ClientForgeEvents {
             // chestplate's synced state, not from this key press.
             ModPacketHandler.sendToServer(new ActivateSoulRageC2SPacket());
         }
+        if (KeyBinding.TEST_KEY.consumeClick()) {
+            OverlayHandler.triggerForgingCompleteVFX();
+        }
     }
 
     @SubscribeEvent
@@ -96,6 +99,8 @@ public class ClientForgeEvents {
         renderSkillIcon(gui, (int) (screenWidth * 0.94), (int) (screenHeight - (screenWidth * 0.06)), ((int) (screenWidth * 0.05)), (int) (screenWidth * 0.05));
 
         renderSwitchSkillVFX(gui, screenWidth, screenHeight);
+
+        renderForgingCompleteVFX(gui, screenWidth, screenHeight);
     }
 
     // Advance the client-side tick counter used by the switch-skill VFX.

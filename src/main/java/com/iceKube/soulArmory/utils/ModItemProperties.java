@@ -84,7 +84,7 @@ public class ModItemProperties {
         });
     }
 
-    private static void makeSoulSword(){
+    private static void makeSoulSword() {
         ItemProperties.register(ItemRegistry.SOUL_SWORD.get(), new ResourceLocation("active"), (stack, clientLevel, livingEntity, i) -> {
             if (livingEntity == null) return 0.0F;
             if (stack.getTag() == null) return 0.0F;
@@ -93,7 +93,7 @@ public class ModItemProperties {
             if (stackTag == null) return 0.0F;
             if (!stackTag.contains("soul_armory.instanceId")) return 0.0F;
 
-            if (ActiveTextureHelper.isActiveTexture(stack,clientLevel)) {
+            if (ActiveTextureHelper.isActiveTexture(stack, clientLevel)) {
 //                return stackTag.getUUID("soul_armory.instanceId")
 //                        .equals(stackTag.getUUID("soul_armory.instanceId")) ? 1.0F : 0.0F;
                 return 1;

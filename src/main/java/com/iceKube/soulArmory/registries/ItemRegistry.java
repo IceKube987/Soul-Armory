@@ -1,13 +1,7 @@
 package com.iceKube.soulArmory.registries;
 
 import com.iceKube.soulArmory.SoulArmoryMod;
-import com.iceKube.soulArmory.items.AdditionalSoulArmorPiece;
-import com.iceKube.soulArmory.items.IncompleteSoulBowItem;
-import com.iceKube.soulArmory.items.IncompleteSoulChestplateItem;
-import com.iceKube.soulArmory.items.IncompleteSoulSwordItem;
-import com.iceKube.soulArmory.items.SoulBowItem;
-import com.iceKube.soulArmory.items.SoulChestplateItem;
-import com.iceKube.soulArmory.items.SoulSwordItem;
+import com.iceKube.soulArmory.items.*;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;

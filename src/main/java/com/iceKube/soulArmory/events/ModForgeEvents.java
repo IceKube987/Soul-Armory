@@ -172,7 +172,8 @@ public class ModForgeEvents {
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onSoulArmorIdleFailsafe(LivingDamageEvent event) {
-        if (Config.soulArmorFullSetIdleFailsafeMaxHealthFraction >= 0.999) return; // >= 0.999 instead of = 1.0 to prevent possible floating point errors.
+        if (Config.soulArmorFullSetIdleFailsafeMaxHealthFraction >= 0.999)
+            return; // >= 0.999 instead of = 1.0 to prevent possible floating point errors.
         if (!(event.getEntity() instanceof Player player)) return;
 
         ItemStack chestplate = SoulChestplateItem.getWornChestplate(player);

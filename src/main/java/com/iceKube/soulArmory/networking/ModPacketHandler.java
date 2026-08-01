@@ -4,6 +4,7 @@ import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.networking.packets.C2S.ActivateSoulRageC2SPacket;
 import com.iceKube.soulArmory.networking.packets.C2S.SelectSkillC2SPacket;
 import com.iceKube.soulArmory.networking.packets.C2S.SwitchSkillC2SPacket;
+import com.iceKube.soulArmory.networking.packets.S2C.ForgingCompleteVFXS2CPacket;
 import com.iceKube.soulArmory.networking.packets.S2C.SwitchSkillVFXS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,6 +54,12 @@ public class ModPacketHandler {
                 .decoder(SelectSkillC2SPacket::new)
                 .encoder(SelectSkillC2SPacket::toBytes)
                 .consumerMainThread(SelectSkillC2SPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(ForgingCompleteVFXS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgingCompleteVFXS2CPacket::new)
+                .encoder(ForgingCompleteVFXS2CPacket::toBytes)
+                .consumerMainThread(ForgingCompleteVFXS2CPacket::handle)
                 .add();
     }
 

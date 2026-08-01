@@ -32,7 +32,9 @@ public class IncompleteSoulChestplateItem extends ArmorItem implements Forgeable
         return Config.forgingChestplateActiveTicks;
     }
 
-    /** Starts the short Soul Rage burst the prototype grants for eating a sonic boom. */
+    /**
+     * Starts the short Soul Rage burst the prototype grants for eating a sonic boom.
+     */
     public void activate(ItemStack stack) {
         BaseIncompleteSoulItem.setActiveTime(stack, getMaxActiveTimeTicks());
     }

@@ -54,10 +54,14 @@ public class SkillRadialMenuScreen extends Screen {
     private static final int COLOR_HOVERED = 0xA04488FF;   // the soul blue used by the switch VFX
     private static final int COLOR_SEPARATOR = 0xC0080C12;
 
-    /** Icon box side, as a fraction of the menu radius. */
+    /**
+     * Icon box side, as a fraction of the menu radius.
+     */
     private static final float ICON_SCALE = 0.28f;
 
-    /** Where the labels sit, as a multiple of the menu radius. */
+    /**
+     * Where the labels sit, as a multiple of the menu radius.
+     */
     private static final float LABEL_RADIUS_SCALE = 1.12f;
 
     private final List<BaseSoulSkill> skills;
@@ -198,7 +202,9 @@ public class SkillRadialMenuScreen extends Screen {
         RenderSystem.disableBlend();
     }
 
-    /** Emits one ARGB-coloured quad from four already-positioned corners, wound in order. */
+    /**
+     * Emits one ARGB-coloured quad from four already-positioned corners, wound in order.
+     */
     private static void quad(BufferBuilder builder, Matrix4f matrix,
                              float x0, float y0, float x1, float y1,
                              float x2, float y2, float x3, float y3,
@@ -247,7 +253,9 @@ public class SkillRadialMenuScreen extends Screen {
         }
     }
 
-    /** The angle, in screen space, at which sector {@code i} is centred. Sector 0 points straight up. */
+    /**
+     * The angle, in screen space, at which sector {@code i} is centred. Sector 0 points straight up.
+     */
     private double midAngle(int i) {
         return -Math.PI / 2 + TAU / skills.size() * i;
     }

@@ -372,11 +372,11 @@ public class Config {
 
             SOUL_CHESTPLATE_MAX_SOUL = BUILDER
                     .comment("The maximum soul amount of armor set with only chestplate equipped")
-                    .defineInRange("soulChestplateMaxSoul",300,1,Integer.MAX_VALUE);
+                    .defineInRange("soulChestplateMaxSoul", 300, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_SOUL_ADDITION_PER_PIECE = BUILDER
                     .comment("How many points of soul will be added with each additional armor piece (that is, every soul armor other than chestplate) equipped")
-                    .defineInRange("soulArmorAdditionalSoul",200,1,Integer.MAX_VALUE);
+                    .defineInRange("soulArmorAdditionalSoul", 200, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_GRACE_PERIOD = BUILDER
                     .comment("How long (in ticks) will the soul start to decay after gaining points of soul")
@@ -388,7 +388,7 @@ public class Config {
 
             SOUL_ARMOR_RAGE_THRESHOLD = BUILDER
                     .comment("How many points of soul is required to start Soul Rage")
-                    .defineInRange("soulArmorRageThreshold",50,1,Integer.MAX_VALUE);
+                    .defineInRange("soulArmorRageThreshold", 50, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_RAGE_SOUL_PER_TICK = BUILDER
                     .comment("How many points of soul is consumed per tick while in Soul Rage")
