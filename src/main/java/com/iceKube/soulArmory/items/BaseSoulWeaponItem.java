@@ -256,4 +256,27 @@ public abstract class BaseSoulWeaponItem extends Item {
         }
         return skills;
     }
+
+    /**
+     * Points the stack at the skill sitting at {@code index} in {@link #getAvailableSkills}.
+     * <p>
+     * The index arrives from the client (the radial menu sends whichever sector was hovered), so it
+     * is re-checked here against the server's own copy of the skill list rather than trusted.
+     * Writes nothing and returns false when the index doesn't name a skill the stack actually has.
+     *
+     * @return whether the skill was changed
+     */
+    protected boolean applySkillIndex(ItemStack stack, int index) {
+        if (!stack.hasTag()) return false;
+
+        List<BaseSoulSkill> skills = getAvailableSkills(stack);
+        if (skills == null || index < 0 || index >= skills.size()) return false;
+
+        CompoundTag tag = stack.getTag();
+        if (tag.getInt(CURRENT_SKILL_INDEX) == index) return false;
+
+        tag.putInt(CURRENT_SKILL_INDEX, index);
+        tag.putString(CURRENT_SKILL, skills.get(index).soulSkillId.toString());
+        return true;
+    }
 }

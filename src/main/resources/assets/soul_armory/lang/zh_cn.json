@@ -16,6 +16,10 @@
   "skills.soul_armory.rapid_fire": "连射",
   "skills.soul_armory.scatter_shot": "齐射",
   "skills.soul_armory.sonic_overload": "音爆",
+  "skills.soul_armory.heal": "治愈",
+  "skills.soul_armory.blade_wave": "剑气",
+
+  "gui.soul_armory.skill_radial_menu": "选择技能",
 
   "itemGroup.soul_armory": "灵魂军械库",
 

@@ -7,7 +7,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -26,13 +25,12 @@ public class SwitchSkillC2SPacket extends BasePacket {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player == null) return;
-            Level level = player.level();
 
             ItemStack stack = player.getMainHandItem();
             Item item = stack.getItem();
 
             if (item instanceof SoulBowItem soulBowItem) {
-                soulBowItem.cycleToNextSkill(stack);
+                soulBowItem.cycleToNextSkill(stack, player);
             }
 
             if (item instanceof SoulSwordItem soulSwordItem) {
@@ -40,6 +38,7 @@ public class SwitchSkillC2SPacket extends BasePacket {
             }
         });
 
+        context.setPacketHandled(true);
         return true;
     }
 

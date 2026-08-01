@@ -9,12 +9,12 @@ import com.iceKube.soulArmory.soulSkill.BaseSoulSkill;
 import com.iceKube.soulArmory.soulSkill.ContinuousSoulSkill;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import com.iceKube.soulArmory.soulSkill.SoulSkills;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -347,7 +347,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         }
     }
 
-    public void cycleToNextSkill(ItemStack stack) {
+    public void cycleToNextSkill(ItemStack stack, ServerPlayer player) {
         if (!stack.hasTag()) return;
         CompoundTag tag = stack.getTag();
 
@@ -361,13 +361,17 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
         int currentIndex = tag.getInt(CURRENT_SKILL_INDEX);
         // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
         int nextIndex = (currentIndex + 1) % size;
-        tag.putInt(CURRENT_SKILL_INDEX, nextIndex);
 
-        // actually switch to next skill
-        String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
-        tag.putString(CURRENT_SKILL, nextSkillId);
+        setCurrentSkill(stack, nextIndex, player);
+    }
 
-        Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
+    @Override
+    public void setCurrentSkill(ItemStack stack, int index, ServerPlayer player) {
+        if (!applySkillIndex(stack, index)) return;
+
+        // Played from the server so this path stays safe on a dedicated server — the bow has no
+        // switch cost or VFX of its own, just the click.
+        player.level().playSound(null, player.getOnPos(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
     }
 
     @Override

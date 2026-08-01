@@ -16,6 +16,10 @@
   "skills.soul_armory.rapid_fire": "Rapid Fire",
   "skills.soul_armory.scatter_shot": "Scatter Shot",
   "skills.soul_armory.sonic_overload": "Sonic Overload",
+  "skills.soul_armory.heal": "Heal",
+  "skills.soul_armory.blade_wave": "Blade Wave",
+
+  "gui.soul_armory.skill_radial_menu": "Select Skill",
 
   "itemGroup.soul_armory": "Soul Armory",
 

@@ -676,6 +676,9 @@ public class Config {
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
+        // Fires once per spec the mod owns, so ignore everything that isn't ours.
+        if (event.getConfig().getSpec() != SPEC) return;
+
         soulSwordMaxSoul = SOUL_SWORD_MAX_SOUL.get();
         soulSwordPointsPerDamage = SOUL_SWORD_POINT_PER_DAMAGE.get();
         soulSwordPointsPerHealing = SOUL_SWORD_POINT_PER_HEALING.get();

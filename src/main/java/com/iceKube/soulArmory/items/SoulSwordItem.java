@@ -120,13 +120,18 @@ public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBo
         int currentIndex = tag.getInt(CURRENT_SKILL_INDEX);
         // 0 -> 1 -> 2 -> 0 loop if there are 3 skills
         int nextIndex = (currentIndex + 1) % size;
-        tag.putInt(CURRENT_SKILL_INDEX, nextIndex);
 
-        // actually switch to next skill
-        String nextSkillId = skills.get(nextIndex).soulSkillId.toString();
-        tag.putString(CURRENT_SKILL, nextSkillId);
+        setCurrentSkill(stack, nextIndex, player);
+    }
 
-        // Soul Sword only: deduce soul when switching
+    @Override
+    public void setCurrentSkill(ItemStack stack, int index, ServerPlayer player) {
+        if (!applySkillIndex(stack, index)) return;
+
+        CompoundTag tag = stack.getTag();
+
+        // Soul Sword only: deduce soul when switching. Charged however the skill was picked, so the
+        // radial menu isn't a free alternative to cycling.
         tag.putFloat(SOUL_AMOUNT, Math.max(0, tag.getFloat(SOUL_AMOUNT) - Config.soulSwordSwitchSkillCost));
 
         // Play the switch sound and signal the client to play the switch VFX.
