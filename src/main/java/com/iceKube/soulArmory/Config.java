@@ -131,7 +131,7 @@ public class Config {
 
             SOUL_SWORD_POINT_PER_DAMAGE = BUILDER
                     .comment("How many points of soul is required for 1 extra damage")
-                    .defineInRange("soulSwordPointPerDamage", 15, 1, Integer.MAX_VALUE);
+                    .defineInRange("soulSwordPointPerDamage", 12, 1, Integer.MAX_VALUE);
 
             SOUL_SWORD_GRACE_PERIOD = BUILDER
                     .comment("How long (in ticks) will the soul start to decay after putting away")

@@ -8,7 +8,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -38,7 +37,7 @@ public class SoulChestplateItem extends ArmorItem {
     private static final int NIGHT_VISION_REFRESH_INTERVAL = 20;
 
     public SoulChestplateItem(Properties pProperties) {
-        super(ArmorMaterials.IRON, Type.CHESTPLATE, pProperties);
+        super(ModArmorMaterials.SOUL_ARMOR, Type.CHESTPLATE, pProperties);
     }
 
     // Get how many pieces of soul armor is equipped on player. Chestplate excluded.
@@ -141,19 +140,8 @@ public class SoulChestplateItem extends ArmorItem {
         return true;
     }
 
-    // Does not break
-    @Override
-    public int getDamage(ItemStack stack) {
-        return 0;
-    }
-
-    // ArmorItem's constructor forces a durability onto the properties, so unlike the soul weapons
-    // the getDamage override above is not enough on its own.
-    @Override
-    public boolean canBeDepleted() {
-        return false;
-    }
-
+    // The material already rules out durability and the enchanting table, but Forge's anvil-side
+    // defaults are not gated on that, so enchanted books still have to be turned away by hand.
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;

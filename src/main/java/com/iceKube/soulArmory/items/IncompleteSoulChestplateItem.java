@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class IncompleteSoulChestplateItem extends ArmorItem implements Forgeable {
 
     public IncompleteSoulChestplateItem(Properties pProperties) {
-        super(ArmorMaterials.IRON, Type.CHESTPLATE, pProperties);
+        super(ModArmorMaterials.SOUL_ARMOR, Type.CHESTPLATE, pProperties);
     }
 
     @Override
@@ -43,19 +42,8 @@ public class IncompleteSoulChestplateItem extends ArmorItem implements Forgeable
         return BaseIncompleteSoulItem.isActive(stack);
     }
 
-    // Does not break
-    @Override
-    public int getDamage(ItemStack stack) {
-        return 0;
-    }
-
-    // ArmorItem's constructor forces a durability onto the properties, so the getDamage override
-    // above is not enough on its own.
-    @Override
-    public boolean canBeDepleted() {
-        return false;
-    }
-
+    // The material already rules out durability and the enchanting table, but Forge's anvil-side
+    // defaults are not gated on that, so enchanted books still have to be turned away by hand.
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
