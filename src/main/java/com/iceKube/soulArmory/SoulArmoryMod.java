@@ -62,13 +62,13 @@ public class SoulArmoryMod {
 
         event.accept(ItemRegistry.SOUL_SWORD);
         event.accept(ItemRegistry.SOUL_BOW);
-        event.accept(ItemRegistry.INCOMPLETE_SOUL_SWORD);
-        event.accept(ItemRegistry.INCOMPLETE_SOUL_BOW);
-        event.accept(ItemRegistry.INCOMPLETE_SOUL_CHESTPLATE);
         event.accept(ItemRegistry.SOUL_HELMET);
         event.accept(ItemRegistry.SOUL_CHESTPLATE);
         event.accept(ItemRegistry.SOUL_LEGGINGS);
         event.accept(ItemRegistry.SOUL_BOOTS);
+        event.accept(ItemRegistry.INCOMPLETE_SOUL_SWORD);
+        event.accept(ItemRegistry.INCOMPLETE_SOUL_BOW);
+        event.accept(ItemRegistry.INCOMPLETE_SOUL_CHESTPLATE);
     }
 
 }
