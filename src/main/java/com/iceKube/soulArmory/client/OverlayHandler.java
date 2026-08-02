@@ -26,14 +26,14 @@ public class OverlayHandler {
 
     private static final ResourceLocation BAR_TEXTURE = new ResourceLocation("textures/gui/bars.png");
 
-    // --- Switch-skill VFX state ---
+    // Switch-skill VFX state
     // Written only when a skill switch is signaled from the server (see triggerSwitchSkillVFX).
     // The render path reads these every frame and is otherwise read-only.
     private static long stanceSeed;
     private static int stanceSpawnTick;
 
-    // --- Forging-complete VFX state ---
-    // Same contract as the switch-skill pair above: written only by triggerForgingCompleteVFX.
+    // Forging-complete VFX state
+    // written only by triggerForgingCompleteVFX.
     private static long forgingSeed;
     private static int forgingSpawnTick;
 
@@ -212,19 +212,16 @@ public class OverlayHandler {
         gui.blit(texture, x, y, w, h, 0, 0, 32, 32, 32, 32);
     }
 
-    // Advances the client tick counter. Called once per client tick.
     public static void onClientTick() {
         clientTick++;
     }
 
-    // Signals a skill switch: seeds a fresh burst of bars starting from the current client tick.
     // This is the ONLY place stanceSeed / stanceSpawnTick are written.
     public static void triggerSwitchSkillVFX() {
         stanceSeed = System.nanoTime();
         stanceSpawnTick = clientTick;
     }
 
-    // Signals a completed forging task: seeds a fresh burst of squares from the current client tick.
     // This is the ONLY place forgingSeed / forgingSpawnTick are written.
     public static void triggerForgingCompleteVFX() {
         forgingSeed = System.nanoTime();
@@ -232,17 +229,11 @@ public class OverlayHandler {
     }
 
     // Used when a forging task completes.
-    // Draws translucent blue squares sweeping in from both screen edges towards the vertical
-    // centre axis.
-    // Purely cosmetic and client-side; all motion/alpha is derived deterministically from the seed.
     public static void renderForgingCompleteVFX(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
         // Skip if no forging has completed yet.
         if (forgingSeed == 0) return;
 
-        // Constants. Sizes and speeds are fractions of the Minecraft window size, so the effect
-        // scales with the window and GUI scale rather than being fixed. The squares travel
-        // horizontally, so width is the natural axis for size, speed and spawn inset; only the
-        // vertical spread is measured against window height.
+        // Constants. Sizes and speeds are fractions of the Minecraft window size.
         final int MIN_COUNT = 15;
         final int MAX_COUNT_EXTRA = 5;         // squares per side
         final float MIN_SPEED = 0.015f;         // fraction of window width per tick
@@ -317,16 +308,12 @@ public class OverlayHandler {
     }
 
     // Used when soul sword switches skill.
-    // Draws a burst of translucent blue vertical bars rising from the bottom of the HUD.
-    // Purely cosmetic and client-side; all motion/alpha is derived deterministically from the seed.
     public static void renderSwitchSkillVFX(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
         // Skip if no switch has happened yet.
         if (stanceSeed == 0) return;
 
         // Constants. Speed, height and width are fractions of the Minecraft
-        // window size, so the effect scales with the window and GUI scale rather than being
-        // fixed. Width is a fraction of window width; height and vertical speed
-        // are fractions of window height (the natural axes for vertical bars).
+        // window size.
         final int MIN_COUNT = 15;
         final int MAX_COUNT_EXTRA = 6;         // total count: 15-20
         final float MIN_SPEED = 0.04f;        // fraction of window height per tick

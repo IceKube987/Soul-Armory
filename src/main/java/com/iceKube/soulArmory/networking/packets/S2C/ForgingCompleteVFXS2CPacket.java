@@ -10,7 +10,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 // Signals the client that a forging task completed, so it can play the forging-complete VFX.
-// Carries no payload; the client only needs the trigger.
 public class ForgingCompleteVFXS2CPacket extends BasePacket {
     public ForgingCompleteVFXS2CPacket(FriendlyByteBuf buf) {
         super(buf);

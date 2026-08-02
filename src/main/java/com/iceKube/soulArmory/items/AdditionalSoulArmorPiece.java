@@ -4,14 +4,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-/**
- * Every piece of the soul armor set other than the chestplate.
- * <p>
- * These pieces hold no state of their own — the soul pool and the Soul Rage flag live on the
- * chestplate (see {@link SoulChestplateItem}). All they do is raise the soul cap and unlock one
- * Soul Rage effect each, both of which the chestplate decides. So a single class covers the
- * helmet, the leggings and the boots; they differ only by their {@link Type}.
- */
+// Every piece of the soul armor set other than the chestplate.
 public class AdditionalSoulArmorPiece extends ArmorItem {
 
     public AdditionalSoulArmorPiece(Type pType, Properties pProperties) {

@@ -27,8 +27,6 @@ public class ActivateSoulRageC2SPacket extends BasePacket {
             ServerPlayer player = context.getSender();
             if (player == null) return;
 
-            // Silently ignored when there is no chestplate, not enough soul, or a rage is already
-            // running. The client finds out either way through the chestplate's synced NBT.
             SoulChestplateItem.tryActivateRage(player);
         });
 

@@ -10,7 +10,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 // Signals the client that a soul weapon skill switch happened, so it can play the switch VFX.
-// Carries no payload; the client only needs the trigger.
 public class SwitchSkillVFXS2CPacket extends BasePacket {
     public SwitchSkillVFXS2CPacket(FriendlyByteBuf buf) {
         super(buf);

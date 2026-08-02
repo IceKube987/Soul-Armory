@@ -90,8 +90,6 @@ public class SkillRadialMenuScreen extends Screen {
 
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
-        // Deliberately no renderBackground() — the vanilla blur/dim is far too heavy to drop over a
-        // fight for the fraction of a second this menu is up.
         if (ClientConfig.radialMenuRenderBackground) {
             gui.fill(0, 0, width, height, 0x40000000);
             // Force the scrim out before the raw-Tesselator wedges, which draw immediately and would

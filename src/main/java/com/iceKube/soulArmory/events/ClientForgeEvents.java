@@ -25,10 +25,6 @@ import java.util.List;
 
 import static com.iceKube.soulArmory.client.OverlayHandler.*;
 
-/**
- * The client half of the forge bus listeners. Kept apart from {@link ModForgeEvents} so that
- * nothing in there references client-only classes — a dedicated server never loads this class.
- */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientForgeEvents {
 
@@ -41,15 +37,11 @@ public class ClientForgeEvents {
             if (mc.screen == null && mc.player != null) {
                 ItemStack stack = mc.player.getMainHandItem();
 
-                // Keyed off the interface, not off a particular weapon — any soul skill item with
-                // enough skills to make cycling tedious gets the menu.
                 List<BaseSoulSkill> skills = stack.getItem() instanceof UseSoulSkillSystem skillItem
                         ? skillItem.getAvailableSkills(stack)
                         : null;
 
                 if (skills != null && skills.size() >= 3) {
-                    // AVAILABLE_SKILLS is synced to the client for held stacks — the same NBT the
-                    // HUD skill icon already reads — so the menu needs no extra sync of its own.
                     mc.setScreen(new SkillRadialMenuScreen(stack, skills));
                 } else {
                     ModPacketHandler.sendToServer(new SwitchSkillC2SPacket());
@@ -57,8 +49,7 @@ public class ClientForgeEvents {
             }
         }
         if (KeyBinding.ACTIVATE_RAGE.consumeClick()) {
-            // The server decides whether the rage actually starts; the vignette follows from the
-            // chestplate's synced state, not from this key press.
+            // The server decides whether the rage actually starts
             ModPacketHandler.sendToServer(new ActivateSoulRageC2SPacket());
         }
         if (KeyBinding.TEST_KEY.consumeClick()) {
@@ -69,7 +60,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void onRenderGui(RenderGuiOverlayEvent event) {
 
-        // Only render ONCE.
+        // Only render ONCE. Rendered before HOTBAR and after PORTAL.
         if (event.getOverlay() != VanillaGuiOverlay.PORTAL.type()) {
             return;
         }
@@ -109,8 +100,6 @@ public class ClientForgeEvents {
         if (event.phase != TickEvent.Phase.END) return;
         OverlayHandler.onClientTick();
 
-        // The player's own armor slots are synced back with their full NBT, so the Soul Rage flag
-        // can simply be read off the worn chestplate instead of needing a packet of its own.
         Minecraft mc = Minecraft.getInstance();
         OverlayHandler.setVignette(mc.player != null && SoulChestplateItem.isRaging(mc.player));
     }

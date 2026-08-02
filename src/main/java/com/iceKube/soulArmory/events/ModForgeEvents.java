@@ -7,7 +7,10 @@ import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulForging.TransformHelper;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -23,8 +26,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -86,8 +91,7 @@ public class ModForgeEvents {
     public static void onSoulArmorHurt(LivingHurtEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        // The prototype answers to the same hits but owns none of the machinery below, so it gets
-        // its own branch before the worn-chestplate lookup rejects it.
+        // When player is wearing incomplete chestplate
         ItemStack wornChest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (wornChest.getItem() instanceof IncompleteSoulChestplateItem prototype) {
             handleIncompleteChestplateHurt(event, player, wornChest, prototype);
@@ -97,18 +101,13 @@ public class ModForgeEvents {
         ItemStack chestplate = SoulChestplateItem.getWornChestplate(player);
         if (chestplate.isEmpty()) return;
 
-        // A sonic boom charges the chestplate instead of hurting the wearer. The damage is zeroed
-        // rather than cancelled so the hit still registers: the Warden's knockback and the camera
-        // shake are meant to land regardless, and both happen in hurt() around this call.
-        // Zeroing it here also means an absorbed boom no longer eats the wearer's golden hearts,
-        // which sit further down actuallyHurt than this event does.
         if (event.getSource().is(DamageTypes.SONIC_BOOM)) {
             SoulChestplateItem.addSoul(player, Config.soulArmorSonicBoomSoulReward);
             // A finished chestplate keeps converting the wearer's iron armor, but only a piece per
-            // boom rather than the whole set the forging itself claimed.
+            // boom rather than the whole set.
             TransformHelper.convertOneWornIronPiece(player);
             if (Config.soulArmorAbsorbSonicBoom) {
-                event.setAmount(0);
+                event.setAmount(0);  // zeroed rather than canceled for the knockback
                 return;
             }
         }
@@ -129,8 +128,6 @@ public class ModForgeEvents {
         ForgingTask task = prototype.getActiveForgingTask(chest);
         CompoundTag tag = chest.getOrCreateTag();
 
-        // Handed over unfiltered — the criterion's own entity and damage source filters decide what
-        // counts, so this doesn't need to know that only Warden booms do.
         EntityType<?> attackerType = event.getSource().getEntity() == null
                 ? null
                 : event.getSource().getEntity().getType();
@@ -140,11 +137,9 @@ public class ModForgeEvents {
 
         boolean sonicBoom = event.getSource().is(DamageTypes.SONIC_BOOM);
         if (sonicBoom) {
-            // Zeroed rather than cancelled for the same reason as the finished chestplate above:
-            // the knockback and camera shake are meant to land regardless.
+            // zeroed rather than canceled for the knockback
             event.setAmount(0);
-            // A share of max health rather than a flat amount, so the reward keeps its weight for a
-            // player whose maximum has been raised by other mods.
+            // A share of max health rather than a flat amount
             player.heal((float) (player.getMaxHealth() * Config.forgingChestplateHealFraction));
         }
 
@@ -203,14 +198,12 @@ public class ModForgeEvents {
      */
     @SubscribeEvent
     public static void onSoulArmorFall(LivingFallEvent event) {
-        // Fires on the client's own player too — without this the shockwave would be dealt twice.
         if (event.getEntity().level().isClientSide()) return;
         if (!(event.getEntity() instanceof Player player)) return;
         if (!SoulChestplateItem.isRaging(player)) return;
         if (!SoulChestplateItem.isSlotEquippedWithSoulArmor(player, EquipmentSlot.FEET)) return;
 
-        // Read the fall before cancelling it: this event fires ahead of calculateFallDamage, so
-        // the distance is still the untouched one. Mirrors vanilla's own damage formula so the
+        // Mirrors vanilla's own damage formula so the
         // shockwave is worth exactly as much as the fall the boots just absorbed.
         MobEffectInstance jumpBoost = player.getEffect(MobEffects.JUMP);
         float jumpBoostAmplifier = jumpBoost == null ? 0.0F : (float) (jumpBoost.getAmplifier() + 1);
@@ -230,6 +223,33 @@ public class ModForgeEvents {
 
         for (LivingEntity target : targets) {
             target.hurt(ModDamageTypes.fallShockwave(player.level(), player), shockwaveDamage);
+        }
+    }
+
+    /**
+     * Silences the armor equip sound for anyone wearing a piece of soul armor on their chest.
+     * <p>
+     * Soul Rage rewrites the chestplate's NBT every tick, and vanilla's equip check
+     * ({@link net.minecraft.world.entity.LivingEntity#onEquipItem}) counts any tag difference as a
+     * fresh equip, so opening inventory while in soul rage makes A LOT of soul equip noises.
+     * <p>
+     * For unknown reason this bug only occurs in creative mode.
+     */
+    @SubscribeEvent
+    public static void onSoulArmorEquipSound(PlayLevelSoundEvent.AtPosition event) {
+        if (event.getSource() != SoundSource.PLAYERS) return;
+
+        Holder<SoundEvent> sound = event.getSound();
+        if (sound == null || sound.value() != ModArmorMaterials.SOUL_ARMOR.getEquipSound()) return;
+
+        // The equip sound is played at the wearer's exact position, so matching it identifies them.
+        for (Player player : event.getLevel().players()) {
+            if (player.position().distanceToSqr(event.getPosition()) > 1.0E-6) continue;
+            if (!(player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorItem armor)) continue;
+            if (armor.getMaterial() != ModArmorMaterials.SOUL_ARMOR) continue;
+
+            event.setCanceled(true);
+            return;
         }
     }
 

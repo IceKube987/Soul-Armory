@@ -151,7 +151,7 @@ public class BladeWaveEntity extends Projectile {
         // 3. Generate hit AABBs, collect enemies
         collectEnemiesAlongRightVec(newPos, sweepFrom);
 
-        // 4. Spawn firework particles
+        // 4. Spawn particles
         // TODO: visual effect
 //        spawnParticles(newPos);
 

@@ -17,11 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The core piece of the soul armor set. It owns the soul pool and the Soul Rage flag for the whole
- * set; the other three pieces ({@link AdditionalSoulArmorPiece}) only widen the cap and unlock one
- * Soul Rage effect each.
- */
 public class SoulChestplateItem extends ArmorItem {
 
     public static final String SOUL_AMOUNT = "soul_armory.soul_armor.soulAmount";
@@ -32,8 +27,7 @@ public class SoulChestplateItem extends ArmorItem {
 
     public static final String LAST_RAGE_UPDATE_GAME_TIME = "soul_armory.soul_armor.lastRageUpdateGameTime";
 
-    // Re-applied on this cadence while raging rather than every tick, because every successful
-    // effect refresh sends a packet to the client.
+    // Re-applied on this cadence while raging rather than every tick.
     private static final int NIGHT_VISION_REFRESH_INTERVAL = 20;
 
     public SoulChestplateItem(Properties pProperties) {
@@ -208,8 +202,6 @@ public class SoulChestplateItem extends ArmorItem {
      * the pool is empty — which is the only thing that ends it.
      */
     private float applyRageDrain(CompoundTag NBT, float soul, long currentGameTime) {
-        // An older stack that went into rage before this timestamp existed: start billing now
-        // rather than charging it for every tick since the world was created.
         if (!NBT.contains(LAST_RAGE_UPDATE_GAME_TIME)) {
             NBT.putLong(LAST_RAGE_UPDATE_GAME_TIME, currentGameTime);
             return soul;
@@ -218,16 +210,12 @@ public class SoulChestplateItem extends ArmorItem {
         long elapsed = currentGameTime - NBT.getLong(LAST_RAGE_UPDATE_GAME_TIME);
         if (elapsed <= 0) return soul;
 
-        // Nothing owed yet — leave both timestamps alone so a configured drain rate of zero, which
-        // is a deliberate way to ask for an endless rage, doesn't resync the slot every tick.
         double drained = elapsed * Config.soulArmorRageSoulPerTick;
         if (drained <= 0) return soul;
 
         NBT.putLong(LAST_RAGE_UPDATE_GAME_TIME, currentGameTime);
 
-        // Idle decay is suspended during rage, and holding its timestamp at the current tick means
-        // its grace period starts counting from the moment the rage ends rather than from the last
-        // soul gained — otherwise a long rage would be followed by a large backdated decay.
+        // Idle decay is suspended during rage.
         NBT.putLong(LAST_UPDATE_GAME_TIME, currentGameTime);
 
         soul = (float) Math.max(0, soul - drained);
@@ -247,6 +235,7 @@ public class SoulChestplateItem extends ArmorItem {
         // next soul gained refreshes it — and it saves rewriting (and so resyncing) it forever on
         // an empty pool. Resting on a set bonus floor is a steady state rather than a dead one,
         // though, so that case needs the credit actively thrown away instead.
+        // That comment there is AI-generated. Long as heck, isn't it? Welp, keeping it might be beneficial.
         if (soul <= floor) {
             if (floor > 0) discardDeadDecayCredit(NBT, currentGameTime);
             return soul;
@@ -265,6 +254,7 @@ public class SoulChestplateItem extends ArmorItem {
         // the clamp may have stopped it early, and charging for decay that never happened would
         // push the timestamp into the future. Rounded up because the pool is a float — addSoul pays
         // in raw damage — and a partial point still used up its tick block.
+        // This one, AI-generated too.
         long ticksSpent = (long) Math.ceil(soul - newSoul) * Config.soulArmorSoulDecaySpeed;
         NBT.putLong(LAST_UPDATE_GAME_TIME, lastUpdate + ticksSpent);
         return newSoul;
@@ -294,9 +284,6 @@ public class SoulChestplateItem extends ArmorItem {
         return Math.min(target, soul + 1);
     }
 
-    // The rage effects that have to be pushed onto the player every tick. The ones that only read
-    // state when something happens — damage reduction, lifesteal, fall immunity, movement speed —
-    // live on their events in ModForgeEvents instead.
     private void applyRageEffects(Level level, Player player) {
         // Soul Helmet: night vision, which outlives the rage that granted it.
         if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.HEAD)
