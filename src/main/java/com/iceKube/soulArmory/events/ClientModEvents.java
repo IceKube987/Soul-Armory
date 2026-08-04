@@ -7,6 +7,7 @@ import com.iceKube.soulArmory.client.shaders.CoreShaders;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.utils.KeyBinding;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -16,8 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-@Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModEvents {
+@Mod.EventBusSubscriber(value = Dist.CLIENT,modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ClientModEvents {
 
     /**
      * Registers the renderer for {@link com.iceKube.soulArmory.entities.SoulArrowEntity}.
