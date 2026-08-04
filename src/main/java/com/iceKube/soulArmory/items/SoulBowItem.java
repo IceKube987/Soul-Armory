@@ -369,9 +369,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
     public void setCurrentSkill(ItemStack stack, int index, ServerPlayer player) {
         if (!applySkillIndex(stack, index)) return;
 
-        // Played from the server so this path stays safe on a dedicated server — the bow has no
-        // switch cost or VFX of its own, just the click.
-        player.level().playSound(null, player.getOnPos(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 1, 1);
+        player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS,1,1);
     }
 
     @Override

@@ -24,11 +24,11 @@ public enum ModArmorMaterials implements ArmorMaterial {
      * non-damageable, and that in turn makes {@code Item#isEnchantable} false as well.
      */
     SOUL_ARMOR("soul_armor", 0, Util.make(new EnumMap<>(ArmorItem.Type.class), (map) -> {
-        map.put(ArmorItem.Type.BOOTS, 2);
-        map.put(ArmorItem.Type.LEGGINGS, 5);
-        map.put(ArmorItem.Type.CHESTPLATE, 6);
-        map.put(ArmorItem.Type.HELMET, 2);
-    }), 0, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, Ingredient.EMPTY),
+        map.put(ArmorItem.Type.BOOTS, 3);
+        map.put(ArmorItem.Type.LEGGINGS, 6);
+        map.put(ArmorItem.Type.CHESTPLATE, 8);
+        map.put(ArmorItem.Type.HELMET, 3);
+    }), 0, SoundEvents.ARMOR_EQUIP_IRON, 1.0F, 0.0F, Ingredient.EMPTY),
     SOUL_ARMOR_INCOMPLETE("soul_armor_incomplete", 0, Util.make(new EnumMap<>(ArmorItem.Type.class), (map) -> {
         map.put(ArmorItem.Type.BOOTS, 2);
         map.put(ArmorItem.Type.LEGGINGS, 5);
