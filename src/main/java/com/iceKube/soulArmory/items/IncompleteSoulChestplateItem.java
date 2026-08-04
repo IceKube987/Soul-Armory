@@ -19,7 +19,7 @@ import java.util.UUID;
 public class IncompleteSoulChestplateItem extends ArmorItem implements Forgeable {
 
     public IncompleteSoulChestplateItem(Properties pProperties) {
-        super(ModArmorMaterials.SOUL_ARMOR, Type.CHESTPLATE, pProperties);
+        super(ModArmorMaterials.SOUL_ARMOR_INCOMPLETE, Type.CHESTPLATE, pProperties);
     }
 
     @Override
