@@ -151,6 +151,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:neat-238372:5838485")
 
+    implementation fg.deobf("curse.maven:patchouli-306770:6164575")
+
     // compile against the JEI API but do not include it at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
