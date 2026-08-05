@@ -119,6 +119,26 @@ public class BladeWaveEntity extends Projectile {
     }
 
     /**
+     * The hitbox is a 0.1 speck, but the rendered quad spans BLADE_LENGTH.
+     * Cull against the visual size instead so it doesn't pop out at the
+     * screen edge while still on screen.
+     */
+    @Override
+    public AABB getBoundingBoxForCulling() {
+        return super.getBoundingBoxForCulling().inflate(BLADE_LENGTH);
+    }
+
+    /**
+     * Vanilla derives the render cutoff from the hitbox size (0.1 → 6.4 blocks).
+     * Use the blade length so the wave stays visible for its whole flight.
+     */
+    @Override
+    public boolean shouldRenderAtSqrDistance(double pDistance) {
+        double range = BLADE_LENGTH * 64.0 * getViewScale();
+        return pDistance < range * range;
+    }
+
+    /**
      * Do not stop on block contact — passes through walls.
      */
     @Override
