@@ -3,12 +3,15 @@ package com.iceKube.soulArmory.events;
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.items.*;
+import com.iceKube.soulArmory.networking.ModPacketHandler;
+import com.iceKube.soulArmory.networking.packets.S2C.ConfigSyncS2CPacket;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
 import com.iceKube.soulArmory.soulForging.TransformHelper;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -35,6 +38,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -48,6 +52,14 @@ public class ModForgeEvents {
 
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
+
+    // Config is a COMMON spec, which Forge never syncs, so push this server's values to the joining
+    // client. Otherwise it would render stuff (especially soul bars) against whatever its own config file happens to say.
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
+        ModPacketHandler.sendToPlayer(new ConfigSyncS2CPacket(), serverPlayer);
+    }
 
     // When player is hurting entity with soul weapons.
     @SubscribeEvent

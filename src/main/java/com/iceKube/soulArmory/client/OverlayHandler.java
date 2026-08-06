@@ -58,8 +58,13 @@ public class OverlayHandler {
             soulPoint = itemStack.getTag().getFloat(BaseSoulWeaponItem.SOUL_AMOUNT);
         }
 
-        float soulPercentage = soulPoint / baseSoulWeaponItem.getMaxSoul();
-        float soulOverflowPercentage = ((float) baseSoulWeaponItem.getOverflowThreshold()) / baseSoulWeaponItem.getMaxSoul();
+        int maxSoul = baseSoulWeaponItem.getMaxSoul();
+        if (maxSoul <= 0) return;
+
+        // Clamped so a soul value or threshold beyond the max can't stretch the quad's UVs outside
+        // the bar's region of the texture.
+        float soulPercentage = clamp01(soulPoint / maxSoul);
+        float soulOverflowPercentage = clamp01(((float) baseSoulWeaponItem.getOverflowThreshold()) / maxSoul);
 
         drawSoulBarOutline(gui, x, y, 0, 10, tex_w, tex_h, w, h);
         drawSoulBar(gui, x, y, 0, 15, tex_w * soulPercentage, tex_h, w * soulPercentage, h, soulOverflowPercentage);
@@ -75,7 +80,10 @@ public class OverlayHandler {
         if (!(item instanceof SoulChestplateItem soulChestplateItem)) return;
         float soulPoint = SoulChestplateItem.getSoul(itemStack);
 
-        float soulPercentage = soulPoint / SoulChestplateItem.getMaxSoulForArmor(mc.player);
+        int maxSoul = SoulChestplateItem.getMaxSoulForArmor(mc.player);
+        if (maxSoul <= 0) return;
+
+        float soulPercentage = clamp01(soulPoint / maxSoul);
 
         float soulOverflowPercentage = 0;
         if (SoulChestplateItem.isRaging(itemStack)) {
@@ -190,10 +198,11 @@ public class OverlayHandler {
             alphaScale = 1 - elapsed / VIGNETTE_FADE_DURATION;
         }
 
-        // Clamp into [0,1]
-        alphaScale = Math.max(0, alphaScale);
-        alphaScale = Math.min(1, alphaScale);
-        return alphaScale;
+        return clamp01(alphaScale);
+    }
+
+    private static float clamp01(float value) {
+        return Math.min(1, Math.max(0, value));
     }
 
     public static void renderSkillIcon(GuiGraphics gui, int x, int y, int w, int h) {

@@ -1,10 +1,28 @@
 package com.iceKube.soulArmory;
 
+import com.mojang.logging.LogUtils;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import org.slf4j.Logger;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Gameplay values, owned by whoever is running the world. This is a {@code ModConfig.Type.COMMON}
+ * spec so the file stays a single global {@code config/soul_armory-common.toml} that modpack makers
+ * can ship — but Forge does not sync COMMON specs, so the server pushes this whole cache to each
+ * client on login (see {@code ConfigSyncS2CPacket}). Without that, a client would render the soul
+ * bars against its own numbers while the server ran on different ones.
+ */
 @Mod.EventBusSubscriber(modid = SoulArmoryMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -679,6 +697,16 @@ public class Config {
         // Fires once per spec the mod owns, so ignore everything that isn't ours.
         if (event.getConfig().getSpec() != SPEC) return;
 
+        loadFromSpec();
+
+        // Forge's file watcher fires this whenever the local toml is edited. While a server's
+        // values are in force they still win, otherwise the edit would silently put this client
+        // back on its own numbers mid-session and desync the rendering again.
+        if (serverSnapshot != null) applyValues(serverSnapshot);
+    }
+
+    // Repopulates the cache from this side's own soul_armory-common.toml.
+    public static void loadFromSpec() {
         soulSwordMaxSoul = SOUL_SWORD_MAX_SOUL.get();
         soulSwordPointsPerDamage = SOUL_SWORD_POINT_PER_DAMAGE.get();
         soulSwordPointsPerHealing = SOUL_SWORD_POINT_PER_HEALING.get();
@@ -767,5 +795,95 @@ public class Config {
         soulArmorFullSetRegenSpeed = SOUL_ARMOR_FULL_SET_REGEN_SPEED.get();
         soulArmorFullSetIdleFailsafeMaxHealthFraction = SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_MAX_HEALTH_FRACTION.get();
         soulArmorFullSetIdleFailsafeIgnoresVoid = SOUL_ARMOR_FULL_SET_IDLE_FAILSAFE_IGNORES_VOID.get();
+    }
+
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    // Every cached value above, in an order both sides agree on. The sync walks this list instead
+    // of naming values one by one, so a config option added above is synced without touching the
+    // packet. Only public static non-final fields qualify, which is exactly the cache: the spec
+    // values and SPEC itself are final, and everything else here is private.
+    private static final List<Field> SYNCED_FIELDS = collectSyncedFields();
+
+    // Non-null only while a remote server's values are in force. See applySynced.
+    private static Map<String, Object> serverSnapshot = null;
+
+    private static List<Field> collectSyncedFields() {
+        List<Field> fields = new ArrayList<>();
+        for (Field field : Config.class.getFields()) {
+            int modifiers = field.getModifiers();
+            if (!Modifier.isStatic(modifiers) || Modifier.isFinal(modifiers)) continue;
+            fields.add(field);
+        }
+        // Declaration order isn't guaranteed by reflection, so sort to give both sides the same
+        // sequence to write and read.
+        fields.sort(Comparator.comparing(Field::getName));
+        return List.copyOf(fields);
+    }
+
+    public static int syncedFieldCount() {
+        return SYNCED_FIELDS.size();
+    }
+
+    // Fingerprint of the field list. Both sides compute it from their own Config, so a mismatch
+    // means the two builds disagree on the layout and the stream can't be read safely.
+    public static int fieldSignature() {
+        StringBuilder builder = new StringBuilder();
+        for (Field field : SYNCED_FIELDS) {
+            builder.append(field.getName()).append(':').append(field.getType().getName()).append(';');
+        }
+        return builder.toString().hashCode();
+    }
+
+    public static void writeAll(FriendlyByteBuf buf) {
+        for (Field field : SYNCED_FIELDS) {
+            Class<?> type = field.getType();
+            try {
+                if (type == int.class) buf.writeVarInt(field.getInt(null));
+                else if (type == double.class) buf.writeDouble(field.getDouble(null));
+                else if (type == boolean.class) buf.writeBoolean(field.getBoolean(null));
+                // An unsupported type writes nothing, and readAll skips it on the same condition,
+                // so the stream stays aligned either way.
+                else LOGGER.error("Config value {} has unsupported type {} and will not be synced", field.getName(), type);
+            } catch (IllegalAccessException e) {
+                LOGGER.error("Could not read config value {} for sync", field.getName(), e);
+            }
+        }
+    }
+
+    public static Map<String, Object> readAll(FriendlyByteBuf buf) {
+        Map<String, Object> values = new HashMap<>();
+        for (Field field : SYNCED_FIELDS) {
+            Class<?> type = field.getType();
+            if (type == int.class) values.put(field.getName(), buf.readVarInt());
+            else if (type == double.class) values.put(field.getName(), buf.readDouble());
+            else if (type == boolean.class) values.put(field.getName(), buf.readBoolean());
+        }
+        return values;
+    }
+
+    // Adopts a remote server's values, and remembers them so a later local file reload doesn't
+    // undo the adoption.
+    public static void applySynced(Map<String, Object> values) {
+        serverSnapshot = values;
+        applyValues(values);
+    }
+
+    // Drops the remote server's values and goes back to this instance's own config file.
+    public static void clearSynced() {
+        serverSnapshot = null;
+        loadFromSpec();
+    }
+
+    private static void applyValues(Map<String, Object> values) {
+        for (Field field : SYNCED_FIELDS) {
+            Object value = values.get(field.getName());
+            if (value == null) continue;
+            try {
+                field.set(null, value);
+            } catch (IllegalAccessException e) {
+                LOGGER.error("Could not apply synced config value {}", field.getName(), e);
+            }
+        }
     }
 }

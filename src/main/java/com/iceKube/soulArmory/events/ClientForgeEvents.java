@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.events;
 
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.client.OverlayHandler;
 import com.iceKube.soulArmory.client.gui.SkillRadialMenuScreen;
@@ -14,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
@@ -102,5 +104,11 @@ public class ClientForgeEvents {
 
         Minecraft mc = Minecraft.getInstance();
         OverlayHandler.setVignette(mc.player != null && SoulChestplateItem.isRaging(mc.player));
+    }
+
+    // Drop the values adopted from the server, otherwise they would carry into the next world.
+    @SubscribeEvent
+    public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        Config.clearSynced();
     }
 }
