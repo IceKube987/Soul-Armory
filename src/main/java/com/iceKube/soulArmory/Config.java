@@ -116,6 +116,8 @@ public class Config {
     private static final ForgeConfigSpec.IntValue SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD;
     private static final ForgeConfigSpec.IntValue SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER;
     private static final ForgeConfigSpec.IntValue SOUL_ARMOR_RAGE_SPEED_BONUS;
+    private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_STEP_HEIGHT_ADDITION;
+    private static final ForgeConfigSpec.BooleanValue SOUL_ARMOR_RAGE_POISON_IMMUNITY;
     private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_RADIUS;
     private static final ForgeConfigSpec.DoubleValue SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER;
 
@@ -425,6 +427,16 @@ public class Config {
                     .comment("This boost is still subject to speedBoostCeil unless speedBoostHasCeil is false")
                     .defineInRange("soulArmorRageSpeedBonus", 100, 0, Integer.MAX_VALUE);
 
+            SOUL_ARMOR_RAGE_STEP_HEIGHT_ADDITION = BUILDER
+                    .comment("How much step height the soul leggings add while in Soul Rage (0.5 lets the player walk up a full block, like a horse)")
+                    .comment("Set to 0 to disable the step assist entirely")
+                    .defineInRange("soulArmorRageStepHeightAddition", 0.5, 0.0, 2.0);
+
+            SOUL_ARMOR_RAGE_POISON_IMMUNITY = BUILDER
+                    .comment("Whether Soul Rage makes the player immune to poison")
+                    .comment("Poison already on the player is cured when the rage starts, and is not restored when it ends")
+                    .define("soulArmorRagePoisonImmunity", true);
+
             SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER = BUILDER
                     .comment("How long (in ticks) the night vision granted by the soul helmet persists after Soul Rage ends")
                     .defineInRange("soulArmorRageNightVisionLinger", 1200, 1, Integer.MAX_VALUE);
@@ -683,6 +695,8 @@ public class Config {
     public static int soulArmorSonicBoomSoulReward;
     public static int soulArmorRageNightVisionLinger;
     public static int soulArmorRageSpeedBonus;
+    public static double soulArmorRageStepHeightAddition;
+    public static boolean soulArmorRagePoisonImmunity;
     public static double soulArmorRageFallAoeRadius;
     public static double soulArmorRageFallAoeDamageMultiplier;
     public static boolean soulArmorFullSetBonusEnabled;
@@ -788,6 +802,8 @@ public class Config {
         soulArmorSonicBoomSoulReward = SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD.get();
         soulArmorRageNightVisionLinger = SOUL_ARMOR_RAGE_NIGHT_VISION_LINGER.get();
         soulArmorRageSpeedBonus = SOUL_ARMOR_RAGE_SPEED_BONUS.get();
+        soulArmorRageStepHeightAddition = SOUL_ARMOR_RAGE_STEP_HEIGHT_ADDITION.get();
+        soulArmorRagePoisonImmunity = SOUL_ARMOR_RAGE_POISON_IMMUNITY.get();
         soulArmorRageFallAoeRadius = SOUL_ARMOR_RAGE_FALL_AOE_RADIUS.get();
         soulArmorRageFallAoeDamageMultiplier = SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER.get();
         soulArmorFullSetBonusEnabled = SOUL_ARMOR_FULL_SET_BONUS_ENABLED.get();

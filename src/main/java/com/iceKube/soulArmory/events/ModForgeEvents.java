@@ -32,14 +32,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,6 +55,7 @@ public class ModForgeEvents {
 
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
+    private static final UUID SOUL_STEP_HEIGHT_MODIFIER_UUID = UUID.fromString("6f1d4a08-2b95-4c37-9e60-5c8a17d3b204"); // Randomly generated UUID
 
     // Config is a COMMON spec, which Forge never syncs, so push this server's values to the joining
     // client. Otherwise it would render stuff (especially soul bars) against whatever its own config file happens to say.
@@ -333,6 +337,43 @@ public class ModForgeEvents {
                 modifierAmount,
                 AttributeModifier.Operation.ADDITION));
 
+    }
+
+    // Soul Leggings: step up a full block during rage, the way a horse does.
+    @SubscribeEvent
+    public static void onPlayerTickApplyStepHeight(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) return;
+
+        Player player = event.player;
+        AttributeInstance attr = player.getAttributes().getInstance(ForgeMod.STEP_HEIGHT_ADDITION.get());
+
+        if (attr == null) return;
+        // Removing first, unconditionally, is what drops the bonus the moment the rage ends, the
+        // leggings come off, or the config is turned down.
+        if (attr.getModifier(SOUL_STEP_HEIGHT_MODIFIER_UUID) != null) {
+            attr.removeModifier(SOUL_STEP_HEIGHT_MODIFIER_UUID);
+        }
+
+        if (Config.soulArmorRageStepHeightAddition <= 0) return;
+        if (!SoulChestplateItem.isRaging(player)) return;
+        if (!SoulChestplateItem.isSlotEquippedWithSoulArmor(player, EquipmentSlot.LEGS)) return;
+
+        attr.addTransientModifier(new AttributeModifier(
+                SOUL_STEP_HEIGHT_MODIFIER_UUID,
+                "Soul Step Height Modifier",
+                Config.soulArmorRageStepHeightAddition,
+                AttributeModifier.Operation.ADDITION));
+    }
+
+    // Rage shrugs off poison. The poison already on the player is cured by SoulChestplateItem's rage tick.
+    @SubscribeEvent
+    public static void onPotionApplicable(MobEffectEvent.Applicable event) {
+        if (!Config.soulArmorRagePoisonImmunity) return;
+        if (event.getEffectInstance().getEffect() != MobEffects.POISON) return;
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!SoulChestplateItem.isRaging(player)) return;
+
+        event.setResult(Event.Result.DENY);
     }
 
     @SubscribeEvent

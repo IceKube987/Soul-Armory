@@ -285,6 +285,12 @@ public class SoulChestplateItem extends ArmorItem {
     }
 
     private void applyRageEffects(Level level, Player player) {
+        // Rage burns the poison out. ModForgeEvents keeps new applications off for as long as it lasts,
+        // so this only ever fires for poison that landed before the rage started.
+        if (Config.soulArmorRagePoisonImmunity && player.hasEffect(MobEffects.POISON)) {
+            player.removeEffect(MobEffects.POISON);
+        }
+
         // Soul Helmet: night vision, which outlives the rage that granted it.
         if (isSlotEquippedWithSoulArmor(player, EquipmentSlot.HEAD)
                 && level.getGameTime() % NIGHT_VISION_REFRESH_INTERVAL == 0) {
