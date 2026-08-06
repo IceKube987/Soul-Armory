@@ -195,7 +195,7 @@ public class Config {
 
                 SOUL_SWORD_WAVE_COST = BUILDER
                         .comment("How many points of soul will it take to use the skill")
-                        .defineInRange("bladeWaveCost", 50, 0, Integer.MAX_VALUE);
+                        .defineInRange("bladeWaveCost", 35, 0, Integer.MAX_VALUE);
                 SOUL_SWORD_WAVE_SPEED = BUILDER
                         .comment("How far (in blocks) should the wave move in one tick")
                         .defineInRange("bladeWaveSpeed", 1, 0, Double.MAX_VALUE);
@@ -394,15 +394,15 @@ public class Config {
 
             SOUL_ARMOR_SOUL_ADDITION_PER_PIECE = BUILDER
                     .comment("How many points of soul will be added with each additional armor piece (that is, every soul armor other than chestplate) equipped")
-                    .defineInRange("soulArmorAdditionalSoul", 200, 1, Integer.MAX_VALUE);
+                    .defineInRange("soulArmorAdditionalSoul", 100, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_GRACE_PERIOD = BUILDER
                     .comment("How long (in ticks) will the soul start to decay after gaining points of soul")
-                    .defineInRange("soulArmorGracePeriod", 1200, 1, Integer.MAX_VALUE);
+                    .defineInRange("soulArmorGracePeriod", 2400, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_SOUL_DECAY_SPEED = BUILDER
                     .comment("How fast should 1 point of soul decay (in ticks)")
-                    .defineInRange("soulArmorSoulDecaySpeed", 4, 1, Integer.MAX_VALUE);
+                    .defineInRange("soulArmorSoulDecaySpeed", 5, 1, Integer.MAX_VALUE);
 
             SOUL_ARMOR_RAGE_THRESHOLD = BUILDER
                     .comment("How many points of soul is required to start Soul Rage")
@@ -410,11 +410,11 @@ public class Config {
 
             SOUL_ARMOR_RAGE_SOUL_PER_TICK = BUILDER
                     .comment("How many points of soul is consumed per tick while in Soul Rage")
-                    .defineInRange("soulArmorRageSoulPerTick", 1.0, 0.0, Double.MAX_VALUE);
+                    .defineInRange("soulArmorRageSoulPerTick", 0.5, 0.0, Double.MAX_VALUE);
 
             SOUL_ARMOR_RAGE_DAMAGE_REDUCTION = BUILDER
                     .comment("The fraction of incoming damage negated while in Soul Rage (0.6 = 60% less damage taken)")
-                    .defineInRange("soulArmorRageDamageReduction", 0.6, 0.0, 1.0);
+                    .defineInRange("soulArmorRageDamageReduction", 0.7, 0.0, 1.0);
 
             SOUL_ARMOR_RAGE_LIFESTEAL_RATIO = BUILDER
                     .comment("How much damage must be dealt to heal 1 point of health while in Soul Rage")
@@ -489,7 +489,7 @@ public class Config {
 
                 FORGING_SWORD_ACTIVE_TICKS = BUILDER
                         .comment("Duration in ticks the incomplete sword stays active after hitting a Warden")
-                        .defineInRange("forgingSwordActiveTicks", 100, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingSwordActiveTicks", 200, 1, Integer.MAX_VALUE);
 
                 BUILDER.pop();
             }
@@ -507,7 +507,7 @@ public class Config {
 
                 FORGING_BOW_ACTIVE_TICKS = BUILDER
                         .comment("Duration in ticks the incomplete bow stays active after hitting a Warden")
-                        .defineInRange("forgingBowActiveTicks", 100, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingBowActiveTicks", 200, 1, Integer.MAX_VALUE);
 
                 BUILDER.pop();
             }
@@ -517,7 +517,7 @@ public class Config {
 
                 FORGING_CHESTPLATE_SONIC_HITS = BUILDER
                         .comment("Number of Warden sonic boom hits required to forge the chestplate")
-                        .defineInRange("forgingChestplateSonicHits", 5, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingChestplateSonicHits", 10, 1, Integer.MAX_VALUE);
 
                 FORGING_CHESTPLATE_TIMEOUT_TICKS = BUILDER
                         .comment("Ticks of inactivity before chestplate forging progress resets (0 = no timeout)")
@@ -525,7 +525,7 @@ public class Config {
 
                 FORGING_CHESTPLATE_ACTIVE_TICKS = BUILDER
                         .comment("Duration in ticks the incomplete chestplate stays active after a sonic boom hit")
-                        .defineInRange("forgingChestplateActiveTicks", 100, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingChestplateActiveTicks", 200, 1, Integer.MAX_VALUE);
 
                 FORGING_CHESTPLATE_HEAL_FRACTION = BUILDER
                         .comment("Fraction of the wearer's maximum health the incomplete chestplate heals when it absorbs a sonic boom (1.0 = a full heal, 0.0 = none)")
