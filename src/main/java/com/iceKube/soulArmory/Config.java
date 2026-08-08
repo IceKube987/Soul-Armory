@@ -493,7 +493,7 @@ public class Config {
 
                 FORGING_SWORD_DAMAGE_TARGET = BUILDER
                         .comment("Total damage to Wardens required to forge the soul sword")
-                        .defineInRange("forgingSwordDamageTarget", 500, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingSwordDamageTarget", 450, 1, Integer.MAX_VALUE);
 
                 FORGING_SWORD_TIMEOUT_TICKS = BUILDER
                         .comment("Ticks of inactivity before sword forging progress resets (0 = no timeout)")
@@ -511,7 +511,7 @@ public class Config {
 
                 FORGING_BOW_DAMAGE_TARGET = BUILDER
                         .comment("Total damage to Wardens required to forge the soul bow")
-                        .defineInRange("forgingBowDamageTarget", 500, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingBowDamageTarget", 450, 1, Integer.MAX_VALUE);
 
                 FORGING_BOW_TIMEOUT_TICKS = BUILDER
                         .comment("Ticks of inactivity before bow forging progress resets (0 = no timeout)")
