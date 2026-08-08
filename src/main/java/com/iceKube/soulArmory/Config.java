@@ -446,8 +446,8 @@ public class Config {
                     .defineInRange("soulArmorRageFallAoeRadius", 5.0, 0.0, Double.MAX_VALUE);
 
             SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER = BUILDER
-                    .comment("The damage of the landing shockwave, as a multiple of the fall damage that was negated")
-                    .defineInRange("soulArmorRageFallAoeDamageMultiplier", 1.0, 0.0, Double.MAX_VALUE);
+                    .comment("The damage of the landing shockwave, as a multiple of the fall damage that was negated, 0 to disable it.")
+                    .defineInRange("soulArmorRageFallAoeDamageMultiplier", 0, 0.0, Double.MAX_VALUE);
 
             SOUL_ARMOR_ABSORB_SONIC_BOOM = BUILDER
                     .comment("Whether wearing a soul chestplate negates the damage of the Warden's sonic boom")
@@ -456,7 +456,7 @@ public class Config {
 
             SOUL_ARMOR_SONIC_BOOM_SOUL_REWARD = BUILDER
                     .comment("How many points of soul is granted when the soul chestplate is hit by a sonic boom")
-                    .defineInRange("soulArmorSonicBoomSoulReward", 100, 0, Integer.MAX_VALUE);
+                    .defineInRange("soulArmorSonicBoomSoulReward", 60, 0, Integer.MAX_VALUE);
 
             SOUL_ARMOR_FULL_SET_BONUS_ENABLED = BUILDER
                     .comment("Whether wearing all four soul armor pieces grants the full set bonus")
@@ -537,7 +537,7 @@ public class Config {
 
                 FORGING_CHESTPLATE_ACTIVE_TICKS = BUILDER
                         .comment("Duration in ticks the incomplete chestplate stays active after a sonic boom hit")
-                        .defineInRange("forgingChestplateActiveTicks", 200, 1, Integer.MAX_VALUE);
+                        .defineInRange("forgingChestplateActiveTicks", 120, 1, Integer.MAX_VALUE);
 
                 FORGING_CHESTPLATE_HEAL_FRACTION = BUILDER
                         .comment("Fraction of the wearer's maximum health the incomplete chestplate heals when it absorbs a sonic boom (1.0 = a full heal, 0.0 = none)")
