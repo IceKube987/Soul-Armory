@@ -1,0 +1,26 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "minecraft:creeper_head"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.no_u.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.no_u.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "failsafe_saved_from_creeper": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "failsafe_saved_from_creeper"
+      }
+    }
+  }
+}

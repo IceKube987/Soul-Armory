@@ -1,0 +1,26 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "minecraft:iron_block"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.not_a_cheese.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.not_a_cheese.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "iron_golem_overkill": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "iron_golem_overkill"
+      }
+    }
+  }
+}

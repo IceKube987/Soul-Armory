@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:awakening",
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_bow"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.whos_the_warden_now.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.whos_the_warden_now.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "sonic_hit_warden": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "warden_sonic_hit"
+      }
+    }
+  }
+}

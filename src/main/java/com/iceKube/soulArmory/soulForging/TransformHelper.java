@@ -1,5 +1,7 @@
 package com.iceKube.soulArmory.soulForging;
 
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
+import com.iceKube.soulArmory.advancements.SoulAction;
 import com.iceKube.soulArmory.items.BaseSoulWeaponItem;
 import com.iceKube.soulArmory.items.Forgeable;
 import com.iceKube.soulArmory.items.SoulChestplateItem;
@@ -58,6 +60,7 @@ public class TransformHelper {
         if (player instanceof ServerPlayer serverPlayer) {
             ModPacketHandler.sendToPlayer(new ForgingCompleteVFXS2CPacket(), serverPlayer);
         }
+        ModCriteriaTriggers.grant(player, SoulAction.FORGING_COMPLETE);
     }
 
     /**
@@ -76,23 +79,33 @@ public class TransformHelper {
         tag.putUUID("soul_armory.instanceId", UUID.randomUUID());
 
         replaceStackInInventory(player, oldStack, newStack);
-        convertAllWornIronPieces(player);
+        int converted = convertAllWornIronPieces(player);
 
         tag.putFloat(SoulChestplateItem.SOUL_AMOUNT, SoulChestplateItem.getMaxSoulForArmor(player));
 
         if (player instanceof ServerPlayer serverPlayer) {
             ModPacketHandler.sendToPlayer(new ForgingCompleteVFXS2CPacket(), serverPlayer);
         }
+        ModCriteriaTriggers.grant(player, SoulAction.FORGING_COMPLETE);
+
+        // "Ascension": the forge caught a full iron set, so every remaining piece turned at once.
+        if (converted == IRON_CONVERTIBLE_SLOTS.length) {
+            ModCriteriaTriggers.grant(player, SoulAction.FULL_SET_CONVERTED);
+        }
     }
 
     /**
      * Converts every worn iron armor piece into its Soul counterpart, discarding durability and
      * enchantments. The chest slot is left alone: forging has already filled it.
+     *
+     * @return how many pieces were converted
      */
-    public static void convertAllWornIronPieces(Player player) {
+    public static int convertAllWornIronPieces(Player player) {
+        int converted = 0;
         for (EquipmentSlot slot : IRON_CONVERTIBLE_SLOTS) {
-            convertWornIronPiece(player, slot);
+            if (convertWornIronPiece(player, slot)) converted++;
         }
+        return converted;
     }
 
     /**

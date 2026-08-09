@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory;
 
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.registries.*;
 import com.iceKube.soulArmory.soulForging.ForgingTasks;
@@ -50,6 +51,7 @@ public class SoulArmoryMod {
             ModPacketHandler.register();
             registerSoulSkills();
             ForgingTasks.registerForgingTasks();
+            ModCriteriaTriggers.register();
         });
     }
 

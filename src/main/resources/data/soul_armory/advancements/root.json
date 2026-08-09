@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_sword"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.root.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.root.description"
+    },
+    "background": "minecraft:textures/block/sculk.png",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "obtain_incomplete": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "soul_armory:incomplete_soul_sword",
+              "soul_armory:incomplete_soul_bow",
+              "soul_armory:incomplete_soul_chestplate"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

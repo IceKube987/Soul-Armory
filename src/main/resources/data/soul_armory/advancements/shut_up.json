@@ -1,0 +1,26 @@
+{
+  "parent": "soul_armory:whos_the_warden_now",
+  "display": {
+    "icon": {
+      "item": "minecraft:echo_shard"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.shut_up.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.shut_up.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "sonic_kill_warden": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "warden_sonic_kill"
+      }
+    }
+  }
+}

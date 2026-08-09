@@ -34,5 +34,24 @@
   "tooltip.soul_armory.forging.sonic_hits": "受到音波攻击次数",
   "tooltip.soul_armory.forging.kill_wardens_in_time": "连续击杀监守者",
   "tooltip.soul_armory.forging.deal_damage_sonic": "通过音波冲击造成伤害",
-  "tooltip.soul_armory.forging.heal": "治疗自己"
+  "tooltip.soul_armory.forging.heal": "治疗自己",
+
+  "advancements.soul_armory.root.title": "灵魂军械库",
+  "advancements.soul_armory.root.description": "远古城市的黑暗中，有未完成之物在等待。",
+  "advancements.soul_armory.awakening.title": "苏醒",
+  "advancements.soul_armory.awakening.description": "用未完成的灵魂武器攻击监守者。",
+  "advancements.soul_armory.unleashed.title": "解放",
+  "advancements.soul_armory.unleashed.description": "完成锻造一件灵魂装备。",
+  "advancements.soul_armory.ascension.title": "飞升",
+  "advancements.soul_armory.ascension.description": "一瞬之间，将整套铁质护甲化为灵魂护甲。",
+  "advancements.soul_armory.thanks_for_the_treat.title": "多谢款待！",
+  "advancements.soul_armory.thanks_for_the_treat.description": "穿着灵魂护甲，把一发音波攻击整个吞下。",
+  "advancements.soul_armory.whos_the_warden_now.title": "现在谁才是监守者？",
+  "advancements.soul_armory.whos_the_warden_now.description": "用你自己的音波击中监守者。",
+  "advancements.soul_armory.shut_up.title": "吵死了",
+  "advancements.soul_armory.shut_up.description": "用音波终结一只监守者。尖叫这种事，是双向的。",
+  "advancements.soul_armory.not_a_cheese.title": "并非设计漏洞",
+  "advancements.soul_armory.not_a_cheese.description": "只用灵魂武器，亲手放倒一只自己造出来的铁傀儡。",
+  "advancements.soul_armory.no_u.title": "今天不行",
+  "advancements.soul_armory.no_u.description": "从一只信心十足的苦力怕手里全身而退。"
 }

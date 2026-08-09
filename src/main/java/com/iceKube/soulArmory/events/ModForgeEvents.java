@@ -2,6 +2,8 @@ package com.iceKube.soulArmory.events;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
+import com.iceKube.soulArmory.advancements.SoulAction;
 import com.iceKube.soulArmory.items.*;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.S2C.ConfigSyncS2CPacket;
@@ -27,6 +29,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -54,6 +58,10 @@ import java.util.UUID;
 public class ModForgeEvents {
 
     private static final String SOUL_AMOUNT_NBT = "soul_armory.soul_weapon.soulAmount";
+    // Running total of ordinary soul weapon damage taken by a player-built iron golem, kept on the
+    // golem itself so it survives chunk unload and world reload.
+    private static final String GOLEM_SOUL_DAMAGE_NBT = "soul_armory.golemSoulDamage";
+    private static final float NOT_A_CHEESE_HEALTH_FRACTION = 0.9F;
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
     private static final UUID SOUL_STEP_HEIGHT_MODIFIER_UUID = UUID.fromString("6f1d4a08-2b95-4c37-9e60-5c8a17d3b204"); // Randomly generated UUID
 
@@ -89,11 +97,31 @@ public class ModForgeEvents {
         // Handle add soul points for regular soul weapons.
         AddSoulPoints(event, mainHandItem);
 
+        accumulateGolemSoulDamage(event, mainHandItem);
+
         // Activate incomplete weapons
         EntityType<?> targetType = event.getEntity().getType();
         if (targetType == EntityType.WARDEN && mainHandItem.getItem() instanceof BaseIncompleteSoulItem incompleteItem) {
             incompleteItem.activate(mainHandItem);
+            ModCriteriaTriggers.grant(player, SoulAction.INCOMPLETE_HIT_WARDEN);
         }
+    }
+
+    /**
+     * Tallies ordinary Soul Sword / Soul Bow damage dealt to a player-constructed iron golem.
+     */
+    private static void accumulateGolemSoulDamage(LivingDamageEvent event, ItemStack mainHandItem) {
+        if (!(event.getEntity() instanceof IronGolem golem)) return;
+        if (golem.level().isClientSide()) return; // the client's persistent data is a throwaway copy
+        if (!golem.isPlayerCreated()) return;
+        if (!(mainHandItem.getItem() instanceof BaseSoulWeaponItem)) return;
+
+        // Clamped to what is actually left, so overkill cannot inflate the total.
+        float dealt = Math.min(event.getAmount(), golem.getHealth());
+        if (dealt <= 0) return;
+
+        CompoundTag data = golem.getPersistentData();
+        data.putFloat(GOLEM_SOUL_DAMAGE_NBT, data.getFloat(GOLEM_SOUL_DAMAGE_NBT) + dealt);
     }
 
     /**
@@ -124,6 +152,7 @@ public class ModForgeEvents {
             TransformHelper.convertOneWornIronPiece(player);
             if (Config.soulArmorAbsorbSonicBoom) {
                 event.setAmount(0);  // zeroed rather than canceled for the knockback
+                ModCriteriaTriggers.grant(player, SoulAction.ABSORB_SONIC_BOOM);
                 return;
             }
         }
@@ -157,6 +186,12 @@ public class ModForgeEvents {
             event.setAmount(0);
             // A share of max health rather than a flat amount
             player.heal((float) (player.getMaxHealth() * Config.forgingChestplateHealFraction));
+
+            // The prototype absorbs the boom either way, but the advancement only exists when the
+            // absorb option is on.
+            if (Config.soulArmorAbsorbSonicBoom) {
+                ModCriteriaTriggers.grant(player, SoulAction.ABSORB_SONIC_BOOM);
+            }
         }
 
         if (completed) {
@@ -201,11 +236,21 @@ public class ModForgeEvents {
         event.setAmount(cap);
 
         SoulChestplateItem.tryActivateRage(player);
+
+        // "No u": the failsafe fired against a creeper and the wearer walked away from it.
+        if (cap < player.getHealth() && isCreeperExplosion(event.getSource())) {
+            ModCriteriaTriggers.grant(player, SoulAction.FAILSAFE_SAVED_FROM_CREEPER);
+        }
     }
 
     // Damage that bypasses invulnerability is the void and /kill.
     private static boolean isExemptFromIdleFailsafe(DamageSource source) {
         return Config.soulArmorFullSetIdleFailsafeIgnoresVoid && source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+    }
+
+    private static boolean isCreeperExplosion(DamageSource source) {
+        if (!source.is(DamageTypeTags.IS_EXPLOSION)) return false;
+        return source.getDirectEntity() instanceof Creeper || source.getEntity() instanceof Creeper;
     }
 
     /**
@@ -272,6 +317,13 @@ public class ModForgeEvents {
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
+
+        // "Not a cheese", checked before the Forgeable guard below would short-circuit it.
+        if (event.getEntity() instanceof IronGolem golem && golem.isPlayerCreated()
+                && golem.getPersistentData().getFloat(GOLEM_SOUL_DAMAGE_NBT)
+                        >= golem.getMaxHealth() * NOT_A_CHEESE_HEALTH_FRACTION) {
+            ModCriteriaTriggers.grant(player, SoulAction.IRON_GOLEM_OVERKILL);
+        }
 
         ItemStack mainHandItem = player.getMainHandItem();
         if (!(mainHandItem.getItem() instanceof Forgeable forgeable)) return;

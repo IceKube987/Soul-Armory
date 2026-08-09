@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:awakening",
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_chestplate"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.unleashed.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.unleashed.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "forging_complete": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "forging_complete"
+      }
+    }
+  }
+}

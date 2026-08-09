@@ -2,6 +2,7 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
 import com.iceKube.soulArmory.items.SoulBowItem;
 import com.iceKube.soulArmory.soulSkill.InstantSoulSkill;
 import net.minecraft.core.particles.ParticleTypes;
@@ -57,7 +58,8 @@ public class SonicBoomSkill extends InstantSoulSkill {
 
         // Apply damage to all collected entities
         for (LivingEntity entity : hitEntities) {
-            entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
+            boolean hurt = entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
+            ModCriteriaTriggers.onSonicSkillHit(player, entity, hurt);
         }
 
         level.playSound(

@@ -1,6 +1,7 @@
 package com.iceKube.soulArmory.items;
 
 import com.iceKube.soulArmory.Config;
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.registries.EntityRegistry;
 import com.iceKube.soulArmory.soulForging.ForgingTask;
@@ -297,7 +298,8 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements Can
 
         // Apply damage to all collected entities
         for (LivingEntity entity : hitEntities) {
-            entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
+            boolean hurt = entity.hurt(player.damageSources().sonicBoom(player), (float) Config.soulBowSkillSBDamage);
+            ModCriteriaTriggers.onSonicSkillHit(player, entity, hurt);
         }
 
         level.playSound(

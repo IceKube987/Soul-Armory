@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "minecraft:sculk_shrieker"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.thanks_for_the_treat.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.thanks_for_the_treat.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "absorb_sonic_boom": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "absorb_sonic_boom"
+      }
+    }
+  }
+}
