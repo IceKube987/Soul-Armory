@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_helmet"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.ascension.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.ascension.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "full_set_converted": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "full_set_converted"
+      }
+    }
+  }
+}

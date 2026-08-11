@@ -12,8 +12,7 @@
     },
     "frame": "challenge",
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": true
+    "announce_to_chat": true
   },
   "criteria": {
     "sonic_kill_warden": {
