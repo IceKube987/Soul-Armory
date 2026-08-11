@@ -2,6 +2,8 @@ package com.iceKube.soulArmory.soulSkill.skills;
 
 import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
+import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
+import com.iceKube.soulArmory.advancements.SoulAction;
 import com.iceKube.soulArmory.items.Forgeable;
 import com.iceKube.soulArmory.registries.SoundRegistry;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
@@ -57,6 +59,8 @@ public class HealSkill extends InstantSoulSkill {
 
         // Apply healing
         player.heal(healingAmount);
+
+        ModCriteriaTriggers.grant(player, SoulAction.SWORD_HEAL);
 
         handleHealTask(player, stack, healingAmount);
 

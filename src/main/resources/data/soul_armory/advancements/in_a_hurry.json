@@ -1,0 +1,26 @@
+{
+  "parent": "soul_armory:flak",
+  "display": {
+    "icon": {
+      "item": "minecraft:dragon_egg"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.in_a_hurry.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.in_a_hurry.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "dragon_killed_after_revival": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "dragon_killed_after_revival"
+      }
+    }
+  }
+}

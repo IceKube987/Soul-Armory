@@ -38,6 +38,17 @@ import java.util.List;
 
 public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSystem, CanApplySpeedBoost, Forgeable {
 
+    /**
+     * Every skill the bow can ever hold — the one it starts with plus the four unlockable ones.
+     * Kept here so "does this bow know everything?" has a single source of truth.
+     */
+    public static final List<BaseSoulSkill> BOW_SKILLS = List.of(
+            SoulSkills.SONIC_BOOM,
+            SoulSkills.SCATTER_SHOT,
+            SoulSkills.RAPID_FIRE,
+            SoulSkills.BARRAGE,
+            SoulSkills.SONIC_OVERLOAD);
+
     public SoulBowItem(Properties pProperties) {
         super(pProperties);
     }

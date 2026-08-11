@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "minecraft:echo_shard"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.growth.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.growth.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "skill_unlocked": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "skill_unlocked"
+      }
+    }
+  }
+}

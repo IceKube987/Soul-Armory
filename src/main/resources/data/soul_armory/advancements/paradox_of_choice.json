@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:growth",
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_bow"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.paradox_of_choice.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.paradox_of_choice.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "bow_all_skills_unlocked": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "bow_all_skills_unlocked"
+      }
+    }
+  }
+}

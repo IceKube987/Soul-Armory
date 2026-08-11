@@ -4,6 +4,8 @@ import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
 import com.iceKube.soulArmory.advancements.SoulAction;
+import com.iceKube.soulArmory.entities.SoulArrowEntity;
+import com.iceKube.soulArmory.entities.SoulArrowScatterEntity;
 import com.iceKube.soulArmory.items.*;
 import com.iceKube.soulArmory.networking.ModPacketHandler;
 import com.iceKube.soulArmory.networking.packets.S2C.ConfigSyncS2CPacket;
@@ -13,6 +15,7 @@ import com.iceKube.soulArmory.soulForging.TransformHelper;
 import com.iceKube.soulArmory.utils.ModDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -23,6 +26,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,15 +34,18 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -51,6 +58,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +70,13 @@ public class ModForgeEvents {
     // golem itself so it survives chunk unload and world reload.
     private static final String GOLEM_SOUL_DAMAGE_NBT = "soul_armory.golemSoulDamage";
     private static final float NOT_A_CHEESE_HEALTH_FRACTION = 0.9F;
+    // Sliding window of game ticks at which this player's soul arrows landed on the Ender Dragon.
+    private static final String DRAGON_FLAK_HITS_NBT = "soul_armory.dragonFlakHits";
+    private static final int DRAGON_FLAK_WINDOW_TICKS = 20;
+    private static final int DRAGON_FLAK_HITS_REQUIRED = 4;
+    // Game tick at which a crystal-revived dragon entered the world, kept on the dragon itself.
+    private static final String DRAGON_REVIVED_AT_NBT = "soul_armory.revivedAtTick";
+    private static final int DRAGON_REVIVAL_KILL_TICKS = 100;
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
     private static final UUID SOUL_STEP_HEIGHT_MODIFIER_UUID = UUID.fromString("6f1d4a08-2b95-4c37-9e60-5c8a17d3b204"); // Randomly generated UUID
 
@@ -83,6 +98,8 @@ public class ModForgeEvents {
 
         // Handle "Deal Damage" forging criterion.
         ForgingDealDamage(event, player, mainHandItem);
+
+        trackDragonFlak(event, player);
 
         // Soul armor accumulates from damage dealt in any way, skills included.
         if (!event.getSource().is(ModDamageTypes.FALL_SHOCKWAVE)) {
@@ -122,6 +139,73 @@ public class ModForgeEvents {
 
         CompoundTag data = golem.getPersistentData();
         data.putFloat(GOLEM_SOUL_DAMAGE_NBT, data.getFloat(GOLEM_SOUL_DAMAGE_NBT) + dealt);
+    }
+
+    /**
+     * "Flak Cannon" — {@value #DRAGON_FLAK_HITS_REQUIRED} soul bow arrows landing on the Ender
+     * Dragon inside one second, which in practice only happens under Rapid Fire, Barrage or
+     * Scatter Shot.
+     * <p>
+     * Kept on the shooter rather than the dragon so two players' volleys never add up together.
+     */
+    private static void trackDragonFlak(LivingDamageEvent event, Player player) {
+        if (player.level().isClientSide()) return; // the client's persistent data is a throwaway copy
+        if (!(event.getEntity() instanceof EnderDragon)) return;
+
+        Entity directEntity = event.getSource().getDirectEntity();
+        if (!(directEntity instanceof SoulArrowEntity || directEntity instanceof SoulArrowScatterEntity)) return;
+
+        long now = player.level().getGameTime();
+        CompoundTag data = player.getPersistentData();
+
+        long[] previous = data.getLongArray(DRAGON_FLAK_HITS_NBT);
+        long[] window = new long[previous.length + 1];
+        int kept = 0;
+        for (long hitTime : previous) {
+            // Also drops timestamps from the future, which is what a /time set leaves behind.
+            if (hitTime <= now && now - hitTime < DRAGON_FLAK_WINDOW_TICKS) window[kept++] = hitTime;
+        }
+        window[kept++] = now;
+
+        data.putLongArray(DRAGON_FLAK_HITS_NBT, Arrays.copyOf(window, kept));
+
+        if (kept >= DRAGON_FLAK_HITS_REQUIRED) {
+            ModCriteriaTriggers.grant(player, SoulAction.DRAGON_FLAK);
+        }
+    }
+
+    /**
+     * Stamps a respawned dragon with the moment it appeared, for "Sorry, Gotta Go" to measure
+     * against in {@link #onLivingDeath}.
+     */
+    @SubscribeEvent
+    public static void onEnderDragonRevived(EntityJoinLevelEvent event) {
+        if (!(event.getEntity() instanceof EnderDragon dragon)) return;
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
+
+        // A revived dragon rejoins the level every time its chunk reloads; only the first join is
+        // the revival, so an existing stamp is never refreshed.
+        CompoundTag data = dragon.getPersistentData();
+        if (data.contains(DRAGON_REVIVED_AT_NBT)) return;
+
+        EndDragonFight fight = serverLevel.getDragonFight();
+        if (fight == null || !fight.hasPreviouslyKilledDragon()) return;
+
+        data.putLong(DRAGON_REVIVED_AT_NBT, serverLevel.getGameTime());
+    }
+
+    /**
+     * Whether this kill can be credited to the soul gear — either swung directly, or landed by one
+     * of the skills, whose projectiles and AoE carry their own damage types.
+     */
+    private static boolean isSoulWeaponKill(LivingDeathEvent event, Player player) {
+        DamageSource source = event.getSource();
+        if (source.is(ModDamageTypes.SKILL_ARROW) || source.is(ModDamageTypes.SKILL_DAMAGE)) return true;
+
+        Entity directEntity = source.getDirectEntity();
+        if (directEntity instanceof SoulArrowEntity || directEntity instanceof SoulArrowScatterEntity) return true;
+
+        return player.getMainHandItem().getItem() instanceof BaseSoulWeaponItem;
     }
 
     /**
@@ -323,6 +407,17 @@ public class ModForgeEvents {
                 && golem.getPersistentData().getFloat(GOLEM_SOUL_DAMAGE_NBT)
                         >= golem.getMaxHealth() * NOT_A_CHEESE_HEALTH_FRACTION) {
             ModCriteriaTriggers.grant(player, SoulAction.IRON_GOLEM_OVERKILL);
+        }
+
+        // "Sorry, Gotta Go", likewise checked ahead of the Forgeable guard.
+        if (event.getEntity() instanceof EnderDragon dragon) {
+            CompoundTag dragonData = dragon.getPersistentData();
+            if (dragonData.contains(DRAGON_REVIVED_AT_NBT)
+                    && player.level().getGameTime() - dragonData.getLong(DRAGON_REVIVED_AT_NBT)
+                            <= DRAGON_REVIVAL_KILL_TICKS
+                    && isSoulWeaponKill(event, player)) {
+                ModCriteriaTriggers.grant(player, SoulAction.DRAGON_KILLED_AFTER_REVIVAL);
+            }
         }
 
         ItemStack mainHandItem = player.getMainHandItem();

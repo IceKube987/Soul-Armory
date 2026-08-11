@@ -1,0 +1,26 @@
+{
+  "parent": "soul_armory:growth",
+  "display": {
+    "icon": {
+      "item": "minecraft:dragon_head"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.flak.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.flak.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "dragon_flak": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "dragon_flak"
+      }
+    }
+  }
+}

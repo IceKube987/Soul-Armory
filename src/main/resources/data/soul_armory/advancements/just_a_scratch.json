@@ -1,0 +1,25 @@
+{
+  "parent": "soul_armory:unleashed",
+  "display": {
+    "icon": {
+      "item": "soul_armory:soul_sword"
+    },
+    "title": {
+      "translate": "advancements.soul_armory.just_a_scratch.title"
+    },
+    "description": {
+      "translate": "advancements.soul_armory.just_a_scratch.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "sword_heal": {
+      "trigger": "soul_armory:soul_action",
+      "conditions": {
+        "action": "sword_heal"
+      }
+    }
+  }
+}

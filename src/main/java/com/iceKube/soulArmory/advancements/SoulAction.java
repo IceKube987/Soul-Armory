@@ -10,7 +10,13 @@ public enum SoulAction {
     IRON_GOLEM_OVERKILL("iron_golem_overkill"),
     WARDEN_SONIC_HIT("warden_sonic_hit"),
     WARDEN_SONIC_KILL("warden_sonic_kill"),
-    FAILSAFE_SAVED_FROM_CREEPER("failsafe_saved_from_creeper");
+    FAILSAFE_SAVED_FROM_CREEPER("failsafe_saved_from_creeper"),
+    SWORD_HEAL("sword_heal"),
+    SKILL_UNLOCKED("skill_unlocked"),
+    BLADE_WAVE_UNLOCKED("blade_wave_unlocked"),
+    BOW_ALL_SKILLS_UNLOCKED("bow_all_skills_unlocked"),
+    DRAGON_FLAK("dragon_flak"),
+    DRAGON_KILLED_AFTER_REVIVAL("dragon_killed_after_revival");
 
     private final String serializedName;
 

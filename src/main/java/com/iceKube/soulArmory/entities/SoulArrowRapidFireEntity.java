@@ -32,7 +32,7 @@ public class SoulArrowRapidFireEntity extends SoulArrowEntity {
             livingOwner.setLastHurtMob(target);
         }
 
-        target.invulnerableTime = 0;
+        clearHurtCooldown(target);
         target.hurt(damageSource, (float) getBaseDamage());
         discard();
     }

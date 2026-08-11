@@ -65,7 +65,7 @@ public class SoulArrowScatterEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(target);
         }
 
-        target.invulnerableTime = 0;
+        SoulArrowEntity.clearHurtCooldown(target);
         target.hurt(damageSource, (float) getBaseDamage());
         discard();
     }

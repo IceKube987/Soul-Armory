@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -126,9 +127,24 @@ public class SoulArrowEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(target);
         }
 
-        target.invulnerableTime = 0;
+        clearHurtCooldown(target);
         target.hurt(damageSource, (float) getBaseDamage());
         discard();
+    }
+
+    /**
+     * Soul arrows deliberately ignore the hurt cooldown, otherwise the rapid skills would land one
+     * hit every ten ticks instead of one per arrow.
+     * <p>
+     * The Ender Dragon needs the extra step: arrows collide with an {@link EnderDragonPart}, which
+     * forwards the damage to the dragon, but the cooldown that actually gates it lives on the
+     * parent mob.
+     */
+    protected static void clearHurtCooldown(Entity target) {
+        target.invulnerableTime = 0;
+        if (target instanceof EnderDragonPart part) {
+            part.parentMob.invulnerableTime = 0;
+        }
     }
 
     // -------------------------------------------------------------------------
