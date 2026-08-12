@@ -20,6 +20,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +35,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -197,6 +200,65 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
     // --------------------
 
     /**
+     * How far away the Ender Dragon can still be locked onto. The dragon spends most of the fight
+     * far outside {@code soulBowTraceRange}, so it gets its own, much larger range; past this it is
+     * dropped from the candidate list like any other out-of-range entity.
+     */
+    static final double DRAGON_TRACE_RANGE = 200.0;
+
+    /**
+     * The points on an entity worth aiming at — used both for the cone test and for the occlusion
+     * raycast.
+     * <p>
+     * The Ender Dragon needs its own set: its collision volume lives in the {@link EnderDragonPart}s
+     * (head, neck, body, wings, tail), and because the entity is 16x8 its mid-height "centre" floats
+     * several blocks above every one of those hitboxes. Using the parts means a wing tip is enough to
+     * acquire a lock, and the visibility check is done against something the arrow can actually hit.
+     */
+    static List<Vec3> traceTargets(LivingEntity entity) {
+        if (entity instanceof EnderDragon dragon) {
+            return Arrays.stream(dragon.getSubEntities())
+                    .map(part -> part.getBoundingBox().getCenter())
+                    .toList();
+        }
+        return List.of(
+                new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ()),
+                entity.getEyePosition(),
+                entity.getPosition(1.0f).add(0, 0.05, 0)
+        );
+    }
+
+    /** The dragon is tracked far past the configured range; everything else uses the config value. */
+    static double effectiveRange(LivingEntity entity, double maxDistance) {
+        return entity instanceof EnderDragon ? DRAGON_TRACE_RANGE : maxDistance;
+    }
+
+    /**
+     * Largest cosine of the angle between the look vector and any of the entity's trace targets,
+     * ignoring targets that are behind the player or past {@code maxDistance} — closer to 1 means
+     * closer to the crosshair. Returns -1 when no target qualifies (including when the entity is
+     * sitting on top of the player), so the caller's cone test discards it.
+     * <p>
+     * Range and angle are judged on the same point on purpose: a dragon overhead can have its tail
+     * behind the player while its head is dead centre, and it should still be lockable.
+     */
+    static double bestCosAngle(LivingEntity entity, Vec3 eyePos, Vec3 lookVec, double maxDistance) {
+        double best = -1;
+        for (Vec3 point : traceTargets(entity)) {
+            Vec3 toPoint = point.subtract(eyePos);
+            double length = toPoint.length();
+            if (length == 0) continue;
+
+            // Depth along the view axis - skip targets behind the player or out of range
+            double t = toPoint.dot(lookVec);
+            if (t < 0 || t > maxDistance) continue;
+
+            best = Math.max(best, t / length);
+        }
+        return best;
+    }
+
+    /**
      * Returns the LivingEntity closest to the player's crosshair within a cone-shaped region.
      * Uses a multi-stage filter: AABB coarse filter, cone filter, angle sort, then occlusion check.
      *
@@ -225,6 +287,17 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
                 e -> e instanceof Enemy
         );
 
+        // The dragon is almost always further away than soulBowTraceRange, so the coarse box above
+        // never catches it. Add it separately, capped at its own much larger range.
+        if (player.level().dimension() == Level.END) {
+            for (EnderDragon dragon : player.level().getEntitiesOfClass(
+                    EnderDragon.class, playerBB.inflate(DRAGON_TRACE_RANGE))) {
+                if (!candidates.contains(dragon)) {
+                    candidates.add(dragon);
+                }
+            }
+        }
+
         // Return null if there is no enemies.
         if (candidates.isEmpty()) {
             return null;
@@ -234,101 +307,32 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
             // Make sure it doesn't track Endermen.
             if (entity instanceof EnderMan) return true;
 
-            // Get entity center at mid-height
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 toEntity = entityCenter.subtract(eyePos);
-
-            // Project onto look vector to get depth along view axis
-            double t = toEntity.dot(lookVec);
-
-            // Discard entities if it is somewhat at the same position as the player.
-            double toEntityLength = toEntity.length();
-            if (toEntityLength == 0) {
-                return true;
-            }
-
-            // Discard entities behind the player or beyond max distance
-            if (t < 0 || t > maxDistance) {
-                return true;
-            }
-
-            // Compute cosAngle - closer to 1 means closer to crosshair
-            double cosAngle = t / toEntityLength;
-
-            // Discard entities outside the cone
-            if (cosAngle < cosHalfAngle) {
-                return true;
-            }
-
-            return false;
+            // Discard entities outside the cone, behind the player, or beyond max distance
+            // (all three collapse into a cosAngle of -1)
+            return bestCosAngle(entity, eyePos, lookVec, effectiveRange(entity, maxDistance)) < cosHalfAngle;
         });
 
-        // Filter candidates by cone constraints and sort by angle
-        candidates.sort(Comparator.comparingDouble((LivingEntity entity) -> {
-            // Get entity center at mid-height
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 toEntity = entityCenter.subtract(eyePos);
+        // Sort by angle, closest to the crosshair first (negative for descending sort)
+        candidates.sort(Comparator.comparingDouble(
+                (LivingEntity entity) -> -bestCosAngle(entity, eyePos, lookVec, effectiveRange(entity, maxDistance))));
 
-            // Project onto look vector to get depth along view axis
-            double t = toEntity.dot(lookVec);
-
-            double toEntityLength = toEntity.length();
-
-            // Compute cosAngle - closer to 1 means closer to crosshair
-            double cosAngle = t / toEntityLength;
-
-            return -cosAngle; // Negative for descending sort (closest to crosshair first)
-        }));
-
-        // Occlusion check: perform block raycast from eye to entity center
+        // Occlusion check: block raycast from the eye to each of the entity's trace targets
         for (LivingEntity entity : candidates) {
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 entityEye = entity.getEyePosition();
-            Vec3 entityFeet = entity.getPosition(1.0f).add(new Vec3(0, 0.05, 0));
+            for (Vec3 point : traceTargets(entity)) {
+                // Perform block raycast with COLLIDER shape and empty fluid handling
+                ClipContext clipContext = new ClipContext(
+                        eyePos,
+                        point,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE,
+                        player
+                );
+                BlockHitResult blockHit = player.level().clip(clipContext);
 
-            // Perform block raycast with COLLIDER shape and empty fluid handling
-            ClipContext centerClipContext = new ClipContext(
-                    eyePos,
-                    entityCenter,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult centerBlockHit = player.level().clip(centerClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (centerBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
-            }
-
-            // Eye check
-            ClipContext eyeClipContext = new ClipContext(
-                    eyePos,
-                    entityEye,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult eyeBlockHit = player.level().clip(eyeClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (eyeBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
-            }
-
-            // Feet check
-            ClipContext feetClipContext = new ClipContext(
-                    eyePos,
-                    entityFeet,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult feetBlockHit = player.level().clip(feetClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (feetBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
+                // If no block obstruction (MISS), return this entity
+                if (blockHit.getType() == HitResult.Type.MISS) {
+                    return entity;
+                }
             }
         }
 

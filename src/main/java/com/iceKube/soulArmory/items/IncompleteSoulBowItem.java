@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -168,6 +169,17 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements Can
                 e -> e instanceof Enemy
         );
 
+        // The dragon is almost always further away than soulBowTraceRange, so the coarse box above
+        // never catches it. Add it separately, capped at its own much larger range.
+        if (player.level().dimension() == Level.END) {
+            for (EnderDragon dragon : player.level().getEntitiesOfClass(
+                    EnderDragon.class, playerBB.inflate(SoulBowItem.DRAGON_TRACE_RANGE))) {
+                if (!candidates.contains(dragon)) {
+                    candidates.add(dragon);
+                }
+            }
+        }
+
         // Return null if there is no enemies.
         if (candidates.isEmpty()) {
             return null;
@@ -177,101 +189,33 @@ public class IncompleteSoulBowItem extends BaseIncompleteSoulItem implements Can
             // Make sure it doesn't track Endermen.
             if (entity instanceof EnderMan) return true;
 
-            // Get entity center at mid-height
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 toEntity = entityCenter.subtract(eyePos);
-
-            // Project onto look vector to get depth along view axis
-            double t = toEntity.dot(lookVec);
-
-            // Discard entities if it is somewhat at the same position as the player.
-            double toEntityLength = toEntity.length();
-            if (toEntityLength == 0) {
-                return true;
-            }
-
-            // Discard entities behind the player or beyond max distance
-            if (t < 0 || t > maxDistance) {
-                return true;
-            }
-
-            // Compute cosAngle - closer to 1 means closer to crosshair
-            double cosAngle = t / toEntityLength;
-
-            // Discard entities outside the cone
-            if (cosAngle < cosHalfAngle) {
-                return true;
-            }
-
-            return false;
+            // Discard entities outside the cone, behind the player, or beyond max distance
+            // (all three collapse into a cosAngle of -1)
+            return SoulBowItem.bestCosAngle(
+                    entity, eyePos, lookVec, SoulBowItem.effectiveRange(entity, maxDistance)) < cosHalfAngle;
         });
 
-        // Filter candidates by cone constraints and sort by angle
-        candidates.sort(Comparator.comparingDouble((LivingEntity entity) -> {
-            // Get entity center at mid-height
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 toEntity = entityCenter.subtract(eyePos);
+        // Sort by angle, closest to the crosshair first (negative for descending sort)
+        candidates.sort(Comparator.comparingDouble((LivingEntity entity) -> -SoulBowItem.bestCosAngle(
+                entity, eyePos, lookVec, SoulBowItem.effectiveRange(entity, maxDistance))));
 
-            // Project onto look vector to get depth along view axis
-            double t = toEntity.dot(lookVec);
-
-            double toEntityLength = toEntity.length();
-
-            // Compute cosAngle - closer to 1 means closer to crosshair
-            double cosAngle = t / toEntityLength;
-
-            return -cosAngle; // Negative for descending sort (closest to crosshair first)
-        }));
-
-        // Occlusion check: perform block raycast from eye to entity center
+        // Occlusion check: block raycast from the eye to each of the entity's trace targets
         for (LivingEntity entity : candidates) {
-            Vec3 entityCenter = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0, entity.getZ());
-            Vec3 entityEye = entity.getEyePosition();
-            Vec3 entityFeet = entity.getPosition(1.0f).add(new Vec3(0, 0.05, 0));
+            for (Vec3 point : SoulBowItem.traceTargets(entity)) {
+                // Perform block raycast with COLLIDER shape and empty fluid handling
+                ClipContext clipContext = new ClipContext(
+                        eyePos,
+                        point,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE,
+                        player
+                );
+                BlockHitResult blockHit = player.level().clip(clipContext);
 
-            // Perform block raycast with COLLIDER shape and empty fluid handling
-            ClipContext centerClipContext = new ClipContext(
-                    eyePos,
-                    entityCenter,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult centerBlockHit = player.level().clip(centerClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (centerBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
-            }
-
-            // Eye check
-            ClipContext eyeClipContext = new ClipContext(
-                    eyePos,
-                    entityEye,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult eyeBlockHit = player.level().clip(eyeClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (eyeBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
-            }
-
-            // Feet check
-            ClipContext feetClipContext = new ClipContext(
-                    eyePos,
-                    entityFeet,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    player
-            );
-            BlockHitResult feetBlockHit = player.level().clip(feetClipContext);
-
-            // If no block obstruction (MISS), return this entity
-            if (feetBlockHit.getType() == HitResult.Type.MISS) {
-                return entity;
+                // If no block obstruction (MISS), return this entity
+                if (blockHit.getType() == HitResult.Type.MISS) {
+                    return entity;
+                }
             }
         }
 

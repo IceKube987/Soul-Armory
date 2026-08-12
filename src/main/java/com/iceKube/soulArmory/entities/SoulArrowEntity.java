@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -16,6 +17,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class SoulArrowEntity extends AbstractArrow {
 
@@ -81,11 +85,17 @@ public class SoulArrowEntity extends AbstractArrow {
                 double currentSpeed = currentVelocity.length();
                 if (currentSpeed > 1e-5) {
                     Vec3 currentDir = currentVelocity.normalize();
-                    // Direction vector pointing from the arrow to the target's centre
-                    Vec3 toTarget = target.position()
-                            .add(0, target.getBbHeight() * 0.5, 0)
-                            .subtract(position())
-                            .normalize();
+                    // Direction vector pointing from the arrow to the target's centre.
+                    // The dragon is the exception: it is 16x8, so its mid-height centre floats
+                    // several blocks above every EnderDragonPart the arrow could actually collide
+                    // with — home in on the nearest part instead.
+                    Vec3 aimPoint = target instanceof EnderDragon dragon
+                            ? Arrays.stream(dragon.getSubEntities())
+                                    .map(part -> part.getBoundingBox().getCenter())
+                                    .min(Comparator.comparingDouble((Vec3 p) -> p.distanceToSqr(position())))
+                                    .orElse(target.position())
+                            : target.position().add(0, target.getBbHeight() * 0.5, 0);
+                    Vec3 toTarget = aimPoint.subtract(position()).normalize();
                     // Smoothly interpolate the arrow's direction toward the target.
                     double turnFactor = Config.soulArrowTurnFactor * Math.min(1, flyingTicks / 2);
                     Vec3 newDir = new Vec3(
