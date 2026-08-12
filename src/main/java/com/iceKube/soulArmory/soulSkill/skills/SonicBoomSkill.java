@@ -29,9 +29,13 @@ public class SonicBoomSkill extends InstantSoulSkill {
     public SonicBoomSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "sonic_boom"),
                 new ResourceLocation("textures/particle/sonic_boom_10.png"),
-                "sonic_boom",
-                Config.soulBowSkillSBConsumption
+                "sonic_boom"
         );
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.soulBowSkillSBConsumption;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class SonicBoomSkill extends InstantSoulSkill {
         if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
 
         // Sonic Boom: trace 15 2-block AABBs along player's view vector and damage all entities hit
         Set<LivingEntity> hitEntities = new HashSet<>();

@@ -20,9 +20,17 @@ public class RapidFireSkill extends ContinuousSoulSkill {
     public RapidFireSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "rapid_fire"),
                 new ResourceLocation("textures/item/bow.png"),
-                "rapid_fire",
-                Config.soulBowSkillRFConsumption,
-                Config.soulBowSkillRFExecuteInterval);
+                "rapid_fire");
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.soulBowSkillRFConsumption;
+    }
+
+    @Override
+    public int getExecuteInterval() {
+        return Config.soulBowSkillRFExecuteInterval;
     }
 
     @Override
@@ -30,11 +38,11 @@ public class RapidFireSkill extends ContinuousSoulSkill {
         if (!(stack.getItem() instanceof SoulBowItem soulBowItem)) return false;
         if (stack.getTag() == null || !stack.getTag().contains(LAST_EXECUTED_TIME)) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
 
         Long lastExecuted = stack.getTag().getLong(LAST_EXECUTED_TIME);
         Long currentTime = level.getGameTime();
-        if (currentTime - lastExecuted < executeInterval) return false;
+        if (currentTime - lastExecuted < getExecuteInterval()) return false;
 
         if (!level.isClientSide) {
 

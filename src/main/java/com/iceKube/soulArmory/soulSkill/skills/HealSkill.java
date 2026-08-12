@@ -29,8 +29,12 @@ public class HealSkill extends InstantSoulSkill {
     public HealSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "heal"),
                 new ResourceLocation(SoulArmoryMod.MODID, "textures/icon/soul_heal.png"),
-                "heal",
-                0); // dynamically deduce soul
+                "heal");
+    }
+
+    @Override
+    public int getSoulCost() {
+        return 0; // dynamically deduce soul
     }
 
     @Override

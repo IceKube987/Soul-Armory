@@ -21,9 +21,17 @@ public class BarrageSkill extends ContinuousSoulSkill {
     public BarrageSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "barrage"),
                 new ResourceLocation("textures/item/bow_pulling_2.png"),
-                "barrage",
-                Config.soulBowSkillBConsumption,
-                Config.soulBowSkillBExecuteInterval);
+                "barrage");
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.soulBowSkillBConsumption;
+    }
+
+    @Override
+    public int getExecuteInterval() {
+        return Config.soulBowSkillBExecuteInterval;
     }
 
     @Override
@@ -31,11 +39,11 @@ public class BarrageSkill extends ContinuousSoulSkill {
         if (!(stack.getItem() instanceof SoulBowItem soulBowItem)) return false;
         if (stack.getTag() == null || !stack.getTag().contains(LAST_EXECUTED_TIME)) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
 
         Long lastExecuted = stack.getTag().getLong(LAST_EXECUTED_TIME);
         Long currentTime = level.getGameTime();
-        if (currentTime - lastExecuted < executeInterval) return false;
+        if (currentTime - lastExecuted < getExecuteInterval()) return false;
 
         double damage = Config.soulBowSkillBDamage;
 

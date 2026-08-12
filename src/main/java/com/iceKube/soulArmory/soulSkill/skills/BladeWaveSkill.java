@@ -21,8 +21,12 @@ public class BladeWaveSkill extends InstantSoulSkill {
     public BladeWaveSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "blade_wave"),
                 new ResourceLocation("textures/item/iron_sword.png"),
-                "blade_wave",
-                Config.bladeWaveCost);
+                "blade_wave");
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.bladeWaveCost;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class BladeWaveSkill extends InstantSoulSkill {
         if (!(stack.getItem() instanceof SoulSwordItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
         if (player.getAttackStrengthScale(0f) < 0.95f) return false;
 
         float effectiveSoul = Math.min(stack.getTag().getFloat(SOUL_AMOUNT) + 100, Config.soulSwordMaxSoul);

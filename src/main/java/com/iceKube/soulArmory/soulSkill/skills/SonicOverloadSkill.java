@@ -28,8 +28,12 @@ public class SonicOverloadSkill extends InstantSoulSkill {
     public SonicOverloadSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "sonic_overload"),
                 new ResourceLocation("textures/item/echo_shard.png"),
-                "sonic_overload",
-                Config.soulBowSkillSOConsumption);
+                "sonic_overload");
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.soulBowSkillSOConsumption;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class SonicOverloadSkill extends InstantSoulSkill {
         if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
 
         int blastCount = Config.soulBowSkillSOBlastCount;
 

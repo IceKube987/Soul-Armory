@@ -20,9 +20,13 @@ public class ScatterShotSkill extends InstantSoulSkill {
     public ScatterShotSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "scatter_shot"),
                 new ResourceLocation("textures/item/arrow.png"),
-                "scatter_shot",
-                Config.soulBowSkillSSConsumption
+                "scatter_shot"
         );
+    }
+
+    @Override
+    public int getSoulCost() {
+        return Config.soulBowSkillSSConsumption;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class ScatterShotSkill extends InstantSoulSkill {
         if (!(stack.getItem() instanceof SoulBowItem)) return false;
         if (stack.getTag() == null) return false;
         if (!stack.getTag().contains(SOUL_AMOUNT)) return false;
-        if (stack.getTag().getFloat(SOUL_AMOUNT) < soulCost) return false;
+        if (stack.getTag().getFloat(SOUL_AMOUNT) < getSoulCost()) return false;
 
         double damage = Config.soulBowSkillSSDamage;
 
