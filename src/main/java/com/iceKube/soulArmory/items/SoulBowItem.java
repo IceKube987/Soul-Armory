@@ -206,15 +206,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
      */
     static final double DRAGON_TRACE_RANGE = 200.0;
 
-    /**
-     * The points on an entity worth aiming at — used both for the cone test and for the occlusion
-     * raycast.
-     * <p>
-     * The Ender Dragon needs its own set: its collision volume lives in the {@link EnderDragonPart}s
-     * (head, neck, body, wings, tail), and because the entity is 16x8 its mid-height "centre" floats
-     * several blocks above every one of those hitboxes. Using the parts means a wing tip is enough to
-     * acquire a lock, and the visibility check is done against something the arrow can actually hit.
-     */
+
     static List<Vec3> traceTargets(LivingEntity entity) {
         if (entity instanceof EnderDragon dragon) {
             return Arrays.stream(dragon.getSubEntities())
@@ -235,12 +227,7 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
 
     /**
      * Largest cosine of the angle between the look vector and any of the entity's trace targets,
-     * ignoring targets that are behind the player or past {@code maxDistance} — closer to 1 means
-     * closer to the crosshair. Returns -1 when no target qualifies (including when the entity is
-     * sitting on top of the player), so the caller's cone test discards it.
-     * <p>
-     * Range and angle are judged on the same point on purpose: a dragon overhead can have its tail
-     * behind the player while its head is dead centre, and it should still be lockable.
+     * ignoring targets that are behind the player or past {@code maxDistance}
      */
     static double bestCosAngle(LivingEntity entity, Vec3 eyePos, Vec3 lookVec, double maxDistance) {
         double best = -1;
