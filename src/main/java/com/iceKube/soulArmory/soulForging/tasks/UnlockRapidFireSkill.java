@@ -1,5 +1,6 @@
 package com.iceKube.soulArmory.soulForging.tasks;
 
+import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.soulForging.ForgingCriterion;
 import com.iceKube.soulArmory.soulForging.ForgingEventType;
@@ -14,9 +15,9 @@ public class UnlockRapidFireSkill extends ForgingTask {
     public UnlockRapidFireSkill() {
         super(new ResourceLocation(SoulArmoryMod.MODID, "unlock_rapid_fire"),
                 List.of(
-                        new ForgingCriterion("deal_damage", ForgingEventType.DEAL_DAMAGE,
-                                500,
-                                0,
+                        new ForgingCriterion("deal_damage_rapid", ForgingEventType.DEAL_DAMAGE,
+                                Config.unlockRapidFireDamageTarget,
+                                Config.unlockRapidFireTimeout,
                                 null,
                                 null,
                                 null)

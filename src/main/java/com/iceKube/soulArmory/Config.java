@@ -104,6 +104,12 @@ public class Config {
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_DAMAGE;
     private static final ForgeConfigSpec.IntValue UNLOCK_SONIC_OVERLOAD_TIMEOUT;
 
+    private static final ForgeConfigSpec.IntValue UNLOCK_RAPID_FIRE_DAMAGE;
+    private static final ForgeConfigSpec.IntValue UNLOCK_RAPID_FIRE_TIMEOUT;
+
+    private static final ForgeConfigSpec.IntValue UNLOCK_BARRAGE_DAMAGE;
+    private static final ForgeConfigSpec.IntValue UNLOCK_BARRAGE_TIMEOUT;
+
     private static final ForgeConfigSpec.IntValue SOUL_CHESTPLATE_MAX_SOUL;
     private static final ForgeConfigSpec.IntValue SOUL_ARMOR_SOUL_ADDITION_PER_PIECE;
     private static final ForgeConfigSpec.IntValue SOUL_ARMOR_GRACE_PERIOD;
@@ -590,6 +596,34 @@ public class Config {
                 BUILDER.pop();
             }
 
+            {
+                BUILDER.comment("When unlocking Rapid Fire Skill for Soul Bow").push("unlock-rapid-fire");
+
+                UNLOCK_RAPID_FIRE_DAMAGE = BUILDER
+                        .comment("Total damage required to unlock the skill")
+                        .defineInRange("unlockRapidFireDamageTarget", 100, 1, Integer.MAX_VALUE);
+
+                UNLOCK_RAPID_FIRE_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before forging progress resets (0 = no timeout)")
+                        .defineInRange("unlockRapidFireTimeout", 20, 0, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
+            {
+                BUILDER.comment("When unlocking Barrage Skill for Soul Bow").push("unlock-barrage");
+
+                UNLOCK_BARRAGE_DAMAGE = BUILDER
+                        .comment("Total damage required to unlock the skill")
+                        .defineInRange("unlockBarrageDamageTarget", 300, 1, Integer.MAX_VALUE);
+
+                UNLOCK_BARRAGE_TIMEOUT = BUILDER
+                        .comment("Ticks of inactivity before forging progress resets (0 = no timeout)")
+                        .defineInRange("unlockBarrageTimeout", 20, 0, Integer.MAX_VALUE);
+
+                BUILDER.pop();
+            }
+
             BUILDER.pop();
         }
 
@@ -683,6 +717,10 @@ public class Config {
     public static int unlockBladeWaveKillTimeout;
     public static int unlockSonicOverloadDamageTarget;
     public static int unlockSonicOverloadTimeout;
+    public static int unlockRapidFireDamageTarget;
+    public static int unlockRapidFireTimeout;
+    public static int unlockBarrageDamageTarget;
+    public static int unlockBarrageTimeout;
     public static int soulChestplateMaxSoul;
     public static int soulArmorAdditionalSoul;
     public static int soulArmorGracePeriod;
@@ -790,6 +828,10 @@ public class Config {
         unlockBladeWaveKillTimeout = UNLOCK_BLADE_WAVE_WARDEN_KILL_TIMEOUT.get();
         unlockSonicOverloadDamageTarget = UNLOCK_SONIC_OVERLOAD_DAMAGE.get();
         unlockSonicOverloadTimeout = UNLOCK_SONIC_OVERLOAD_TIMEOUT.get();
+        unlockRapidFireDamageTarget = UNLOCK_RAPID_FIRE_DAMAGE.get();
+        unlockRapidFireTimeout = UNLOCK_RAPID_FIRE_TIMEOUT.get();
+        unlockBarrageDamageTarget = UNLOCK_BARRAGE_DAMAGE.get();
+        unlockBarrageTimeout = UNLOCK_BARRAGE_TIMEOUT.get();
         soulChestplateMaxSoul = SOUL_CHESTPLATE_MAX_SOUL.get();
         soulArmorAdditionalSoul = SOUL_ARMOR_SOUL_ADDITION_PER_PIECE.get();
         soulArmorGracePeriod = SOUL_ARMOR_GRACE_PERIOD.get();
