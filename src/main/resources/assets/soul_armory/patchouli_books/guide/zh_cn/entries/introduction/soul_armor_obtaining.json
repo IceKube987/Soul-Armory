@@ -1,0 +1,16 @@
+{
+  "name": "获取灵魂护甲",
+  "icon": "soul_armory:incomplete_soul_chestplate",
+  "category": "soul_armory:introduction",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "远古城市的箱子中只有$(item)灵魂胸甲$()的原胚。不要费心去找其他部位——它们没有原胚。$(br2)当灵魂胸甲铸造完成时，你身上穿着的所有$(thing)铁制护甲$()会被立刻转化为对应的$(thing)灵魂护甲$()。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "缺了一件？小问题。穿着成品灵魂胸甲时，每吸收一次监守者的音波攻击就会将你身上的一件铁甲转化为灵魂护甲。"
+    }
+  ]
+}

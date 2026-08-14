@@ -1,0 +1,17 @@
+{
+  "name": "Heal",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Soul Sword's default skill. When your health is not full, $(thing)right-click$() to instantly consume soul energy and restore your health.$(br2)The sword converts soul energy into health at a fixed ratio — the more you need to heal, the more it costs.$(br2)$(l)Note:$() By default, this skill cannot be used while holding a shield in your off-hand."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Suggestion",
+      "text": "Do not use the skill while you are low on both health and soul, as that will take away too much of your soul. Consider eating some food if you are not trying to survive an upcoming death."
+    }
+  ]
+}

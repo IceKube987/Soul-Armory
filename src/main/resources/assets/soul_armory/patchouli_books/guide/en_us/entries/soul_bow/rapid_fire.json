@@ -1,0 +1,17 @@
+{
+  "name": "Rapid Fire",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Hold $(thing)Shift$() with a fully drawn bow to enter rapid fire mode, automatically releasing a stream of arrows at high speed. Each arrow costs a small amount of soul energy.$(br2)Each individual arrow deals fixed damage, but the sheer fire rate — combined with the bow's ability to ignore invincibility frames — makes this skill extremely potent against single targets."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Unlocking",
+      "text": "Place the Soul Bow in a crafting table with an $(item)Arrow$() and a $(item)Crossbow$() to begin the forging task.$(br2)This task demands fast, sustained damage output within a tight time window. Check the tooltip for requirements."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "箭雨",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)连射$()与$(thing)齐射$()的终极合体。满弓状态下按住$(thing)Shift$()持续释放高速箭雨，每轮在前方扇形区域同时射出多根箭矢。$(br2)覆盖范围和打击密度都极为出色，但灵魂能量也会急速消耗。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "解锁方式",
+      "text": "将灵魂弓与$(item)箭$()和$(item)弩$()放入合成台即可启动铸造任务。$(br2)与连射类似，此任务要求在有限时间窗口内持续造成伤害——但门槛更高。查看提示信息以了解需求。"
+    }
+  ]
+}

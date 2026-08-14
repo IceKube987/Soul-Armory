@@ -1,0 +1,18 @@
+{
+  "name": "灵魂剑",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_sword",
+      "text": "灵魂剑的基础伤害不高，但会随着积累的$(thing)灵魂能量$()大幅成长。你造成的每一点伤害都在喂养这把剑，而剑也会加倍奉还。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "被动效果",
+      "text": "手持灵魂剑时，你的$(thing)移动速度$()会随灵魂能量的增加而提升。$(br2)灵魂剑拥有无限耐久且无法附魔。"
+    }
+  ]
+}

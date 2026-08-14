@@ -1,0 +1,17 @@
+{
+  "name": "Forging",
+  "icon": "soul_armory:incomplete_soul_sword",
+  "category": "soul_armory:introduction",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "To awaken an incomplete soul weapon, you must wield it against the $(thing)Warden$() itself.$(br2)Each one has its own forging requirements — check the item's $(thing)tooltip$() to see what you need to do and track your progress.$(br2)Be warned: if you take too long between attempts, your progress will reset."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Incomplete Soul Bow",
+      "text": "The $(item)Incomplete Soul Bow$() has a unique trait: while wielding it, you can hold $(thing)Shift$() while firing to unleash a special attack. $(br2)Take advantage of it during your combat against Wardens."
+    }
+  ]
+}

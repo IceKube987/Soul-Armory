@@ -1,0 +1,17 @@
+{
+  "name": "铸造",
+  "icon": "soul_armory:incomplete_soul_sword",
+  "category": "soul_armory:introduction",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "要唤醒灵魂原胚，你必须手持它与$(thing)监守者$()战斗。$(br2)每件原胚都有各自的铸造需求——查看物品的$(thing)提示信息$()来了解具体条件和当前进度。$(br2)注意：如果你中断战斗太久，铸造进度会归零。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "灵魂弓原胚",
+      "text": "$(item)灵魂弓$()原胚有一个独特之处：手持它射箭时，按住$(thing)Shift$()可以释放特殊攻击。$(br2)你可以在与监守者的战斗中利用这一特性。"
+    }
+  ]
+}

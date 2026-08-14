@@ -1,0 +1,27 @@
+{
+  "name": "Armor Pieces",
+  "icon": "soul_armory:soul_helmet",
+  "category": "soul_armory:soul_armor",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Each additional soul armor piece increases the chestplate's $(thing)maximum soul capacity$() and grants a unique bonus during $(thing)Soul Rage$().$(br2)All soul armor pieces have infinite durability and cannot be enchanted."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Soul Helmet",
+      "text": "Grants $(thing)night vision$() during Soul Rage. The effect lingers for a time after Soul Rage ends."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Soul Leggings",
+      "text": "$(thing)Doubles your movement speed$() during Soul Rage. You will also be able to walk up single-block ledges without jumping, like riding a horse."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Soul Boots",
+      "text": "Grants $(thing)fall damage immunity$() during Soul Rage. Landing from a sufficient height will also deal damage to nearby mobs."
+    }
+  ]
+}

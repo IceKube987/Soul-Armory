@@ -1,0 +1,30 @@
+{
+  "name": "各部位效果",
+  "icon": "soul_armory:soul_helmet",
+  "category": "soul_armory:soul_armor",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "每件额外的灵魂护甲都会提升胸甲的$(thing)灵魂上限$()，并在$(thing)灵魂狂怒$()期间提供独特加成。$(br2)所有灵魂护甲均拥有无限耐久且无法附魔。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_helmet",
+      "title": "灵魂头盔",
+      "text": "灵魂狂怒期间获得$(thing)夜视$()效果。狂怒结束后，夜视状态将继续维持一段时间。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_leggings",
+      "title": "灵魂护腿",
+      "text": "灵魂狂怒期间$(thing)移速翻倍$()。同时可以像骑马一样直接走上一格高的方块，无需跳跃。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_boots",
+      "title": "灵魂靴子",
+      "text": "灵魂狂怒期间$(thing)免疫摔落伤害$()。从足够高处落地时还会对周围生物造成伤害。"
+    }
+  ]
+}

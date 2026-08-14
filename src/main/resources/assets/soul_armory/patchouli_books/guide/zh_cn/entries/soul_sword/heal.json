@@ -1,0 +1,12 @@
+{
+  "name": "治愈",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "灵魂剑的默认技能。血量未满时，$(thing)右键$()即可消耗灵魂能量立刻恢复生命值。$(br2)剑会以固定比率将灵魂能量转化为生命——需要恢复的越多，消耗就越大。$(br2)$(l)注意：$()副手持盾时无法使用此技能，因为盾牌的右键会覆盖剑的右键。"
+    }
+  ]
+}

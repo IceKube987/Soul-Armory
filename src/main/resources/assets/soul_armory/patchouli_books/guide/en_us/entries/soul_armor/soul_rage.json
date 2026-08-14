@@ -1,0 +1,17 @@
+{
+  "name": "Soul Rage",
+  "icon": "soul_armory:soul_chestplate",
+  "category": "soul_armory:soul_armor",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(item)Soul Chestplate$() is the core of the soul armor set. Dealing damage by any means accumulates soul energy in the chestplate.$(br2)Once you have enough soul energy, press the $(thing)Soul Rage$() key to activate a powerful empowered state. While active, you gain massive damage reduction and heal a portion of the damage you deal.$(br2)Soul Rage cannot be manually deactivated — it drains soul energy over time until it runs out."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Warden Interaction",
+      "text": "While wearing the Soul Chestplate, the Warden's sonic attack will not damage you. Instead, it will grant you a burst of soul energy.$(br2)You will still be knocked back and have your view shaken — but you will take no damage."
+    }
+  ]
+}

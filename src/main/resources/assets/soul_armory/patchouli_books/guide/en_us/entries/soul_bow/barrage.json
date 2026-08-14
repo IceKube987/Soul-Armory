@@ -1,0 +1,17 @@
+{
+  "name": "Barrage",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The ultimate combination of $(thing)Rapid Fire$() and $(thing)Scatter Shot$(). Hold $(thing)Shift$() with a fully drawn bow to unleash a continuous volley of arrow fans at high speed.$(br2)Each volley fires multiple arrows in an arc and costs soul energy accordingly. Extremely effective at saturating an area with damage, but drains your soul reserves rapidly."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Unlocking",
+      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() and a $(item)Crossbow$() to begin the forging task.$(br2)Like Rapid Fire, this task requires sustained damage within a tight time window — but at a higher threshold. Check the tooltip for requirements."
+    }
+  ]
+}
