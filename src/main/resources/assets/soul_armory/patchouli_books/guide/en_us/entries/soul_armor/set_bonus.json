@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Creepers?",
-      "text": "When your soul energy is exactly at the minimum threshold and you would receive a lethal blow, $(thing)Soul Rage activates automatically$().$(br2)The fatal damage is reduced to leave you alive, and you immediately enter the empowered state.$(br2)A failsafe against ambushes and surprise explosions — but it only works when your soul energy is sitting at the threshold, so don't count on it mid-fight."
+      "text": "When your soul energy is exactly at the minimum threshold and you would receive a lethal blow, $(thing)Soul Rage activates automatically$().$(br2)The fatal damage is reduced to leave you alive, and you immediately enter the empowered state.$(br2)A failsafe against ambushes and surprise explosions, but it only works when your soul energy is sitting at the threshold, so don't count on it mid-fight."
     }
   ]
 }
