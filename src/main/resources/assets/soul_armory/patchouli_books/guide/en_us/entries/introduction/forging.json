@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Incomplete Soul Bow",
-      "text": "The $(item)Incomplete Soul Bow$() has a unique trait: while wielding it, you can hold $(thing)Shift$() while firing to unleash a special attack. $(br2)Take advantage of it during your combat against Wardens."
+      "text": "The $(item)Incomplete Soul Bow$() has a unique trait: hitting a $(thing)Warden$() while wielding it will temporarily activate the bow, during which you can hold $(thing)Shift$() while firing to unleash a special attack. $(br2)Take advantage of it during your combat against Wardens."
     }
   ]
 }

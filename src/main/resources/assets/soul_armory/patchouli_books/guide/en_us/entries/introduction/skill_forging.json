@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Check the weapon's tooltip for your current task and progress. Be Warned: Some tasks have time limits, taking too long will cause the progress to reset."
+      "text": "Check the weapon's tooltip for your current task and progress. Be warned: Some tasks have time limits, taking too long will cause the progress to reset."
     }
   ]
 }

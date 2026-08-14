@@ -6,12 +6,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Hold $(thing)Shift$() while releasing to fire a fan of arrows in a wide arc. Each arrow deals fixed damage regardless of your soul energy.$(br2)The soul cost is moderate, making this a practical mid-combat option for dealing with groups of enemies at medium range."
+      "text": "Hold $(thing)Shift$() while releasing to fire a fan of arrows in a wide arc. Each arrow deals fixed damage regardless of your soul energy.$(br2)The soul cost is low, making this a practical mid-combat option for dealing with groups of enemies at medium range."
     },
     {
       "type": "patchouli:text",
       "title": "Unlocking",
-      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() to begin the forging task.$(br2)This task requires dealing a substantial amount of damage with the bow. Check the tooltip for details."
+      "text": "Place the Soul Bow in a crafting table with $(bold)three$() $(item)Arrows$() to begin the forging task.$(br2)This task requires dealing a substantial amount of damage with the bow. Check the tooltip for details."
     }
   ]
 }

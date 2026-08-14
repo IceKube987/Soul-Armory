@@ -6,12 +6,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "An alternative combat skill for the Soul Sword. When equipped, $(thing)right-click$() launches a projectile wave that passes through walls and deals area damage.$(br2)The blade wave can only be fired when your attack cooldown is full, and using it resets the cooldown — effectively replacing one melee swing.$(br2)$(bold)Note$(): Its damage would always be higher than your melee damage, regardless of the soul amount."
+      "text": "An alternative combat skill for the Soul Sword. When equipped, $(thing)right-click$() launches a projectile wave that passes through walls and deals area damage.$(br2)The blade wave can only be fired when your attack cooldown is full, and using it resets the cooldown — effectively replacing one melee swing.$(br2)$(bold)Note$(): Its damage will always be higher than your melee damage, regardless of the soul amount."
     },
     {
       "type": "patchouli:text",
       "title": "Unlocking",
-      "text": "Place the Soul Sword in a crafting table with $(bold)two $(item)Echo Shards$() to begin the forging task.$(br2)This task demands extensive mastery of the sword. Check tooltip for details"
+      "text": "Place the Soul Sword in a crafting table with $(bold)two $(item)Echo Shards$() to begin the forging task.$(br2)This task demands extensive mastery of the sword."
     },
     {
       "type": "patchouli:text",
