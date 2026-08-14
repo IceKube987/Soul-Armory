@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Unlocking",
-      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() to begin the forging task.$(br2)This task requires dealing a substantial amount of damage with the bow. Check the tooltip for progress."
+      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() to begin the forging task.$(br2)This task requires dealing a substantial amount of damage with the bow. Check the tooltip for details."
     }
   ]
 }

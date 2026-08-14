@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Unlocking",
-      "text": "Place the Soul Sword in a crafting table with $(bold)two $(item)Echo Shards$() to begin the forging task.$(br2)This task demands extensive mastery of the sword — you will need to prove yourself in sustained combat and demonstrate your ability to use the heal skill effectively."
+      "text": "Place the Soul Sword in a crafting table with $(bold)two $(item)Echo Shards$() to begin the forging task.$(br2)This task demands extensive mastery of the sword. Check tooltip for details"
     },
     {
       "type": "patchouli:text",

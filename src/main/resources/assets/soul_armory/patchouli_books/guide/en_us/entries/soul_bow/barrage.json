@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Unlocking",
-      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() and a $(item)Crossbow$() to begin the forging task.$(br2)Like Rapid Fire, this task requires sustained damage within a tight time window — but at a higher threshold. Check the tooltip for requirements."
+      "text": "Place the Soul Bow in a crafting table with $(item)Arrows$() and a $(item)Crossbow$() to begin the forging task.$(br2)Like Rapid Fire, this task requires sustained damage within a tight time window — but at a higher threshold. Check the tooltip for details.$(br2)By default, the damage interval shouldn't be longer than one second."
     }
   ]
 }

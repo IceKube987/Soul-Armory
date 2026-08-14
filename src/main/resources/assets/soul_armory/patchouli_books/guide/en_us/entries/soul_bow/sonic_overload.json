@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "An upgraded version of the default Sonic Boom. Hold $(thing)Shift$() while releasing to fire a barrage of amplified sonic waves in a wide arc, dealing devastating armor-piercing damage.$(br2)This skill consumes nearly all of your soul energy and will leave you at very low power afterward — it is a room-clearing tool, not a sustained damage source.$(br2)Like the default sonic boom, it will not harm villagers, players, or passive mobs."
+      "text": "An upgraded version of the default Sonic Boom. Hold $(thing)Shift$() while releasing to fire a barrage of amplified sonic waves in a wide arc, dealing devastating armor-piercing damage.$(br2)This skill consumes nearly all of your soul energy and will leave you at very low power afterward.$(br2)Like the default sonic boom, it will not harm villagers, players, or passive mobs."
     },
     {
       "type": "patchouli:text",

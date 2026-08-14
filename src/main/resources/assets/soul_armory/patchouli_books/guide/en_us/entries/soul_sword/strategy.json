@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Synergy with Armor",
-      "text": "These two modes interact well with $(thing)Soul Armor$(). Since the armor provides its own survivability through Soul Rage, you may find that Blade Wave becomes the stronger choice when fully armored — freeing you from needing the sword's heal.$(br2)Conversely, if you are not wearing soul armor, Heal may be essential for staying alive in extended fights."
+      "text": "These two modes interact well with $(thing)Soul Armor$(). Since the armor provides its own survivability through $(thing)Soul Rage$(), you may find that $(thing)Blade Wave$() becomes the stronger choice when fully armored.$(br2)Conversely, if you are not wearing strong armor, or that you are not in $(thing)Soul Rage$(), $(thing)Heal$() may be essential for staying alive in extended fights."
     }
   ]
 }

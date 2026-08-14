@@ -18,13 +18,13 @@
       "type": "patchouli:spotlight",
       "item": "soul_armory:soul_leggings",
       "title": "灵魂护腿",
-      "text": "灵魂狂怒期间$(thing)移速翻倍$()。同时可以像骑马一样直接走上一格高的方块，无需跳跃。"
+      "text": "灵魂狂怒期间$(thing)移速翻倍$()。同时可以直接走上一格高的方块，无需跳跃。"
     },
     {
       "type": "patchouli:spotlight",
       "item": "soul_armory:soul_boots",
       "title": "灵魂靴子",
-      "text": "灵魂狂怒期间$(thing)免疫摔落伤害$()。从足够高处落地时还会对周围生物造成伤害。"
+      "text": "灵魂狂怒期间$(thing)免疫摔落伤害$()。"
     }
   ]
 }

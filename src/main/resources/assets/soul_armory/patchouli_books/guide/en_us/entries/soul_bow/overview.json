@@ -7,7 +7,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "soul_armory:soul_bow",
-      "text": "The Soul Bow fires slow, weak arrows that $(thing)track nearby targets$() and ignore invincibility frames. It does not consume arrows and has infinite durability."
+      "text": "The Soul Bow draws slow, and fires weak arrows that $(thing)track nearby targets$() and ignore invincibility frames. It does not consume arrows, cannot be enchanted and has infinite durability."
     },
     {
       "type": "patchouli:text",
