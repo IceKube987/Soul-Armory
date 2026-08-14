@@ -1,0 +1,16 @@
+{
+  "name": "习得新技能",
+  "icon": "minecraft:crafting_table",
+  "category": "soul_armory:introduction",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "灵魂武器可以习得默认技能以外的新能力。$(br2)将完整的灵魂武器与特定材料放入$(thing)合成台$()即可启动$(thing)技能铸造任务$()。$(br2)每件武器同一时间只能进行一个任务。在使用武器的过程中完成任务需求，新技能就会被永久解锁。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "将鼠标悬浮在物品上以了解当前任务和进度。注意：部分任务有时间限制，超时会导致进度归零。"
+    }
+  ]
+}

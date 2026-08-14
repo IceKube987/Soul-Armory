@@ -1,0 +1,17 @@
+{
+  "name": "齐射",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "放箭时按住$(thing)Shift$()可向前方扇形区域同时射出一组箭矢。每根箭矢造成固定伤害，不受灵魂能量影响。$(br2)灵魂消耗较低，是近距离搏斗的实用选择。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "解锁方式",
+      "text": "将灵魂弓与$(bold)三根$()$(item)箭$()放入合成台即可启动铸造任务。$(br2)此任务需要用弓造成相当数量的伤害。详情请查看物品描述。"
+    }
+  ]
+}

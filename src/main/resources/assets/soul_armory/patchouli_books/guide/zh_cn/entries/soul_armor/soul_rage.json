@@ -1,0 +1,17 @@
+{
+  "name": "灵魂狂怒",
+  "icon": "soul_armory:soul_chestplate",
+  "category": "soul_armory:soul_armor",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(item)灵魂胸甲$()是整套灵魂护甲的核心。以任何方式造成伤害都会为胸甲积攒灵魂能量。$(br2)积攒足够后，按下$(thing)灵魂狂怒$()键(默认为$(thing)V$())进入强化状态。在此期间，你获得大幅减伤，并且造成伤害时会恢复生命值。$(br2)灵魂狂怒无法主动取消——它会持续消耗灵魂能量，直到耗尽为止。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "监守者交互",
+      "text": "穿戴灵魂胸甲时，监守者的音波攻击不会对你造成伤害，反而会赋予你一波灵魂能量。"
+    }
+  ]
+}

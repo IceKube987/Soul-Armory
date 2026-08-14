@@ -1,0 +1,17 @@
+{
+  "name": "Soul Energy",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:introduction",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Once you wield a completed soul weapon, you will notice a new bar on your HUD. This is your $(thing)Soul Gauge$().$(br2)Deal damage to fill it. The more soul energy stored, the more powerful your weapon becomes.$(br2)However, soul energy fades quickly if you stop holding the weapon. Keep fighting to keep your power."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Overflow",
+      "text": "You may notice a portion of your soul bar glows differently. That $(thing)overflow$() section drains on its own even while you are holding the weapon, and this decay stacks with the normal decay when you put the weapon away.$(br2)The best time to use your skills is while you have overflow energy — spending it there has the least impact on your sustained combat ability."
+    }
+  ]
+}

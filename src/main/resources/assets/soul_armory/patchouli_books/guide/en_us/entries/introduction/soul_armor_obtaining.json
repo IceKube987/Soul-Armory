@@ -1,0 +1,16 @@
+{
+  "name": "Obtaining Soul Armor",
+  "icon": "soul_armory:incomplete_soul_chestplate",
+  "category": "soul_armory:introduction",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You will only find the $(item)Incomplete Soul Chestplate$() in Ancient City chests. Don't bother looking for the other pieces — they don't have incomplete versions.$(br2)Instead, when the chestplate finishes forging, all $(thing)iron armor$() you are currently wearing will be instantly converted into the corresponding $(thing)soul armor$() pieces."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Missed a piece? Don't worry — while wearing a completed soul chestplate, absorbing a Warden's sonic attack will convert one piece of iron armor on you into soul armor."
+    }
+  ]
+}

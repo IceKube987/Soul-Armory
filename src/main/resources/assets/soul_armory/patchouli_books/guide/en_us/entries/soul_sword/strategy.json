@@ -1,0 +1,17 @@
+{
+  "name": "Combat Strategy",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Once Blade Wave is unlocked, you can switch between $(thing)Heal$() and $(thing)Blade Wave$() using the skill switch key. Switching costs a significant amount of soul energy, so commit to your choice.$(br2)$(l)Heal$() turns the sword into a sustain-focused weapon. You sacrifice ranged damage for survivability.$(br2)$(l)Blade Wave$() turns the sword into an aggressive, ranged-capable weapon. You sacrifice self-healing for damage."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Synergy with Armor",
+      "text": "These two modes interact well with $(thing)Soul Armor$(). Since the armor provides its own survivability through $(thing)Soul Rage$(), you may find that $(thing)Blade Wave$() becomes the stronger choice when fully armored.$(br2)Conversely, if you are not wearing strong armor, or if you are not in $(thing)Soul Rage$(), $(thing)Heal$() may be essential for staying alive in extended fights."
+    }
+  ]
+}

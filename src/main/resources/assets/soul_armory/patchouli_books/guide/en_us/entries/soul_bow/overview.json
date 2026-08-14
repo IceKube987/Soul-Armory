@@ -1,0 +1,23 @@
+{
+  "name": "Soul Bow",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_bow",
+      "text": "The Soul Bow draws slowly, and fires weak arrows that $(thing)track nearby targets$() and ignore invincibility frames. It does not consume arrows, cannot be enchanted and has infinite durability."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Soul Scaling",
+      "text": "As you accumulate soul energy, both $(thing)draw speed$() and $(thing)arrow damage$() increase proportionally. At high soul energy, the bow transforms from sluggish to devastating.$(br2)Holding the bow also passively increases your movement speed based on current soul energy."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Default Skill: Sonic Boom",
+      "text": "Hold $(thing)Shift$() while releasing an arrow to unleash a Warden-style $(thing)sonic boom$() instead. This consumes a large amount of soul energy and deals massive armor-piercing area damage.$(br2)The sonic boom will not harm villagers, players, or passive mobs."
+    }
+  ]
+}

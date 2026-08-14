@@ -1,0 +1,12 @@
+{
+  "name": "远古城市",
+  "icon": "minecraft:sculk_shrieker",
+  "category": "soul_armory:introduction",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)远古城市$()深处的箱子中，沉睡着一些奇特的武器。$(br2)这些兵器的基础数值弱得可怜，但它们在等待着什么。"
+    }
+  ]
+}

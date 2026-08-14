@@ -1,0 +1,16 @@
+{
+  "name": "Learning New Skills",
+  "icon": "minecraft:crafting_table",
+  "category": "soul_armory:introduction",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Your soul weapons can learn new abilities beyond their defaults.$(br2)Place a completed soul weapon in a $(thing)crafting table$() along with specific materials to begin a $(thing)skill forging task$().$(br2)Each weapon can only have one active task at a time. Fulfill the requirements while wielding the weapon, and the new skill will be permanently unlocked."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Check the weapon's tooltip for your current task and progress. Be warned: Some tasks have time limits, taking too long will cause the progress to reset."
+    }
+  ]
+}

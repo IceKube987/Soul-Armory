@@ -1,0 +1,12 @@
+{
+  "name": "The Ancient City",
+  "icon": "minecraft:sculk_shrieker",
+  "category": "soul_armory:introduction",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Deep within the $(thing)Ancient City$(), forgotten chests hold peculiar, unfinished weapons.$(br2)These dormant armaments are far too weak to be useful on their own. But they are waiting for something."
+    }
+  ]
+}

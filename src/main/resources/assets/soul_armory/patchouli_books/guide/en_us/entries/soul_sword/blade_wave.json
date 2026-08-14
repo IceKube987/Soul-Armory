@@ -1,0 +1,21 @@
+{
+  "name": "Blade Wave",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "An alternative combat skill for the Soul Sword. When equipped, $(thing)right-click$() launches a projectile wave that passes through walls and deals area damage.$(br2)The blade wave can only be fired when your attack cooldown is full, and using it resets the cooldown — effectively replacing one melee swing.$(br2)$(bold)Note$(): Its damage will always be higher than your melee damage, regardless of the soul amount."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Unlocking",
+      "text": "Place the Soul Sword in a crafting table with $(bold)two $(item)Echo Shards$() to begin the forging task.$(br2)This task demands extensive mastery of the sword."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Check the tooltip for the full list of requirements. For the $(thing)Warden kill streak$() requirement: each kill must follow the previous within 2 minutes by default."
+    }
+  ]
+}

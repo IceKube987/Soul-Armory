@@ -1,0 +1,17 @@
+{
+  "name": "连射",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "满弓状态下按住$(thing)Shift$()进入连射模式，自动以高射速持续发射箭矢。每根箭矢消耗少量灵魂能量。$(br2)单根箭矢伤害固定，但凭借极高的射速——加上灵魂弓无视无敌帧的特性——此技能的输出能力非常可观。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "解锁方式",
+      "text": "将灵魂弓与$(item)箭$()和$(item)弩$()放入合成台即可启动铸造任务。$(br2)此任务要求在有限时间窗口内快速持续造成伤害，详情请查看物品描述。$(br2)默认配置下，每次伤害间隔不得高于一秒钟。"
+    }
+  ]
+}

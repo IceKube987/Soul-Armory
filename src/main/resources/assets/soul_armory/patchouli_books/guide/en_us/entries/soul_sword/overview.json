@@ -1,0 +1,18 @@
+{
+  "name": "Soul Sword",
+  "icon": "soul_armory:soul_sword",
+  "category": "soul_armory:soul_sword",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_sword",
+      "text": "The Soul Sword has modest base damage, but scales dramatically with accumulated $(thing)soul energy$(). Every bit of damage you deal feeds the blade, and the blade rewards you in kind."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Passive Effects",
+      "text": "While holding the Soul Sword, your $(thing)movement speed$() increases with your accumulated soul energy.$(br2)The sword has infinite durability and cannot be enchanted."
+    }
+  ]
+}

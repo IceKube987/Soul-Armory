@@ -1,0 +1,17 @@
+{
+  "name": "Sonic Overload",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "An upgraded version of the default Sonic Boom. Hold $(thing)Shift$() while releasing to fire a barrage of amplified sonic waves in a wide arc, dealing devastating armor-piercing damage.$(br2)This skill consumes nearly all of your soul energy and will leave you at very low power afterward.$(br2)Like the default sonic boom, it will not harm villagers, players, or passive mobs."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Unlocking",
+      "text": "Place the Soul Bow in a crafting table with an $(item)Echo Shard$() to begin the forging task.$(br2)You must prove your proficiency with the bow's default sonic boom skill. Check the tooltip for details."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "灵魂弓",
+  "icon": "soul_armory:soul_bow",
+  "category": "soul_armory:soul_bow",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "soul_armory:soul_bow",
+      "text": "灵魂弓拉弓速度缓慢，发射的箭矢伤害也低，但箭矢会$(thing)自动追踪附近的目标$()且无视受伤无敌帧。$(br2)这把武器不消耗箭矢，无法附魔，无限耐久。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "灵魂成长",
+      "text": "随着灵魂能量的积累，$(thing)拉弓速度$()和$(thing)箭矢伤害$()都会同比提升。灵魂能量足够高时，弓会变得极具杀伤力。$(br2)手持灵魂弓还会根据当前灵魂能量被动提升移动速度。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "默认技能：音波",
+      "text": "放箭时按住$(thing)Shift$()会释放监守者同款$(thing)音波攻击$()。消耗大量灵魂能量，造成无视护甲的大范围伤害。$(br2)音波不会伤害村民、玩家和友好生物。"
+    }
+  ]
+}

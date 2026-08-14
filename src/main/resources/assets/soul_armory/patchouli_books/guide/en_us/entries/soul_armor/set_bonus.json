@@ -1,0 +1,17 @@
+{
+  "name": "Full Set Bonus",
+  "icon": "soul_armory:soul_chestplate",
+  "category": "soul_armory:soul_armor",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Wearing the complete soul armor set unlocks additional passive effects:$(br2)Your soul energy will never decay below a certain threshold through natural drain. If it falls below that threshold by other means, it will slowly regenerate back up.$(br2)This means you always have a baseline of power available, even outside of combat."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Creepers?",
+      "text": "When your soul energy is exactly at the minimum threshold and you would receive a lethal blow, $(thing)Soul Rage activates automatically$().$(br2)The fatal damage is reduced to leave you alive, and you immediately enter the empowered state.$(br2)A failsafe against ambushes and surprise explosions — but it only works when your soul energy is sitting at the threshold, so don't count on it mid-fight."
+    }
+  ]
+}
