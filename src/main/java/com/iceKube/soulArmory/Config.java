@@ -449,7 +449,7 @@ public class Config {
 
             SOUL_ARMOR_RAGE_FALL_AOE_RADIUS = BUILDER
                     .comment("The radius of the shockwave dealt by the soul boots when landing during Soul Rage")
-                    .defineInRange("soulArmorRageFallAoeRadius", 5.0, 0.0, Double.MAX_VALUE);
+                    .defineInRange("soulArmorRageFallAoeRadius", 0, 0.0, Double.MAX_VALUE);
 
             SOUL_ARMOR_RAGE_FALL_AOE_DAMAGE_MULTIPLIER = BUILDER
                     .comment("The damage of the landing shockwave, as a multiple of the fall damage that was negated, 0 to disable it.")
