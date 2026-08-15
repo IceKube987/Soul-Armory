@@ -1,1 +1,0 @@
-This is the source code of the mod Soul Armory.
