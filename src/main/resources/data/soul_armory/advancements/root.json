@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancements.soul_armory.root.description"
     },
-    "background": "minecraft:textures/block/sculk.png",
+    "background": "minecraft:textures/block/sculk_catalyst_top.png",
     "frame": "task",
     "show_toast": false,
     "announce_to_chat": false
