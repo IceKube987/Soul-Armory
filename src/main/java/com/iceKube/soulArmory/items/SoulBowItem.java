@@ -57,6 +57,11 @@ public class SoulBowItem extends BaseSoulWeaponItem implements UseSoulSkillSyste
     }
 
     @Override
+    public List<BaseSoulSkill> getAllPossibleSkills() {
+        return BOW_SKILLS;
+    }
+
+    @Override
     public int getGracePeriodTicks() {
         return Config.soulBowGracePeriod;
     }

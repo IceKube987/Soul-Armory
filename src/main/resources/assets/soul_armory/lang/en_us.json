@@ -11,6 +11,15 @@
 
   "tooltip.soul_armory.soul": "Soul :",
 
+  "commands.soul_armory.grant_skill.success": "Granted %s to %s's soul weapon",
+  "commands.soul_armory.grant_skill.success_multiple": "Granted %s skill(s) to %s's soul weapon",
+  "commands.soul_armory.grant_skill.no_weapon": "You must be holding a soul weapon that uses the skill system",
+  "commands.soul_armory.grant_skill.not_ready": "This soul weapon is not initialized yet. HOW did you get it?",
+  "commands.soul_armory.grant_skill.unknown_skill": "Unknown soul skill: %s",
+  "commands.soul_armory.grant_skill.incompatible": "%s cannot be used by the %s",
+  "commands.soul_armory.grant_skill.already_unlocked": "This soul weapon already knows %s",
+  "commands.soul_armory.grant_skill.everything_none": "This soul weapon already knows every skill it can learn",
+
   "skills.soul_armory.sonic_boom": "Sonic Boom",
   "skills.soul_armory.barrage": "Barrage",
   "skills.soul_armory.rapid_fire": "Rapid Fire",

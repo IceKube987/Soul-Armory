@@ -22,8 +22,17 @@ import java.util.List;
 public class SkillUnlockHelper {
 
     public static void unlockSkill(Player player, ItemStack stack, Level level, BaseSoulSkill skill) {
+        unlockSkill(player, stack, level, skill, true);
+    }
+
+    /**
+     * @param clearForgingTask whether to drop the stack's active forging task
+     */
+    public static void unlockSkill(Player player, ItemStack stack, Level level, BaseSoulSkill skill, boolean clearForgingTask) {
         CompoundTag tag = stack.getTag();
-        tag.putString(BaseSoulWeaponItem.CURRENT_FORGING_TASK, BaseSoulWeaponItem.NO_FORGING_TASK);
+        if (clearForgingTask) {
+            tag.putString(BaseSoulWeaponItem.CURRENT_FORGING_TASK, BaseSoulWeaponItem.NO_FORGING_TASK);
+        }
 
         ListTag listTag = tag.getList(BaseSoulWeaponItem.AVAILABLE_SKILLS, Tag.TAG_STRING);
         listTag.add(StringTag.valueOf(skill.soulSkillId.toString()));

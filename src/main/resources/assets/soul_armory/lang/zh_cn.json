@@ -11,6 +11,15 @@
 
   "tooltip.soul_armory.soul": "灵魂: ",
 
+  "commands.soul_armory.grant_skill.success": "已为 %2$s 的灵魂武器解锁 %1$s",
+  "commands.soul_armory.grant_skill.success_multiple": "已为 %2$s 的灵魂武器解锁 %1$s 个技能",
+  "commands.soul_armory.grant_skill.no_weapon": "你必须手持一件可使用技能系统的灵魂武器",
+  "commands.soul_armory.grant_skill.not_ready": "这件灵魂武器尚未初始化 你是怎么拿到的？",
+  "commands.soul_armory.grant_skill.unknown_skill": "未知的灵魂技能：%s",
+  "commands.soul_armory.grant_skill.incompatible": "%2$s 无法使用 %1$s",
+  "commands.soul_armory.grant_skill.already_unlocked": "这件灵魂武器已经掌握了 %s",
+  "commands.soul_armory.grant_skill.everything_none": "这件灵魂武器已经掌握了它能学会的全部技能",
+
   "skills.soul_armory.sonic_boom": "音波",
   "skills.soul_armory.barrage": "箭雨",
   "skills.soul_armory.rapid_fire": "连射",

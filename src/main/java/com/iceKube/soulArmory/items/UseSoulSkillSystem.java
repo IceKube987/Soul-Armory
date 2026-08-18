@@ -12,6 +12,9 @@ public interface UseSoulSkillSystem {
 
     List<BaseSoulSkill> getAvailableSkills(ItemStack stack);
 
+    // Every skill this weapon type can ever hold, unlocked or not.
+    List<BaseSoulSkill> getAllPossibleSkills();
+
     void setDefaultSkill(ItemStack stack, Level level);
     void setCurrentSkill(ItemStack stack, int index, ServerPlayer player);
 }

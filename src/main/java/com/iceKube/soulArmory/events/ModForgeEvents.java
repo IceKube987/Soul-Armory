@@ -4,6 +4,7 @@ import com.iceKube.soulArmory.Config;
 import com.iceKube.soulArmory.SoulArmoryMod;
 import com.iceKube.soulArmory.advancements.ModCriteriaTriggers;
 import com.iceKube.soulArmory.advancements.SoulAction;
+import com.iceKube.soulArmory.commands.SoulArmoryCommand;
 import com.iceKube.soulArmory.entities.SoulArrowEntity;
 import com.iceKube.soulArmory.entities.SoulArrowScatterEntity;
 import com.iceKube.soulArmory.items.*;
@@ -44,6 +45,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.PlayLevelSoundEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -79,6 +81,11 @@ public class ModForgeEvents {
     private static final int DRAGON_REVIVAL_KILL_TICKS = 100;
     private static final UUID SOUL_SPEED_MODIFIER_UUID = UUID.fromString("00929c63-7970-49d5-bd65-43fae58e3b96"); // Randomly generated UUID
     private static final UUID SOUL_STEP_HEIGHT_MODIFIER_UUID = UUID.fromString("6f1d4a08-2b95-4c37-9e60-5c8a17d3b204"); // Randomly generated UUID
+
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        SoulArmoryCommand.register(event.getDispatcher());
+    }
 
     // Config is a COMMON spec, which Forge never syncs, so push this server's values to the joining
     // client. Otherwise it would render stuff (especially soul bars) against whatever its own config file happens to say.

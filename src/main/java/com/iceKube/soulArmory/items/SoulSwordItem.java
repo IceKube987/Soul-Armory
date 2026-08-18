@@ -38,8 +38,18 @@ import java.util.List;
 
 public class SoulSwordItem extends BaseSoulWeaponItem implements CanApplySpeedBoost, UseSoulSkillSystem, Forgeable {
 
+    // Every skill the sword can ever hold: the one it starts with plus the single unlockable one.
+    public static final List<BaseSoulSkill> SWORD_SKILLS = List.of(
+            SoulSkills.HEAL,
+            SoulSkills.BLADE_WAVE);
+
     public SoulSwordItem(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public List<BaseSoulSkill> getAllPossibleSkills() {
+        return SWORD_SKILLS;
     }
 
     @Override
