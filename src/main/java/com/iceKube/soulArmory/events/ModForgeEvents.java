@@ -570,6 +570,7 @@ public class ModForgeEvents {
         float damageDealt = event.getAmount();
         if (damageDealt <= 0) return;
         damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
+        damageDealt = applyWardenSoulMultiplier(event, damageDealt);
 
         SoulChestplateItem.addSoul(player, damageDealt);
     }
@@ -584,12 +585,19 @@ public class ModForgeEvents {
         player.heal((float) (damageDealt / Config.soulArmorRageLifestealRatio));
     }
 
+    // Warden damage is worth more soul.
+    private static float applyWardenSoulMultiplier(LivingDamageEvent event, float soul) {
+        if (event.getEntity().getType() != EntityType.WARDEN) return soul;
+        return soul * (float) Config.wardenSoulMultiplier;
+    }
+
     private static void AddSoulPoints(LivingDamageEvent event, ItemStack mainHandItem) {
         if (mainHandItem.getItem() instanceof BaseSoulWeaponItem item) {
             // Add soul equal to the damage dealt, capped at maxSoul
             float damageDealt = event.getAmount();
             if (damageDealt <= 0) return;
             damageDealt = Math.min(event.getEntity().getHealth(), damageDealt);
+            damageDealt = applyWardenSoulMultiplier(event, damageDealt);
 
             CompoundTag tag = mainHandItem.getOrCreateTag();
             float currentSoul = tag.getFloat(BaseSoulWeaponItem.SOUL_AMOUNT);

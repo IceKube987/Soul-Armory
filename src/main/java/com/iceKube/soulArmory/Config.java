@@ -79,6 +79,8 @@ public class Config {
     private static final ForgeConfigSpec.BooleanValue SOUL_SPEED_BOOST_HAS_CEIL;
     private static final ForgeConfigSpec.DoubleValue SOUL_SPEED_BOOST_CEIL;
 
+    private static final ForgeConfigSpec.DoubleValue WARDEN_SOUL_MULTIPLIER;
+
     private static final ForgeConfigSpec.IntValue FORGING_SWORD_DAMAGE_TARGET;
     private static final ForgeConfigSpec.IntValue FORGING_SWORD_TIMEOUT_TICKS;
     private static final ForgeConfigSpec.IntValue FORGING_SWORD_ACTIVE_TICKS;
@@ -143,6 +145,11 @@ public class Config {
                 .comment("The maximum speed multiplier (relative to base movement speed) at which soul weapons or armor will no longer provide additional speed boosts")
                 .comment("This value is ignored if speedBoostHasCeil is false")
                 .defineInRange("speedBoostCeil", 2.0, 1.0, Double.MAX_VALUE);
+
+        WARDEN_SOUL_MULTIPLIER = BUILDER
+                .comment("How much soul is gain when hurting wardens, as a multiple of the damage")
+                .comment("Applies to both soul weapons and soul armor, set to 1 to disable")
+                .defineInRange("wardenSoulMultiplier", 3.0, 0.0, Double.MAX_VALUE);
 
         {
             BUILDER.comment("Soul Sword Settings").push("soul-sword");
@@ -680,6 +687,7 @@ public class Config {
     public static double soulBowTraceRange;
     public static boolean speedBoostHasCeil;
     public static double speedBoostCeil;
+    public static double wardenSoulMultiplier;
     public static boolean soulSwordDisableShieldUsage;
     public static double soulArrowTurnFactor;
     public static int soulSwordOverflowSpeed;
@@ -772,6 +780,7 @@ public class Config {
         soulBowPointPerSpeedPercent = SOUL_BOW_POINT_PER_SPEED_PERCENT.get();
         speedBoostHasCeil = SOUL_SPEED_BOOST_HAS_CEIL.get();
         speedBoostCeil = SOUL_SPEED_BOOST_CEIL.get();
+        wardenSoulMultiplier = WARDEN_SOUL_MULTIPLIER.get();
         soulBowGracePeriod = SOUL_BOW_GRACE_PERIOD.get();
         soulBowSoulDecaySpeed = SOUL_BOW_SOUL_DECAY_SPEED.get();
         soulBowTraceAngle = SOUL_BOW_TRACE_ANGLE.get();
