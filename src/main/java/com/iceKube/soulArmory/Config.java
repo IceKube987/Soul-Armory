@@ -200,7 +200,7 @@ public class Config {
 
                 SOUL_SWORD_POINT_PER_HEALING = BUILDER
                         .comment("How many points of soul is required for 1 HP in healing")
-                        .defineInRange("soulSwordPointPerHealing", 10, 1, Integer.MAX_VALUE);
+                        .defineInRange("soulSwordPointPerHealing", 6, 1, Integer.MAX_VALUE);
 
                 BUILDER.pop();
             }
